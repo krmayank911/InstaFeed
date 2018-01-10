@@ -3,6 +3,7 @@ package com.buggyarts.instafeedplus.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
     public String publishedTime(String string) {
 
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM'T'HH:mm:ss'Z'");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String currentTime = format.format(calendar.getTime());
 
         String timestamp = null;
@@ -114,25 +115,27 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
 //        int p_year = Integer.parseInt(string.substring(0,3));
 //        int p_month = Integer.parseInt(string.substring(8,9));
 //        int p_sec = Integer.parseInt(string.substring(15,16));
-        int p_date = Integer.parseInt(string.substring(5, 6));
-        int p_hr = Integer.parseInt(string.substring(11, 12));
-        int p_min = Integer.parseInt(string.substring(15, 16));
-        int c_date = Integer.parseInt(currentTime.substring(5, 6));
-        int c_hr = Integer.parseInt(currentTime.substring(11, 12));
-        int c_min = Integer.parseInt(currentTime.substring(15, 16));
+        int p_date = Integer.parseInt(string.substring(8, 10));
+        int p_hr = Integer.parseInt(string.substring(11, 13));
+        int p_min = Integer.parseInt(string.substring(14, 16));
+        int c_date = Integer.parseInt(currentTime.substring(8, 10));
+        int c_hr = Integer.parseInt(currentTime.substring(11, 13));
+        int c_min = Integer.parseInt(currentTime.substring(14, 16));
 
 //        int c_year = Integer.parseInt(currentTime.substring(0,3));
 //        int c_month = Integer.parseInt(currentTime.substring(8,9));
 //        int c_sec = Integer.parseInt(currentTime.substring(15,16));
 
         int dateDiff = compairValues(p_date, c_date);
-        if (dateDiff > 2) {
-            timestamp = " " + dateDiff + "days ago..";
+        if (dateDiff > 1) {
+            timestamp = " " + dateDiff + " days ago..";
         } else if (dateDiff == 1) {
             timestamp = " Yesterday";
-        }
-        if (dateDiff == 0) {
+        } else if (dateDiff == 0) {
             int hourDiff = compairValues(p_hr, c_hr);
+//            Log.d("C_Date",currentTime);
+//            Log.d("P_Date",string);
+//            Log.d("HourDiff", "" +p_hr+" - "+c_hr + " = "+ hourDiff);
             timestamp = hourDiff + " hours ago";
             if (hourDiff == 0) {
                 int minDiff = compairValues(p_min, c_min);

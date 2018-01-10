@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.buggyarts.instafeedplus">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -53,6 +54,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.buggyarts.instafeedplus.MainActivity" />
         </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            tools:replace="android:value"
+            android:value="a72fd413850382879bcd244179c7b204bf5badde" />
     </application>
 
 </manifest>
