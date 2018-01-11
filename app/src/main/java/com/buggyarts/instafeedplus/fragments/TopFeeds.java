@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
@@ -47,6 +48,8 @@ public class TopFeeds extends Fragment {
     RecyclerView.LayoutManager manager;
     FeedsRecyclerViewAdapter adapter;
 
+    ProgressBar progressBar;
+
     Context context;
     ArrayList<Article> feeds;
 
@@ -61,6 +64,8 @@ public class TopFeeds extends Fragment {
         recyclerView.setLayoutManager(manager);
         adapter = new FeedsRecyclerViewAdapter(feeds, context);
         recyclerView.setAdapter(adapter);
+
+        progressBar = feedsView.findViewById(R.id.progressBar);
 
         return feedsView;
     }
@@ -115,8 +120,8 @@ public class TopFeeds extends Fragment {
         @Override
         protected void onPostExecute(String res) {
             createSources(json_res);
+            progressBar.setProgress(25);
             String listOfSources = filterByCategory(GENERAL);
-
             loadFeeds(listOfSources);
             super.onPostExecute(res);
         }
@@ -176,18 +181,34 @@ public class TopFeeds extends Fragment {
         new GetFeeds().execute(url);
     }
 
-    public class GetFeeds extends AsyncTask<String, Void, String> {
+    public class GetFeeds extends AsyncTask<String, Integer, String> {
 
         String json_res;
 
         @Override
+        protected void onPreExecute() {
+            progressBar.setMax(100);
+            publishProgress(50);
+            super.onPreExecute();
+        }
+
+        @Override
         protected String doInBackground(String... strings) {
             json_res = getJson(strings[0]);
+            publishProgress(75);
             return json_res;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressBar.setProgress(values[0]);
+            super.onProgressUpdate(values);
+        }
+
+        @Override
         protected void onPostExecute(String res) {
+            progressBar.setProgress(100);
+            progressBar.setVisibility(View.GONE);
             createFeeds(json_res);
             adapter.notifyDataSetChanged();
             super.onPostExecute(res);
@@ -211,7 +232,11 @@ public class TopFeeds extends Fragment {
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
 
+                int total_length = httpURLConnection.getContentLength();
+                int total = 0;
                 while ((line = bufferedReader.readLine()) != null) {
+                    total += line.length();
+//                    publishProgress((int)((total*100)/total_length));
                     stringBuilder.append(line + "\n");
                 }
                 bufferedReader.close();
@@ -234,7 +259,7 @@ public class TopFeeds extends Fragment {
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 int article_count = jsonObject.getInt("totalResults");
                 int i = 0;
-                while (i < article_count) {
+                while (i <= article_count) {
                     JSONArray articles = jsonObject.getJSONArray("articles");
                     JSONObject article_ob = articles.getJSONObject(i);
                     String source = article_ob.getJSONObject("source").getString("name");

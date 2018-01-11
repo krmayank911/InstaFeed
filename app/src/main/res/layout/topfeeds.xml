@@ -3,8 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+        android:progressBackgroundTint="@color/colorPrimaryDark"
+        android:progressTint="@color/colorPrimaryDark" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topfeeds_recyclerview"
+        android:layout_below="@id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f1f5f8">

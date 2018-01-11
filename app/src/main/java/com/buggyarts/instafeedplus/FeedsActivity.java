@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
@@ -39,10 +41,12 @@ public class FeedsActivity extends AppCompatActivity {
     RecyclerView.LayoutManager manager;
     FeedsRecyclerViewAdapter adapter;
     String CATEGORY = CATEGORIES[1];
+    String categories = "";
     ArrayList<Article> feeds;
 
     Toolbar toolbar;
     CollapsingToolbarLayout toolbarLayout;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,20 @@ public class FeedsActivity extends AppCompatActivity {
         int index = getIntent().getIntExtra("index", 1);
         Log.v("CATEGORY", "" + index);
         CATEGORY = CATEGORIES[index];
-
+        switch (index) {
+            case 4:
+                categories = "health";
+                break;
+            case 7:
+                categories = "science";
+                break;
+            case 8:
+                categories = "sports";
+                break;
+            default:
+                categories = CATEGORY;
+                break;
+        }
 
         feeds = new ArrayList<>();
         findSources();
@@ -74,6 +91,7 @@ public class FeedsActivity extends AppCompatActivity {
 //        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedText);
         toolbarLayout.setCollapsedTitleTextAppearance(R.style.ExpendedText);
 
+        progressBar = findViewById(R.id.progressBar);
 
         recyclerView = (RecyclerView) findViewById(R.id.feeds_recycler_view);
         manager = new LinearLayoutManager(this);
@@ -85,7 +103,8 @@ public class FeedsActivity extends AppCompatActivity {
 
     //Find All Sources
     public void findSources() {
-        String url = BASE_URL + ALLSOURCES + "&language=en" + "&apiKey=" + API_KEY;
+        String url = BASE_URL + ALLSOURCES + "language=en" + "&category=" + categories + "&apiKey=" + API_KEY;
+        Log.d("URL", url);
         SOURCES = new ArrayList<>();
         new GetSources().execute(url);
     }
@@ -103,9 +122,10 @@ public class FeedsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String res) {
             createSources(json_res);
-            Log.v("Category", CATEGORY);
-            String listOfSources = filterByCategory(CATEGORY);
+//            Log.v("Category", CATEGORY);
+            String listOfSources = filterByCategory(categories);
             Log.v("listOfSources", listOfSources);
+            progressBar.setProgress(25);
             loadFeeds(listOfSources);
             super.onPostExecute(res);
         }
@@ -165,13 +185,21 @@ public class FeedsActivity extends AppCompatActivity {
 
     public void loadFeeds(String listOfSources) {
         String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + API_KEY;
-        Log.v("URL", url);
+//        String url = BASE_URL + TOP_HEADLINES + "category="+ CATEGORY + "&country=us"+ "&sortBy=popularity" + "&apiKey=" + API_KEY;
+//        Log.v("URL", url);
         new GetFeeds().execute(url);
     }
 
-    public class GetFeeds extends AsyncTask<String, Void, String> {
+    public class GetFeeds extends AsyncTask<String, Integer, String> {
 
         String json_res;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setMax(100);
+            publishProgress(50);
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -180,7 +208,15 @@ public class FeedsActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            publishProgress(values[0]);
+            super.onProgressUpdate(values);
+        }
+
+        @Override
         protected void onPostExecute(String res) {
+            progressBar.setProgress(100);
+            progressBar.setVisibility(View.GONE);
             createFeeds(json_res);
             adapter.notifyDataSetChanged();
             super.onPostExecute(res);
@@ -217,7 +253,6 @@ public class FeedsActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return jsonResponse;
     }
 
