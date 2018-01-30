@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#e20a50</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="teal">#009688</color>
+    <color name="indigo">#536DFE</color>
+
+    <color name="darkGray">#222</color>
+    <color name="blueStatusBar">#5eb6b8</color>
 </resources>

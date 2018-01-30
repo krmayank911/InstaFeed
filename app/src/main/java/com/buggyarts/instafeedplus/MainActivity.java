@@ -2,30 +2,53 @@ package com.buggyarts.instafeedplus;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.adapters.MainPagerAdapter;
+import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.adapters.OptionsRecyclerViewAdapter;
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
+
 import io.fabric.sdk.android.Fabric;
+
+import static com.buggyarts.instafeedplus.utils.Constants.CATEGORIES;
+import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
 
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     MainPagerAdapter adapter;
     FragmentManager fragmentManager;
+
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle abdt;
 
     CollapsingToolbarLayout toolbarLayout;
     Toolbar toolbar;
@@ -37,29 +60,46 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
+
+        checkUserPreferences();
+
+        setUpToolbar();
+        setUpViewPager();
+        navigationHandler();
+
+    }
+
+    public void checkUserPreferences() {
+        SharedPreferences preferences = getSharedPreferences("user_preferences", MODE_PRIVATE);
+        if (!preferences.contains("asked_before")) {
+            Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    public void setUpToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+
+
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setSelectedTabIndicatorHeight(0);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolBar);
-
+//
         toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorWhite));
         toolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
+    }
 
+    public void setUpViewPager() {
         fragmentManager = getSupportFragmentManager();
-
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout.setupWithViewPager(viewPager);
 
         adapter = new MainPagerAdapter(fragmentManager);
         viewPager.setAdapter(adapter);
-
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -98,12 +138,82 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
+
+        if (abdt.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.action_search:
                 //SearchView
+                return true;
+            case R.id.user_preferences:
+                Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void navigationHandler() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        TextView magazine = findViewById(R.id.magazine);
+        magazine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HotStoriesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        CATEG_S = new ArrayList<>();
+
+        ArrayList<Object> categoryArrayList = new ArrayList<>();
+
+        int i = 0;
+        while (i < CATEGORIES.length) {
+            categoryArrayList.add(new Category(CATEGORIES[i]));
+            i++;
+        }
+
+        RecyclerView catg_recyclerView = findViewById(R.id.nav_categories_list);
+        RecyclerView.LayoutManager catg_layoutManager = new LinearLayoutManager(this);
+        catg_recyclerView.setLayoutManager(catg_layoutManager);
+
+        ObjectRecyclerViewAdapter catg_adapter = new ObjectRecyclerViewAdapter(categoryArrayList, this);
+
+//        final OptionsRecyclerViewAdapter catg_adapter = new OptionsRecyclerViewAdapter(CATEG_S, new OptionsRecyclerViewAdapter.OnCategoryClick() {
+//            @Override
+//            public void onCategoryClickListener(int index, String category) {
+//                Intent intent = new Intent(MainActivity.this, FeedsActivity.class);
+//                intent.putExtra("category", category);
+//                intent.putExtra("index", index);
+//                startActivity(intent);
+//            }
+//        });
+
+        catg_recyclerView.setAdapter(catg_adapter);
+
+        abdt = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+//                catg_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        abdt.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        abdt.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(abdt);
+        abdt.syncState();
+
+    }
+
 }

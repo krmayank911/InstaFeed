@@ -8,15 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-        android:progressBackgroundTint="@color/colorPrimaryDark"
-        android:progressTint="@color/colorPrimaryDark" />
+        android:progressBackgroundTint="@color/indigo"
+        android:progressTint="@color/indigo" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/scores_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:layout_below="@id/progressBar">
+
+    </android.support.v7.widget.RecyclerView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/topfeeds_recyclerview"
-        android:layout_below="@id/progressBar"
+        android:layout_below="@id/scores_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#f1f5f8">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 

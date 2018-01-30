@@ -1,10 +1,12 @@
 package com.buggyarts.instafeedplus.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,10 +15,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.buggyarts.instafeedplus.Models.CricMchInnDetails;
+import com.buggyarts.instafeedplus.Models.CricMchTeamScore;
+import com.buggyarts.instafeedplus.Models.CricketMatch;
+import com.buggyarts.instafeedplus.Models.CricketMatchState;
+import com.buggyarts.instafeedplus.Models.ScoreCard;
 import com.buggyarts.instafeedplus.R;
+import com.buggyarts.instafeedplus.adapters.CricMchAdapter;
 import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
+import com.buggyarts.instafeedplus.utils.Constants;
 import com.buggyarts.instafeedplus.utils.Source;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +48,7 @@ import java.util.ArrayList;
 import static com.buggyarts.instafeedplus.utils.Constants.ALLSOURCES;
 import static com.buggyarts.instafeedplus.utils.Constants.API_KEY;
 import static com.buggyarts.instafeedplus.utils.Constants.BASE_URL;
+import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
 import static com.buggyarts.instafeedplus.utils.Constants.GENERAL;
 import static com.buggyarts.instafeedplus.utils.Constants.SOURCE;
 import static com.buggyarts.instafeedplus.utils.Constants.SOURCES;
@@ -46,12 +62,24 @@ public class TopFeeds extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
-    FeedsRecyclerViewAdapter adapter;
+//    FeedsRecyclerViewAdapter adapter;
+
+    ObjectRecyclerViewAdapter adapter;
 
     ProgressBar progressBar;
 
     Context context;
-    ArrayList<Article> feeds;
+    ArrayList<Object> items;
+//    ArrayList<Article> feeds;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference cric_databaseReference;
+    ArrayList<CricketMatch> matches;
+    String SELECTED_COUNTRY = "in", SELECTED_LANGUAGE = "en";
+
+//    RecyclerView cric_recyclerView;
+//    RecyclerView.LayoutManager cric_layoutManager;
+//    CricMchAdapter cric_adapter;
 
     @Nullable
     @Override
@@ -59,13 +87,21 @@ public class TopFeeds extends Fragment {
 
         View feedsView = inflater.inflate(R.layout.topfeeds, container, false);
 
+        progressBar = feedsView.findViewById(R.id.progressBar);
+
         recyclerView = feedsView.findViewById(R.id.topfeeds_recyclerview);
         manager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(manager);
-        adapter = new FeedsRecyclerViewAdapter(feeds, context);
+        adapter = new ObjectRecyclerViewAdapter(items, context);
+//        adapter = new FeedsRecyclerViewAdapter(feeds, context);
         recyclerView.setAdapter(adapter);
 
-        progressBar = feedsView.findViewById(R.id.progressBar);
+        //Cricket
+//        cric_recyclerView = feedsView.findViewById(R.id.scores_recyclerView);
+//        cric_layoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
+//        cric_recyclerView.setLayoutManager(cric_layoutManager);
+//        cric_adapter = new CricMchAdapter(matches,context);
+//        cric_recyclerView.setAdapter(cric_adapter);
 
         return feedsView;
     }
@@ -75,34 +111,63 @@ public class TopFeeds extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getContext();
 
-        if (savedInstanceState != null) {
-            feeds = savedInstanceState.getParcelableArrayList("feeds");
-        } else {
-            Log.v("ON SAVED INSTANCE", "null");
-            feeds = new ArrayList<>();
-            findSources();
+        SharedPreferences preferences = context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE);
+        if (preferences.contains("asked_before")) {
+            SELECTED_COUNTRY = preferences.getString("country", "in");
+            SELECTED_LANGUAGE = preferences.getString("language", "en");
         }
+
+        items = new ArrayList<>();
+        new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "country=" + SELECTED_COUNTRY + "&apiKey=" + API_KEY);
+
+//        if(!SELECTED_COUNTRY.equals("")){
+//
+//        }
+//        else {
+//            new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "&apiKey=" + API_KEY);
+//        }
+        findSources();
+
+
+        //cricket
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        cric_databaseReference = firebaseDatabase.getReference().child("News").child("CricketNews");
+        matches = new ArrayList<>();
+        cric_databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                matches.clear();
+                String sourceString = dataSnapshot.toString().replace("DataSnapshot", "");
+//                Log.d("JSON",sourceString);
+                extractSportsFeeds(sourceString);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
-
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
     public void onStop() {
-
-        Bundle outState = new Bundle();
-        outState.putParcelableArrayList("feeds", feeds);
-        Log.v("ON SAVED INSTANCE", "CALL");
-        onSaveInstanceState(outState);
         super.onStop();
     }
 
     //Find All Sources
     public void findSources() {
-        String url = BASE_URL + ALLSOURCES + "&language=en" + "&apiKey=" + API_KEY;
+        String url;
+        if (SELECTED_LANGUAGE != null) {
+            url = BASE_URL + ALLSOURCES + "&language=" + SELECTED_LANGUAGE + "&apiKey=" + API_KEY;
+        } else {
+            url = BASE_URL + ALLSOURCES + "&apiKey=" + API_KEY;
+        }
         SOURCES = new ArrayList<>();
         new GetSources().execute(url);
     }
@@ -138,6 +203,12 @@ public class TopFeeds extends Fragment {
                     String id = source_ob.getString("id");
                     String name = source_ob.getString("name");
                     String category = source_ob.getString("category");
+
+                    boolean result = isInCategory(category);
+                    if (!result) {
+                        CATEG_S.add(category);
+                    }
+
                     String language = source_ob.getString("language");
                     String country = source_ob.getString("country");
                     String url = source_ob.getString("url");
@@ -153,10 +224,10 @@ public class TopFeeds extends Fragment {
     String filterByCategory(String reqCategory) {
         int i = 0;
         ArrayList<Source> sourcesByCategory = new ArrayList<>();
-        Log.v("SOURCES ARRAY", "CALL");
+//        Log.v("SOURCES ARRAY", "CALL");
         while (i < SOURCES.size()) {
             Source source = SOURCES.get(i);
-            if (source.category.equals(reqCategory) && source.country.equals("in")) {
+            if (source.category.equals(reqCategory) && source.country.equals(SELECTED_COUNTRY)) {
                 sourcesByCategory.add(source);
             }
             i++;
@@ -176,8 +247,10 @@ public class TopFeeds extends Fragment {
     }
 
     public void loadFeeds(String listOfSources) {
+
         String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + API_KEY;
-        Log.v("URL", url);
+
+//        Log.v("URL", url);
         new GetFeeds().execute(url);
     }
 
@@ -187,7 +260,6 @@ public class TopFeeds extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            progressBar.setMax(100);
             publishProgress(50);
             super.onPreExecute();
         }
@@ -255,6 +327,7 @@ public class TopFeeds extends Fragment {
 
     public void createFeeds(String jsonResponse) {
         if (jsonResponse != null) {
+            Log.d("createFeeds: ", "Called");
             try {
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 int article_count = jsonObject.getInt("totalResults");
@@ -268,14 +341,205 @@ public class TopFeeds extends Fragment {
                     String description = article_ob.getString("description");
                     String thumbnail_url = article_ob.getString("urlToImage");
                     String url = article_ob.getString("url");
-
-                    feeds.add(new Article(time, source, title, description, thumbnail_url, url));
+                    items.add(new Article(time, source, title, description, thumbnail_url, url));
                     i++;
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
     }
 
+    public void extractSportsFeeds(String jsonResponse) {
+        try {
+            JSONObject responseObject = new JSONObject(jsonResponse);
+            JSONArray mchs = responseObject.getJSONObject("value").getJSONObject("mchdata").getJSONArray("match");
+            int i = 0;
+            while (i < mchs.length()) {
+                CricketMatch cricketMatch = new CricketMatch();
+                JSONObject match = mchs.getJSONObject(i);
+                JSONObject state = match.getJSONObject("state");
+
+
+                CricketMatchState matchState = new CricketMatchState();
+                matchState.setState(state.getString("@mchState"));
+                matchState.setStatus(state.getString("@status"));
+
+
+                CricMchInnDetails mchInnDetails = new CricMchInnDetails();
+                CricMchTeamScore btnTeam = new CricMchTeamScore();
+                CricMchTeamScore blngTeam = new CricMchTeamScore();
+
+                if (!(matchState.getState().equals("Result") || matchState.getState().equals("nextlive") || matchState.getState().equals("preview"))) {
+
+                    matchState.setTossWon(state.getString("@TW"));
+                    matchState.setDecisn(state.getString("@decisn"));
+
+                    JSONObject mScore = match.getJSONObject("mscr");
+                    JSONObject inngDetail = mScore.getJSONObject("inngsdetail");
+                    JSONObject btnTeamScore = mScore.getJSONObject("btTm");
+                    JSONObject blngTeamScore = mScore.getJSONObject("blgTm");
+
+                    mchInnDetails.setNoOfOvers(inngDetail.getString("@noofovers"));
+                    mchInnDetails.setRrr(inngDetail.getString("@rrr"));
+                    mchInnDetails.setCrr(inngDetail.getString("@crr"));
+                    mchInnDetails.setCprtshp(inngDetail.getString("@cprtshp"));
+
+                    btnTeam.setId(btnTeamScore.getString("@id"));
+                    btnTeam.setsName(btnTeamScore.getString("@sName"));
+                    blngTeam.setId(blngTeamScore.getString("@id"));
+                    blngTeam.setsName(blngTeamScore.getString("@sName"));
+
+//                    if(match.getString("@type").equals("TEST")){
+
+                    try {
+                        JSONObject btn_score = btnTeamScore.getJSONObject("Inngs");
+
+                        btnTeam.setRuns(btn_score.getString("@r"));
+                        btnTeam.setOvrs(btn_score.getString("@ovrs"));
+                        btnTeam.setWkts(btn_score.getString("@wkts"));
+
+
+                    } catch (JSONException btnObject_err) {
+
+                        JSONArray btn_inngsArray = btnTeamScore.getJSONArray("Inngs");
+                        int j = 0;
+                        while (i < btn_inngsArray.length()) {
+                            btnTeam.setRuns(btn_inngsArray.getJSONObject(j).getString("@r"));
+                            btnTeam.setOvrs(btn_inngsArray.getJSONObject(j).getString("@ovrs"));
+                            btnTeam.setWkts(btn_inngsArray.getJSONObject(j).getString("@wkts"));
+                            i++;
+                        }
+                    }
+
+
+                    try {
+
+                        JSONObject blng_score = blngTeamScore.getJSONObject("Inngs");
+
+                        blngTeam.setRuns(blng_score.getString("@r"));
+                        blngTeam.setOvrs(blng_score.getString("@ovrs"));
+                        blngTeam.setWkts(blng_score.getString("@wkts"));
+
+                    } catch (JSONException blngObject_err) {
+
+                        JSONArray blng_inngsArray = blngTeamScore.getJSONArray("Inngs");
+                        int k = 0;
+                        while (k < blng_inngsArray.length()) {
+                            blngTeam.setRuns(blng_inngsArray.getJSONObject(k).getString("@r"));
+                            blngTeam.setOvrs(blng_inngsArray.getJSONObject(k).getString("@ovrs"));
+                            blngTeam.setWkts(blng_inngsArray.getJSONObject(k).getString("@wkts"));
+                            k++;
+                        }
+
+                    }
+
+
+//                    }else {
+//                        btnTeam.setRuns(btnTeamScore.getJSONObject("Inngs").getString("@r"));
+//                        btnTeam.setOvrs(btnTeamScore.getJSONObject("Inngs").getString("@ovrs"));
+//                        btnTeam.setWkts(btnTeamScore.getJSONObject("Inngs").getString("@wkts"));
+//
+//                        blngTeam.setId(blngTeamScore.getString("@id"));
+//                        blngTeam.setsName(blngTeamScore.getString("@sName"));
+//                        try {
+//                            blngTeam.setRuns(blngTeamScore.getJSONObject("Inngs").getString("@r"));
+//                            blngTeam.setOvrs(blngTeamScore.getJSONObject("Inngs").getString("@ovrs"));
+//                            blngTeam.setWkts(blngTeamScore.getJSONObject("Inngs").getString("@wkts"));
+//                        } catch (JSONException e) {
+////                        e.printStackTrace();
+//                            blngTeam.setRuns(" ");
+//                            blngTeam.setOvrs(" ");
+//                            blngTeam.setWkts(" ");
+//                        }
+//                    }
+
+                } else if (matchState.getState().equals("Result")) {
+                    cricketMatch.setMom(match.getJSONObject("manofthematch").getJSONObject("mom").getString("@Name"));
+                    mchInnDetails = null;
+                    btnTeam = null;
+                    blngTeam = null;
+                } else {
+                    mchInnDetails = null;
+                    btnTeam = null;
+                    blngTeam = null;
+                }
+
+                cricketMatch.setType(match.getString("@type"));
+                try {
+                    cricketMatch.setMchDesc(match.getString("@mchDesc"));
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    cricketMatch.setMchDesc(" ");
+                }
+                try {
+                    cricketMatch.setGrnd(match.getString("@grnd"));
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    cricketMatch.setGrnd(" ");
+                }
+                try {
+                    cricketMatch.setNmch(match.getString("@nmch"));
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    try {
+                        cricketMatch.setNmch(match.getString("@mnum"));
+                    } catch (JSONException e2) {
+                        e2.printStackTrace();
+                        cricketMatch.setNmch(" ");
+                    }
+                }
+                try {
+                    cricketMatch.setInngCnt(match.getString("@inngCnt"));
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    cricketMatch.setInngCnt(" ");
+                }
+                try {
+                    cricketMatch.setTme_Dt(match.getJSONObject("Tme").getString("@Dt"));
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                    cricketMatch.setTme_Dt(" ");
+                }
+
+                cricketMatch.setMatchState(matchState);
+                cricketMatch.setInnDetails(mchInnDetails);
+                cricketMatch.setBtnTeam(btnTeam);
+                cricketMatch.setBlgnTeam(blngTeam);
+
+
+                matches.add(cricketMatch);
+
+
+                i++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (items.size() == 0) {
+            items.add(0, new ScoreCard(matches));
+        } else {
+            items.set(0, new ScoreCard(matches));
+        }
+
+    }
+
+    public boolean isInCategory(String category) {
+
+        boolean result = false;
+
+        int i = 0;
+        while (i < CATEG_S.size()) {
+
+            result = category.equals(CATEG_S.get(i));
+
+            if (result) {
+                return result;
+            }
+
+            i++;
+        }
+
+        return result;
+    }
 }

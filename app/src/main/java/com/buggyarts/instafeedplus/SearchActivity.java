@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
@@ -71,13 +72,14 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_up);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolBar);
 
         toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorWhite));
         toolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
-//        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedText);
+        toolbarLayout.setExpandedTitleGravity(Gravity.CENTER);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedText);
         toolbarLayout.setCollapsedTitleTextAppearance(R.style.ExpendedText);
     }
 

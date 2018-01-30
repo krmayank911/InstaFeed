@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -55,22 +56,6 @@ public class FeedsActivity extends AppCompatActivity {
 
         CATEGORY = getIntent().getStringExtra("category");
         int index = getIntent().getIntExtra("index", 1);
-        Log.v("CATEGORY", "" + index);
-        CATEGORY = CATEGORIES[index];
-        switch (index) {
-            case 4:
-                categories = "health";
-                break;
-            case 7:
-                categories = "science";
-                break;
-            case 8:
-                categories = "sports";
-                break;
-            default:
-                categories = CATEGORY;
-                break;
-        }
 
         feeds = new ArrayList<>();
         findSources();
@@ -82,13 +67,14 @@ public class FeedsActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_up);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
 
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolBar);
 
         toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorWhite));
         toolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
-//        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedText);
+        toolbarLayout.setExpandedTitleGravity(Gravity.CENTER);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedText);
         toolbarLayout.setCollapsedTitleTextAppearance(R.style.ExpendedText);
 
         progressBar = findViewById(R.id.progressBar);
@@ -103,7 +89,7 @@ public class FeedsActivity extends AppCompatActivity {
 
     //Find All Sources
     public void findSources() {
-        String url = BASE_URL + ALLSOURCES + "language=en" + "&category=" + categories + "&apiKey=" + API_KEY;
+        String url = BASE_URL + ALLSOURCES + "language=en" + "&category=" + CATEGORY + "&apiKey=" + API_KEY;
         Log.d("URL", url);
         SOURCES = new ArrayList<>();
         new GetSources().execute(url);
@@ -123,7 +109,7 @@ public class FeedsActivity extends AppCompatActivity {
         protected void onPostExecute(String res) {
             createSources(json_res);
 //            Log.v("Category", CATEGORY);
-            String listOfSources = filterByCategory(categories);
+            String listOfSources = filterByCategory(CATEGORY);
             Log.v("listOfSources", listOfSources);
             progressBar.setProgress(25);
             loadFeeds(listOfSources);

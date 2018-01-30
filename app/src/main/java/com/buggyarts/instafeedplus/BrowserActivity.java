@@ -33,7 +33,7 @@ public class BrowserActivity extends AppCompatActivity {
         toolbar.setTitle(base_url.substring(0, index));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_up);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
 
         webView = (WebView) findViewById(R.id.web_view);
         webView.setWebViewClient(new WebViewClient() {

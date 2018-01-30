@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "729789087886",
+    "firebase_url": "https://instafeedplus.firebaseio.com",
+    "project_id": "instafeedplus",
+    "storage_bucket": "instafeedplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729789087886:android:780b998f4106b031",
+        "android_client_info": {
+          "package_name": "com.buggyarts.instafeed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729789087886-if36ols3t4cl3r7mcmovga091etkf2i4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buggyarts.instafeed",
+            "certificate_hash": "08f3aefa209b64c4423e21e714da01c6e77c3b1e"
+          }
+        },
+        {
+          "client_id": "729789087886-hf36rns3s7m3sl4s1uhg3dbckct80700.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjcbKSAOvPZkR96NgJgwcuu66-VxqgzXc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729789087886-hf36rns3s7m3sl4s1uhg3dbckct80700.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

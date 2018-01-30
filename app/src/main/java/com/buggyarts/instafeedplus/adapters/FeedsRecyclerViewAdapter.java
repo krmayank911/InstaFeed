@@ -40,7 +40,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
     }
 
     @Override
-    public void onBindViewHolder(FeedsRecyclerViewAdapter.VH holder, int position) {
+    public void onBindViewHolder(final FeedsRecyclerViewAdapter.VH holder, int position) {
         final Article article = feeds.get(position);
         String published = "";
 
@@ -75,7 +75,11 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
                 context.startActivity(intent);
             }
         });
-        holder.description.setText(article.description);
+        if (article.description.equals(" ") || article.description.equals("null")) {
+            holder.description.setText(" ");
+        } else {
+            holder.description.setText(article.description);
+        }
         Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
 
     }
@@ -90,7 +94,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
 
     class VH extends RecyclerView.ViewHolder {
         ImageView thumbnail;
-        TextView time, source, title, description, read_more;
+        TextView time, source, title, description, read_more, powered_by;
 
         public VH(View itemView) {
             super(itemView);
@@ -100,7 +104,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
             title = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             read_more = itemView.findViewById(R.id.read_more);
-
+            powered_by = itemView.findViewById(R.id.powered_by);
         }
     }
 

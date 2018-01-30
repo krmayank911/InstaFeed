@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
@@ -64,10 +67,21 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="2dp"
                     android:layout_toStartOf="@+id/relativeimage"
-                    android:maxLines="5"
+                    android:maxLines="6"
                     android:ellipsize="end"
                     android:gravity="fill"
                     android:hint="'Mad Men' actress Kiernan Shipka will take on Madam Satan in the dark Archie Comics drama" />
+
+                <TextView
+                    android:id="@+id/powered_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/relativeimage"
+                    android:layout_alignParentEnd="true"
+                    android:paddingTop="10dp"
+                    android:textSize="10dp"
+                    android:text="powered by NewsApi.org"
+                    android:layout_toStartOf="@id/relativeimage" />
 
                 <TextView
                     android:id="@+id/read_more"
@@ -80,6 +94,7 @@
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_blue_dark"
                     android:text="Read More.." />
+
 
                 <RelativeLayout
                     android:id="@+id/relativeimage"

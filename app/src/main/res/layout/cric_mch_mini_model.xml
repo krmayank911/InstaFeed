@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/match_card"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:contentPadding="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/match_heading"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/left_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Jan 20, 2018 - 3rd Match IND vs SA  " />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/score_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/match_heading"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical">
+
+            <RelativeLayout
+                android:id="@+id/match_scores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/team_batting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="IND  247/4 (46.2)"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/team_bowling"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/team_batting"
+                    android:hint="SA YET TO BAT"
+                    android:gravity="center_horizontal"
+                    android:textSize="18dp" />
+
+                <RelativeLayout
+                    android:id="@+id/match_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/team_batting"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/required_rr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="R. run rate : 6.4" />
+
+                    <TextView
+                        android:id="@+id/current_rr"
+                        android:layout_toRightOf="@id/required_rr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:hint="C. run rate : 6.4" />
+
+                    <TextView
+                        android:id="@+id/partnership"
+                        android:layout_toRightOf="@id/current_rr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Patenership 24" />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/match_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/score_card">
+
+            <TextView
+                android:id="@+id/match_description"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="India elected to bat first"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/toggle_extra"
+                android:layout_marginRight="5dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_expand_more_black_24dp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

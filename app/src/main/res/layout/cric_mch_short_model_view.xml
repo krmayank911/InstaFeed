@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/match_card"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="5dp"
+    card_view:contentPadding="10dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/match_heading"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/left_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Jan 20, 2018 - 3rd Match IND vs SA  " />
+
+            <TextView
+                android:id="@+id/right_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/left_heading"
+                android:gravity="center_horizontal"
+                android:hint="LIVE" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/score_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/match_heading"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical">
+
+            <RelativeLayout
+                android:id="@+id/match_scores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/team_batting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="IND  247/4 (46.2)"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/team_bowling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/team_batting"
+                    android:hint="SA     YET TO BAT"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/inng_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/match_scores"
+                android:layout_alignParentRight="true"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/required_rr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="R. run rate : 6.4" />
+
+                <TextView
+                    android:id="@+id/current_rr"
+                    android:layout_below="@id/required_rr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="C. run rate : 6.4" />
+
+                <TextView
+                    android:id="@+id/partnership"
+                    android:layout_below="@id/current_rr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Patenership 24" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/match_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/score_card">
+
+            <TextView
+                android:id="@+id/match_description"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="India Tour of South Africa,2018"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

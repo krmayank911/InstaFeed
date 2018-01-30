@@ -1,58 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinator_layout"
+<android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    tools:context="com.buggyarts.instafeedplus.MainActivity">
+    android:layout_height="match_parent">
 
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimaryDark">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolBar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="1dp"
-                app:layout_collapseMode="pin">
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/main_view_pager"
+    <android.support.design.widget.CoordinatorLayout android:id="@+id/coordinator_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:fitsSystemWindows="false"
+        tools:context="com.buggyarts.instafeedplus.MainActivity">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimaryDark"
-            app:tabTextColor="#95FFFFFF"
-            app:tabSelectedTextColor="@color/colorWhite">
+            android:layout_height="160dp"
+            android:background="@color/colorPrimaryDark">
 
-        </android.support.design.widget.TabLayout>
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-    </android.support.v4.view.ViewPager>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="1dp"
+                    app:layout_collapseMode="pin">
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimaryDark"
+                app:tabMode="fixed"
+                app:tabTextColor="#95FFFFFF"
+                app:tabSelectedTextColor="@color/colorWhite"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+            </android.support.design.widget.TabLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v4.view.ViewPager>
 
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <RelativeLayout
+        android:id="@+id/nav_drawer_layout"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_gravity="start">
+
+        <TextView
+            android:id="@+id/nav_heading_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="CATEGORIES"
+            android:textSize="24dp"
+            android:padding="10dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/drawer_close"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/nav_categories_list"
+            android:layout_below="@id/nav_heading_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f1f5f8">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/magazine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/nav_categories_list"
+            android:text="Hot Stories"
+            android:textSize="24dp"
+            android:padding="10dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimaryDark" />
+
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>
+

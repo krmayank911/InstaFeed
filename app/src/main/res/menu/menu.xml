@@ -6,6 +6,14 @@
         android:title="Search"
         android:icon="@drawable/ic_search_white_48dp"
         app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView"></item>
+        app:actionViewClass="android.support.v7.widget.SearchView">
+
+    </item>
+    <item
+        android:id="@+id/user_preferences"
+        android:title="Preferences"
+        app:showAsAction="never">
+
+    </item>
 
 </menu>

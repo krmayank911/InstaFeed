@@ -13,33 +13,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name="com.buggyarts.instafeedplus.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchActivity"></meta-data>
+                android:value=".SearchActivity" />
         </activity>
         <activity
-            android:name="com.buggyarts.instafeedplus.FeedsActivity"
+            android:name=".FeedsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.buggyarts.instafeedplus.MainActivity" />
         </activity>
         <activity
-            android:name="com.buggyarts.instafeedplus.BrowserActivity"
+            android:name=".BrowserActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.buggyarts.instafeedplus.MainActivity" />
         </activity>
         <activity
-            android:name="com.buggyarts.instafeedplus.SearchActivity"
+            android:name=".SearchActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -57,8 +58,19 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            tools:replace="android:value"
-            android:value="a72fd413850382879bcd244179c7b204bf5badde" />
+            android:value="a72fd413850382879bcd244179c7b204bf5badde"
+            tools:replace="android:value" />
+
+        <activity android:name=".GatherInfoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.buggyarts.instafeedplus.MainActivity" />
+        </activity>
+        <activity android:name=".HotStoriesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.buggyarts.instafeedplus.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

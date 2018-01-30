@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/stories_top_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginBottom="30dp">
+
+        <TextView
+            android:id="@+id/trending_title"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="Keala Redefines Women's Surfing"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/title_underline"
+            android:layout_below="@id/trending_title"
+            android:layout_width="80dp"
+            android:layout_height="5dp"
+            android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/trending_sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_underline"
+            android:textSize="20dp"
+            android:text="JULY 24, 2018"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/stories_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/stories_top_header">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
