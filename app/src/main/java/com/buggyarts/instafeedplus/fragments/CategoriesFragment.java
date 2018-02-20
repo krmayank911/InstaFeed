@@ -12,25 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.buggyarts.instafeedplus.FeedsActivity;
+import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.R;
+import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.OptionsRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
 import static com.buggyarts.instafeedplus.utils.Constants.CATEGORIES;
+import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
 
 /**
  * Created by mayank on 1/6/18
  */
 
-public class SampleFragment extends Fragment {
+public class CategoriesFragment extends Fragment {
 
     RecyclerView recyclerView;
-    ArrayList<String> categories;
     RecyclerView.LayoutManager manager;
-    OptionsRecyclerViewAdapter adapter;
+    ObjectRecyclerViewAdapter adapter;
 
     Context context;
+    ArrayList<Object> categoryArrayList;
 
     @Nullable
     @Override
@@ -40,16 +43,7 @@ public class SampleFragment extends Fragment {
         recyclerView = v.findViewById(R.id.categories_recycler_view);
         manager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(manager);
-        adapter = new OptionsRecyclerViewAdapter(categories, new OptionsRecyclerViewAdapter.OnCategoryClick() {
-            @Override
-            public void onCategoryClickListener(int index, String category) {
-
-                Intent intent = new Intent(context, FeedsActivity.class);
-                intent.putExtra("category", category);
-                intent.putExtra("index", index);
-                startActivity(intent);
-            }
-        });
+        adapter = new ObjectRecyclerViewAdapter(categoryArrayList, context);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -58,10 +52,12 @@ public class SampleFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = getContext();
+
+        categoryArrayList = new ArrayList<>();
+
         int i = 0;
-        categories = new ArrayList<>();
         while (i < CATEGORIES.length) {
-            categories.add(CATEGORIES[i]);
+            categoryArrayList.add(new Category(CATEGORIES[i]));
             i++;
         }
     }

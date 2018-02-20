@@ -2,6 +2,7 @@ package com.buggyarts.instafeedplus.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.buggyarts.instafeedplus.BrowserActivity;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.utils.Article;
+import com.buggyarts.instafeedplus.utils.Share;
+import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -81,6 +84,30 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
             holder.description.setText(article.description);
         }
         Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
+        holder.share.setOnClickListener(takeSnapShotAndShare);
+
+        if (!article.isBookmarked()) {
+            holder.bookmark.setImageResource(R.drawable.ic_bookmark_border_pink_24dp);
+        } else {
+            holder.bookmark.setImageResource(R.drawable.ic_bookmark_pink_24dp);
+        }
+
+        holder.bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!article.isBookmarked()) {
+                    article.setBookmarked(true);
+                    holder.bookmark.setImageResource(R.drawable.ic_bookmark_pink_24dp);
+//                    Log.d("BookMark", "JsonString" + article.toString());
+                    DbUser dbUser = new DbUser(context, article.toString());
+                    dbUser.addArticleInDB();
+                } else {
+                    article.setBookmarked(false);
+                    holder.bookmark.setImageResource(R.drawable.ic_bookmark_border_pink_24dp);
+                }
+            }
+        });
+
 
     }
 
@@ -93,12 +120,14 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
     }
 
     class VH extends RecyclerView.ViewHolder {
-        ImageView thumbnail;
+        ImageView thumbnail, share, bookmark;
         TextView time, source, title, description, read_more, powered_by;
 
         public VH(View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            share = itemView.findViewById(R.id.share);
+            bookmark = itemView.findViewById(R.id.bookmark);
             time = itemView.findViewById(R.id.time);
             source = itemView.findViewById(R.id.source);
             title = itemView.findViewById(R.id.title);
@@ -163,5 +192,23 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
         }
         return 0;
     }
+
+    View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Share shareItem = new Share(v);
+            String image_path = shareItem.shareScreenShot();
+
+            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            intent.setData(Uri.parse(image_path));
+            intent.setAction("android.intent.action.SEND");
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image_path));
+            intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            }
+        }
+    };
 
 }

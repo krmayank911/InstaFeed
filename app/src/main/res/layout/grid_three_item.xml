@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/story_card_3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/story_thumbnail_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/gradient" />
+
+            <ImageView
+                android:id="@+id/share_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_black_24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp" />
+
+            <TextView
+                android:id="@+id/story_title_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/story_category_3"
+                android:text="Stories From The Road Pt.2"
+                android:maxLines="4"
+                android:ellipsize="end"
+                android:textSize="12dp"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/story_category_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="TRAVEL"
+                android:textSize="10dp"
+                android:textColor="@color/colorWhite"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="5dp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

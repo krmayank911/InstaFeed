@@ -24,7 +24,7 @@
                 android:id="@+id/left_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Jan 20, 2018 - 3rd Match IND vs SA  " />
+                android:text="Jan 20, 2018 - 3rd Match IND vs SA" />
 
         </RelativeLayout>
 
@@ -45,7 +45,7 @@
                     android:id="@+id/team_batting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="IND  247/4 (46.2)"
+                    android:text="IND  247/4 (46.2)"
                     android:textSize="18dp" />
 
                 <TextView
@@ -53,41 +53,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/team_batting"
-                    android:hint="SA YET TO BAT"
+                    android:text="SA YET TO BAT"
                     android:gravity="center_horizontal"
                     android:textSize="18dp" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/match_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/team_batting"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/required_rr"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="R. run rate : 6.4" />
+                        android:layout_weight="5">
 
-                    <TextView
-                        android:id="@+id/current_rr"
-                        android:layout_toRightOf="@id/required_rr"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:hint="C. run rate : 6.4" />
+                        <TextView
+                            android:id="@+id/required_rr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="R. run rate : 6.4" />
+
+                        <TextView
+                            android:id="@+id/current_rr"
+                            android:layout_below="@id/required_rr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="C. run rate : 6.4" />
+
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/partnership"
                         android:layout_toRightOf="@id/current_rr"
-                        android:layout_width="wrap_content"
+                        android:layout_weight="5"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Patenership 24" />
+                        android:text="Patenership 24" />
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
             </RelativeLayout>
 

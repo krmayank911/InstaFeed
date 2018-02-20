@@ -15,5 +15,12 @@
         app:showAsAction="never">
 
     </item>
+    <item
+        android:id="@+id/open_bookmarks"
+        android:icon="@drawable/ic_bookmark_pink_24dp"
+        android:title="Bookmarks"
+        app:showAsAction="never">
+
+    </item>
 
 </menu>

@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class Article implements Parcelable {
     public String time, source, title, description, thumbnail_url, url;
+    private boolean isBookmarked = false;
 
     public Article(String time, String source, String title, String description, String thumbnail_url, String url) {
         this.time = time;
@@ -80,6 +81,18 @@ public class Article implements Parcelable {
         this.thumbnail_url = thumbnail_url;
     }
 
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        isBookmarked = bookmarked;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,5 +106,19 @@ public class Article implements Parcelable {
         parcel.writeString(description);
         parcel.writeString(thumbnail_url);
         parcel.writeString(url);
+    }
+
+    @Override
+    public String toString() {
+
+        String article = "{ \"source\": { \"id\": \"reuters\",\"name\": \""
+                + getSource() + "\" }, \"author\": \"Yara Bayoumy\", \"title\": \""
+                + getTitle() + "\",\"description\": \""
+                + getDescription() + "\",\"url\": \""
+                + getUrl() + "\",\"urlToImage\": \""
+                + getThumbnail_url() + "\",\"publishedAt\": \""
+                + getTime() + "\"}";
+
+        return article;
     }
 }

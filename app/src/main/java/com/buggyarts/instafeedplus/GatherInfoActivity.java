@@ -27,7 +27,7 @@ public class GatherInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gather_info);
 
-        setToolbar();
+//        setToolbar();
         countrySelectorSetup();
         languageSelectorSetup();
 
@@ -35,12 +35,12 @@ public class GatherInfoActivity extends AppCompatActivity {
         actionSubmit();
     }
 
-    public void setToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolBar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
-        toolbar.setTitle("Preferences");
-        setSupportActionBar(toolbar);
-    }
+//    public void setToolbar() {
+//        toolbar = (Toolbar) findViewById(R.id.toolBar);
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
+//        toolbar.setTitle("Preferences");
+//        setSupportActionBar(toolbar);
+//    }
 
     public void countrySelectorSetup() {
 

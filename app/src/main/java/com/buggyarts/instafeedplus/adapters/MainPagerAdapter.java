@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.buggyarts.instafeedplus.fragments.SampleFragment;
+import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
 import com.buggyarts.instafeedplus.fragments.SportsFeed;
 import com.buggyarts.instafeedplus.fragments.TopFeeds;
 import com.buggyarts.instafeedplus.fragments.TwitterNews;
@@ -33,7 +33,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
                 fragment = new TwitterNews();
                 break;
             case 3:
-                fragment = new SampleFragment();
+                fragment = new TrendingFeeds();
                 break;
             case 2:
                 fragment = new SportsFeed();

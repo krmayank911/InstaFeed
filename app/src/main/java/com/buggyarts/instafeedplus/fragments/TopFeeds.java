@@ -6,10 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,10 @@ import com.buggyarts.instafeedplus.Models.CricketMatch;
 import com.buggyarts.instafeedplus.Models.CricketMatchState;
 import com.buggyarts.instafeedplus.Models.ScoreCard;
 import com.buggyarts.instafeedplus.R;
-import com.buggyarts.instafeedplus.adapters.CricMchAdapter;
-import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
-import com.buggyarts.instafeedplus.utils.Constants;
 import com.buggyarts.instafeedplus.utils.Source;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,7 +61,6 @@ public class TopFeeds extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
-//    FeedsRecyclerViewAdapter adapter;
 
     ObjectRecyclerViewAdapter adapter;
 
@@ -70,16 +68,12 @@ public class TopFeeds extends Fragment {
 
     Context context;
     ArrayList<Object> items;
-//    ArrayList<Article> feeds;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference cric_databaseReference;
     ArrayList<CricketMatch> matches;
     String SELECTED_COUNTRY = "in", SELECTED_LANGUAGE = "en";
 
-//    RecyclerView cric_recyclerView;
-//    RecyclerView.LayoutManager cric_layoutManager;
-//    CricMchAdapter cric_adapter;
 
     @Nullable
     @Override
@@ -93,15 +87,11 @@ public class TopFeeds extends Fragment {
         manager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(manager);
         adapter = new ObjectRecyclerViewAdapter(items, context);
-//        adapter = new FeedsRecyclerViewAdapter(feeds, context);
         recyclerView.setAdapter(adapter);
 
-        //Cricket
-//        cric_recyclerView = feedsView.findViewById(R.id.scores_recyclerView);
-//        cric_layoutManager = new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false);
-//        cric_recyclerView.setLayoutManager(cric_layoutManager);
-//        cric_adapter = new CricMchAdapter(matches,context);
-//        cric_recyclerView.setAdapter(cric_adapter);
+        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
+        snapHelper.attachToRecyclerView(recyclerView);
+
 
         return feedsView;
     }
@@ -118,14 +108,9 @@ public class TopFeeds extends Fragment {
         }
 
         items = new ArrayList<>();
+        CATEG_S = new ArrayList<>();
         new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "country=" + SELECTED_COUNTRY + "&apiKey=" + API_KEY);
 
-//        if(!SELECTED_COUNTRY.equals("")){
-//
-//        }
-//        else {
-//            new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "&apiKey=" + API_KEY);
-//        }
         findSources();
 
 
@@ -423,36 +408,24 @@ public class TopFeeds extends Fragment {
 
                     } catch (JSONException blngObject_err) {
 
-                        JSONArray blng_inngsArray = blngTeamScore.getJSONArray("Inngs");
-                        int k = 0;
-                        while (k < blng_inngsArray.length()) {
-                            blngTeam.setRuns(blng_inngsArray.getJSONObject(k).getString("@r"));
-                            blngTeam.setOvrs(blng_inngsArray.getJSONObject(k).getString("@ovrs"));
-                            blngTeam.setWkts(blng_inngsArray.getJSONObject(k).getString("@wkts"));
-                            k++;
+                        try {
+                            JSONArray blng_inngsArray = blngTeamScore.getJSONArray("Inngs");
+                            int k = 0;
+                            while (k < blng_inngsArray.length()) {
+                                blngTeam.setRuns(blng_inngsArray.getJSONObject(k).getString("@r"));
+                                blngTeam.setOvrs(blng_inngsArray.getJSONObject(k).getString("@ovrs"));
+                                blngTeam.setWkts(blng_inngsArray.getJSONObject(k).getString("@wkts"));
+                                k++;
+                            }
+                        } catch (JSONException e) {
+
+                            blngTeam.setRuns(" ");
+                            blngTeam.setOvrs(" ");
+                            blngTeam.setWkts(" ");
                         }
 
+
                     }
-
-
-//                    }else {
-//                        btnTeam.setRuns(btnTeamScore.getJSONObject("Inngs").getString("@r"));
-//                        btnTeam.setOvrs(btnTeamScore.getJSONObject("Inngs").getString("@ovrs"));
-//                        btnTeam.setWkts(btnTeamScore.getJSONObject("Inngs").getString("@wkts"));
-//
-//                        blngTeam.setId(blngTeamScore.getString("@id"));
-//                        blngTeam.setsName(blngTeamScore.getString("@sName"));
-//                        try {
-//                            blngTeam.setRuns(blngTeamScore.getJSONObject("Inngs").getString("@r"));
-//                            blngTeam.setOvrs(blngTeamScore.getJSONObject("Inngs").getString("@ovrs"));
-//                            blngTeam.setWkts(blngTeamScore.getJSONObject("Inngs").getString("@wkts"));
-//                        } catch (JSONException e) {
-////                        e.printStackTrace();
-//                            blngTeam.setRuns(" ");
-//                            blngTeam.setOvrs(" ");
-//                            blngTeam.setWkts(" ");
-//                        }
-//                    }
 
                 } else if (matchState.getState().equals("Result")) {
                     cricketMatch.setMom(match.getJSONObject("manofthematch").getJSONObject("mom").getString("@Name"));

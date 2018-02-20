@@ -1,119 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.buggyarts.instafeedplus.GatherInfoActivity">
+    tools:context="com.buggyarts.instafeedplus.GatherInfoActivity"
+    android:background="@drawable/background_gradient">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="30dp">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolBar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:titleTextAppearance="@style/ExpendedText">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.Toolbar>
+            <TextView
+                android:id="@+id/gather_info_heading"
+                android:layout_below="@id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Care to answer some Questions?"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="30dp" />
 
-    </android.support.design.widget.AppBarLayout>
+            <RelativeLayout
+                android:id="@+id/country"
+                android:layout_below="@id/gather_info_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
 
-    <TextView
-        android:id="@+id/gather_info_heading"
-        android:layout_below="@id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Care to answer some Questions?"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="30dp" />
+                <TextView
+                    android:id="@+id/country_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Country :"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:visibility="gone"
+                    android:layout_marginRight="20dp" />
 
-    <RelativeLayout
-        android:id="@+id/country"
-        android:layout_below="@id/gather_info_heading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+                <Spinner
+                    android:id="@+id/country_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/country_heading"
+                    android:autofillHints="Country">
 
-        <TextView
-            android:id="@+id/country_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Country :"
-            android:textSize="20dp"
-            android:textColor="@android:color/holo_orange_dark"
-            android:visibility="gone"
-            android:layout_marginRight="20dp" />
+                </Spinner>
 
-        <Spinner
-            android:id="@+id/country_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/country_heading"
-            android:autofillHints="Country"></Spinner>
+            </RelativeLayout>
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/language"
+                android:layout_below="@id/country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
 
-    <RelativeLayout
-        android:id="@+id/language"
-        android:layout_below="@id/country"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+                <TextView
+                    android:id="@+id/language_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Language :"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:layout_marginRight="20dp"
+                    android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/language_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Language :"
-            android:textSize="20dp"
-            android:textColor="@android:color/holo_orange_dark"
-            android:layout_marginRight="20dp"
-            android:visibility="gone" />
+                <Spinner
+                    android:id="@+id/language_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/language_heading"
+                    android:autofillHints="Country"></Spinner>
 
-        <Spinner
-            android:id="@+id/language_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/language_heading"
-            android:autofillHints="Country"></Spinner>
+            </RelativeLayout>
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/skip_or_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/language"
+                android:layout_margin="50dp"
+                android:gravity="center_horizontal">
 
-    <RelativeLayout
-        android:id="@+id/skip_or_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/language"
-        android:layout_margin="50dp">
+                <!--<TextView-->
+                <!--android:id="@+id/skip"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Not Now"-->
+                <!--android:textSize="20dp"-->
+                <!--android:textColor="@color/colorWhite"-->
+                <!--android:textStyle="bold"-->
+                <!--android:background="@drawable/rectagularbg"-->
+                <!--android:padding="12dp" />-->
 
-        <TextView
-            android:id="@+id/skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Not Now"
-            android:textSize="20dp"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            android:background="@drawable/rectagularbg"
-            android:padding="12dp" />
+                <TextView
+                    android:id="@+id/submit"
+                    android:layout_width="wrap_content"
+                    android:minWidth="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/rectagularbg"
+                    android:padding="12dp"
+                    android:gravity="center" />
 
-        <TextView
-            android:id="@+id/submit"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/rectagularbg"
-            android:padding="12dp" />
+            </RelativeLayout>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:padding="12dp"
+                android:text="Not Now"
+                android:textColor="@color/indigo"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 
 </RelativeLayout>

@@ -37,6 +37,21 @@
                     android:layout_toRightOf="@id/time"
                     android:hint="Daily Mail" />
 
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_share_pink_24dp" />
+
+                <ImageView
+                    android:id="@+id/bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/share"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/ic_bookmark_border_pink_24dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -54,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:ellipsize="end"
-                    android:hint="Netflix's Chilling New Sabrina Series Has Finally Found Its Teenage Witch"
+                    android:text="Netflix's Chilling New Sabrina Series Has Finally Found Its Teenage Witch"
                     android:maxLines="2"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16dp" />
@@ -70,7 +85,7 @@
                     android:maxLines="6"
                     android:ellipsize="end"
                     android:gravity="fill"
-                    android:hint="'Mad Men' actress Kiernan Shipka will take on Madam Satan in the dark Archie Comics drama" />
+                    android:text="'Mad Men' actress Kiernan Shipka will take on Madam Satan in the dark Archie Comics drama" />
 
                 <TextView
                     android:id="@+id/powered_by"

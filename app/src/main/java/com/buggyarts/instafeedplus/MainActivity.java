@@ -4,10 +4,15 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -28,10 +33,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.adapters.MainPagerAdapter;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.OptionsRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.fragments.Bookmarks;
+import com.buggyarts.instafeedplus.fragments.CategoriesFragment;
+import com.buggyarts.instafeedplus.fragments.StoriesFragment;
+import com.buggyarts.instafeedplus.fragments.TopFeeds;
+import com.buggyarts.instafeedplus.fragments.Trending;
+import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
+import com.buggyarts.instafeedplus.fragments.TwitterNews;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
@@ -54,18 +68,25 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     TabLayout tabLayout;
 
+    AHBottomNavigation bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
 
 
         checkUserPreferences();
 
         setUpToolbar();
-        setUpViewPager();
-        navigationHandler();
+
+        fragmentManager = getSupportFragmentManager();
+        loadFragment(new TopFeeds());
+
+        setupBottomNav();
+//        setUpViewPager();
+//        navigationHandler();
 
     }
 
@@ -81,14 +102,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolBar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setSelectedTabIndicatorHeight(0);
+//        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+//        tabLayout.setSelectedTabIndicatorHeight(0);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolBar);
-//
         toolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorWhite));
         toolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorWhite));
     }
@@ -139,9 +160,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
-        if (abdt.onOptionsItemSelected(item)) {
-            return true;
-        }
+//        if (abdt.onOptionsItemSelected(item)) {
+//            return true;
+//        }
 
         switch (item.getItemId()) {
             case R.id.action_search:
@@ -150,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.user_preferences:
                 Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.open_bookmarks:
+                loadFragment(new Bookmarks());
+                toolbarLayout.setTitle("Bookmarks");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -215,5 +240,62 @@ public class MainActivity extends AppCompatActivity {
         abdt.syncState();
 
     }
+
+    public void setupBottomNav() {
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+
+        // Create items
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem("Feeds", R.drawable.ic_home_black_24dp, R.color.colorWhite);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem("Categories", R.drawable.ic_more_black_24dp, R.color.colorWhite);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("Trending", R.drawable.ic_whatshot_black_24dp, R.color.colorWhite);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem("Stories", R.drawable.ic_pages_black_24dp, R.color.colorWhite);
+
+        // Add items
+        bottomNavigationView.addItem(item1);
+        bottomNavigationView.addItem(item2);
+        bottomNavigationView.addItem(item3);
+        bottomNavigationView.addItem(item4);
+
+        bottomNavigationView.setBehaviorTranslationEnabled(false);
+
+        bottomNavigationView.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+        bottomNavigationView.setCurrentItem(0);
+        bottomNavigationView.setInactiveColor(R.color.colorPrimary);
+
+        bottomNavigationView.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public boolean onTabSelected(int position, boolean wasTabSelected) {
+                switch (position) {
+                    case 0:
+                        toolbarLayout.setTitle("InstaFeed+");
+                        loadFragment(new TopFeeds());
+                        return true;
+                    case 1:
+                        toolbarLayout.setTitle("Categories");
+                        loadFragment(new CategoriesFragment());
+                        return true;
+                    case 2:
+                        toolbarLayout.setTitle("InFocus");
+                        loadFragment(new TrendingFeeds());
+                        return true;
+                    case 3:
+                        toolbarLayout.setTitle("Magazine");
+                        loadFragment(new StoriesFragment());
+//                        Intent intent = new Intent(MainActivity.this,HotStoriesActivity.class);
+//                        startActivity(intent);
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    public void loadFragment(Fragment fragment) {
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_container, fragment);
+        transaction.commit();
+    }
+
 
 }

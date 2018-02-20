@@ -50,6 +50,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
+    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
 
 }
 

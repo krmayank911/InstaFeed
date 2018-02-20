@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.buggyarts.instafeedplus.fragments.MenFragment;
 import com.buggyarts.instafeedplus.fragments.RelationshipFragment;
 import com.buggyarts.instafeedplus.fragments.Trending;
 import com.buggyarts.instafeedplus.fragments.WomenFragment;
@@ -15,7 +16,7 @@ import com.buggyarts.instafeedplus.fragments.WomenFragment;
 
 public class StoriesPagerAdapter extends FragmentPagerAdapter {
 
-    int pageCount = 3;
+    int pageCount = 4;
 
     public StoriesPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -32,6 +33,9 @@ public class StoriesPagerAdapter extends FragmentPagerAdapter {
                 fragment = new WomenFragment();
                 break;
             case 2:
+                fragment = new MenFragment();
+                break;
+            case 3:
                 fragment = new RelationshipFragment();
                 break;
         }
@@ -54,7 +58,11 @@ public class StoriesPagerAdapter extends FragmentPagerAdapter {
                 title = "Women";
                 break;
             case 2:
+                title = "Men";
+                break;
+            case 3:
                 title = "Relationship";
+                break;
         }
         return title;
     }

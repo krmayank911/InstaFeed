@@ -1,5 +1,11 @@
 package com.buggyarts.instafeedplus.utils;
 
+import android.graphics.Bitmap;
+import android.os.Environment;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -48,5 +54,8 @@ public class Constants {
             "Japan", "Republic Of Korea", "Lithuania", "Latvia", "Morocco", "Mexico", "Malaysia", "Nigeria", "Netherlands", "Norway",
             "New Zealand", "Philippines", "Poland", "Portugal", "Romania", "Serbia", "Russian Federation", "Saudi Arabia",
             "Sweden", "Singapore", "Slovenia", "Slovakia", "Thailand", "Turkey", "Taiwan", "Ukraine", "United States", "Venezuela", "South Africa"};
+
+    public static File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
+            "capturedScreenShot.jpg");
 
 }

@@ -2,10 +2,12 @@ package com.buggyarts.instafeedplus.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -109,7 +111,7 @@ public class CricMchAdapter extends RecyclerView.Adapter<CricMchAdapter.VH> {
     public class VH extends RecyclerView.ViewHolder {
 
         TextView heading, status, score_team_batting, score_team_bowling, crr, rrr, c_partnership, description;
-        RelativeLayout extra;
+        LinearLayout extra;
         ImageView toggle_extra;
 
         public VH(View itemView) {

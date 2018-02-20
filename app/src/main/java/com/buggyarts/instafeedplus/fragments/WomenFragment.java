@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.buggyarts.instafeedplus.Models.StoriesModelOne;
 import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by mayank on 1/27/18
@@ -33,37 +35,60 @@ import java.util.ArrayList;
 public class WomenFragment extends Fragment {
 
     Context context;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager manager;
-    ObjectRecyclerViewAdapter adapter;
 
-    ArrayList<Object> list;
+    ArrayList<Object> stories;
+    ArrayList<Story> cosmo_maxim, xp;
+
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, databaseReference_2;
 
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    ObjectRecyclerViewAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.stories_fragment_trending, container, false);
+        View stories_view = inflater.inflate(R.layout.sample_dev_fragment, container, false);
 
-        recyclerView = fragmentView.findViewById(R.id.stories_recycler_view);
-        manager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(manager);
-        adapter = new ObjectRecyclerViewAdapter(list, context);
+        recyclerView = stories_view.findViewById(R.id.scores_card_recyclerView);
+        layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new ObjectRecyclerViewAdapter(stories, context);
         recyclerView.setAdapter(adapter);
 
-        return fragmentView;
+        return stories_view;
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stories = new ArrayList<>();
+        cosmo_maxim = new ArrayList<>();
+        xp = new ArrayList<>();
+
         context = getContext();
-        list = new ArrayList<>();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("MensXp").child("Women");
+        databaseReference = firebaseDatabase.getReference().child("Mix").child("Women");
+
+        databaseReference_2 = firebaseDatabase.getReference().child("Cosmopolitan").child("FrontPage");
+        databaseReference_2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String jsonResponse = dataSnapshot.toString().replace("DataSnapshot", "");
+//                Log.d("COSMO",jsonResponse);
+                extractStories(jsonResponse);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,21 +104,63 @@ public class WomenFragment extends Fragment {
 
             }
         });
+
+
     }
 
     public void extractStories(String jsonResponse) {
         try {
-            JSONObject value = new JSONObject(jsonResponse).getJSONObject("value");
-            JSONArray items = value.getJSONArray("women");
+            JSONArray items;
+            try {
+                items = new JSONObject(jsonResponse).getJSONArray("value");
+            } catch (JSONException e2) {
+                items = new JSONObject(jsonResponse).getJSONObject("value").getJSONArray("frontPage");
+            }
+
             int i = 0;
             while (i < items.length()) {
                 JSONObject story = items.getJSONObject(i);
-                list.add(new Story(story.getString("title"),
-                        story.getString("imgUrl"),
-                        story.getString("fullStoryUrl"),
-                        story.getString("category")));
+                String identifier = story.getString("identifier");
+                String img_url;
+                if (identifier.equals("MaximWomen") || identifier.equals("cosmopolitanFrontPage")) {
+                    img_url = story.getString("imgUrl").replace("https://", "");
+
+                    stories.add(new Story(story.getString("title"),
+                            img_url,
+                            story.getString("fullStoryUrl"),
+                            story.getString("category")));
+
+                } else {
+
+                    img_url = story.getString("imgUrl");
+                    xp.add(new Story(story.getString("title"),
+                            img_url,
+                            story.getString("fullStoryUrl"),
+                            story.getString("category")));
+                }
                 i++;
             }
+
+            int j = 0;
+            int even_odd = xp.size() % 2;
+
+            if (even_odd == 0) {
+                while (j < xp.size()) {
+
+                    StoriesModelOne model = new StoriesModelOne(xp.get(j), xp.get(j + 1));
+                    stories.add(model);
+                    j = j + 2;
+                }
+            } else {
+                while (j < xp.size() - 1) {
+
+                    StoriesModelOne model = new StoriesModelOne(xp.get(j), xp.get(j + 1));
+                    stories.add(model);
+                    j = j + 2;
+                }
+            }
+
+            Collections.shuffle(stories);
 
         } catch (JSONException e) {
             e.printStackTrace();
