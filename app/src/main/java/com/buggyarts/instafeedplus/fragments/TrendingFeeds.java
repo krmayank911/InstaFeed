@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.Models.Link;
 import com.buggyarts.instafeedplus.Models.LinksnTagsList;
 import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,6 +96,15 @@ public class TrendingFeeds extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!NetworkConnection.isNetworkAvailale(context)) {
+            Toast.makeText(context, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void extractTrendingFeeds(String json) throws JSONException {

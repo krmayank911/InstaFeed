@@ -11,9 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.adapters.FeedsRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +66,16 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
         adapter = new FeedsRecyclerViewAdapter(feeds, this);
         recyclerView.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!NetworkConnection.isNetworkAvailale(this)) {
+            Toast.makeText(this, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     void setupAppBar() {

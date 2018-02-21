@@ -6,16 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.Models.StoryModelSI;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,10 +40,9 @@ public class RelationshipFragment extends Fragment {
 
     ArrayList<Object> list;
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference, headlineReference;
+    DatabaseReference databaseReference;
 
     TextView heading_title, heading_sub_title;
-    String title, sub_title;
 
 
     @Nullable
@@ -52,10 +50,6 @@ public class RelationshipFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.stories_fragment_trending, container, false);
 
-        if (savedInstanceState != null) {
-            heading_title.setText(savedInstanceState.getString("title"));
-            heading_sub_title.setText(savedInstanceState.getString("sub_title"));
-        }
 
         recyclerView = fragmentView.findViewById(R.id.stories_recycler_view);
         manager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
@@ -94,19 +88,15 @@ public class RelationshipFragment extends Fragment {
     }
 
     @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            heading_title.setText(savedInstanceState.getString("title"));
-            heading_sub_title.setText(savedInstanceState.getString("sub_title"));
-        }
-    }
+    public void onResume() {
+        super.onResume();
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("title", title);
-        outState.putString("sub_title", sub_title);
+        if (Constants.RELATIONSHIP_TITLE != null) {
+            heading_title.setText(Constants.RELATIONSHIP_TITLE);
+        }
+        if (Constants.RELATIONSHIP_SUB_TITLE != null) {
+            heading_sub_title.setText(Constants.RELATIONSHIP_SUB_TITLE);
+        }
     }
 
     public void extractStories(String jsonResponse) {
@@ -124,10 +114,10 @@ public class RelationshipFragment extends Fragment {
             }
             JSONObject headline = value.getJSONObject("heading");
 
-            title = headline.getString("title");
-            sub_title = headline.getString("subTitle");
-            heading_title.setText(title);
-            heading_sub_title.setText(sub_title);
+            Constants.RELATIONSHIP_TITLE = headline.getString("title");
+            Constants.RELATIONSHIP_SUB_TITLE = headline.getString("subTitle");
+            heading_title.setText(Constants.RELATIONSHIP_TITLE);
+            heading_sub_title.setText(Constants.RELATIONSHIP_SUB_TITLE);
 
         } catch (JSONException e) {
             e.printStackTrace();

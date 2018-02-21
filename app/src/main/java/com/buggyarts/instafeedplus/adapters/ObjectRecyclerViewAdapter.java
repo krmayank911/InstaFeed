@@ -2,11 +2,11 @@ package com.buggyarts.instafeedplus.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,23 +24,23 @@ import com.buggyarts.instafeedplus.Models.StoryModelSI;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.customViewHolders.ArticleViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.CategoryViewHolder;
-import com.buggyarts.instafeedplus.customViewHolders.LinkAdapter;
 import com.buggyarts.instafeedplus.customViewHolders.LinksnTagsViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.ScoreCardViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryCardSmallImageViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryCardViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryModelOneViewHolder;
 import com.buggyarts.instafeedplus.utils.Article;
-import com.buggyarts.instafeedplus.utils.Constants;
-import com.buggyarts.instafeedplus.utils.Share;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.buggyarts.instafeedplus.utils.Constants.BUSINESS;
 import static com.buggyarts.instafeedplus.utils.Constants.ENTERTAINMENT;
@@ -233,6 +233,8 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 } else {
                     article.setBookmarked(false);
                     holder.bookmark.setImageResource(R.drawable.ic_bookmark_border_pink_24dp);
+                    DbUser dbUser = new DbUser(context);
+                    dbUser.deleteArticleFromDB(article.toString());
                 }
             }
         });
@@ -441,24 +443,50 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         @Override
         public void onClick(View v) {
 
-            if (Constants.file.exists()) {
-                Log.d("Share File", "Result = delete: " + Constants.file.delete());
-            }
+            takeScreenShot(v);
 
-            Share shareItem = new Share(v);
-            String image_path = shareItem.shareScreenShot();
+//            if (Constants.file.exists()) {
+//                Log.d("Share File", "Result = delete: " + Constants.file.delete());
+//            }
 
-            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            intent.setData(Uri.parse(image_path));
-            intent.setAction("android.intent.action.SEND");
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image_path));
-            intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
-            if (intent.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(intent);
-            }
+//            Share shareItem = new Share(v);
+//            String image_path = shareItem.shareScreenShot();
 
         }
     };
+
+    private void takeScreenShot(View v) {
+        View view = v.getRootView();
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        String fileName = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", new Date()).toString();
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".jpg";
+
+        File file = new File(filePath);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            shareScreenShot(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareScreenShot(File imageFile) {
+        Uri uri = Uri.fromFile(imageFile);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.setType("image/png");
+        intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+    }
 
 }

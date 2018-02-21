@@ -61,4 +61,13 @@ public class DbUser {
         cursor.close();
         return articles;
     }
+
+    public void deleteArticleFromDB(String articleJson) {
+        dbManager = new ArticleDbManager(context);
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        String[] argument = {articleJson};
+        db.delete(DataContract.ArticleEntry.TABLE_NAME, DataContract.ArticleEntry.ARTICLE_JSON + "=?", argument);
+        db.close();
+    }
+
 }

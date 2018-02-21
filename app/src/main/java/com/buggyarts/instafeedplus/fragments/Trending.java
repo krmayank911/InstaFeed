@@ -16,6 +16,7 @@ import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.Models.StoryModelSI;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +42,11 @@ public class Trending extends Fragment {
     ObjectRecyclerViewAdapter adapter;
 
     TextView heading_title, heading_sub_title;
-    String title, sub_title;
     String TAG = "Trending";
 
     ArrayList<Object> list;
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference, headlineReference;
+    DatabaseReference databaseReference;
 
 
     @Nullable
@@ -62,12 +62,6 @@ public class Trending extends Fragment {
 
         heading_title = fragmentView.findViewById(R.id.trending_title);
         heading_sub_title = fragmentView.findViewById(R.id.trending_sub_title);
-
-        if (savedInstanceState != null) {
-            Log.d(TAG, "onCreateView: instance_state not null");
-            heading_title.setText(savedInstanceState.getString("title"));
-            heading_sub_title.setText(savedInstanceState.getString("sub_title"));
-        }
 
         return fragmentView;
     }
@@ -100,34 +94,20 @@ public class Trending extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+//        Log.d(TAG,"OnResumed Called");
+        if (Constants.TRENDING_TITLE != null) {
+            heading_title.setText(Constants.TRENDING_TITLE);
+        }
+        if (Constants.TRENDING_SUB_TITLE != null) {
+            heading_sub_title.setText(Constants.TRENDING_SUB_TITLE);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        onSaveInstanceState(new Bundle());
     }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-
-        if (savedInstanceState != null) {
-            heading_title.setText(savedInstanceState.getString("title"));
-            heading_sub_title.setText(savedInstanceState.getString("sub_title"));
-            Log.d(TAG, "onViewStateRestored: called");
-        }
-        super.onViewStateRestored(savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("title", title);
-        outState.putString("sub_title", sub_title);
-        Log.d(TAG, "onSaveInstanceState: called");
-    }
-
-
 
     public void extractStories(String jsonResponse) {
         try {
@@ -144,12 +124,14 @@ public class Trending extends Fragment {
             }
 
             JSONObject headline = value.getJSONObject("heading");
-            title = headline.getString("title");
-            sub_title = headline.getString("subTitle");
-            heading_title.setText(title);
-            heading_sub_title.setText(sub_title);
+            Constants.TRENDING_TITLE = headline.getString("title");
+            Constants.TRENDING_SUB_TITLE = headline.getString("subTitle");
+            heading_title.setText(Constants.TRENDING_TITLE);
+            heading_sub_title.setText(Constants.TRENDING_SUB_TITLE);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 }

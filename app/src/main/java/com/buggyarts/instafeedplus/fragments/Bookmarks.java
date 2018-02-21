@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +68,15 @@ public class Bookmarks extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!NetworkConnection.isNetworkAvailale(context)) {
+            Toast.makeText(context, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void createFeeds(String jsonResponse) {
 
         Log.d("Bookmark: ", jsonResponse);
@@ -79,7 +90,10 @@ public class Bookmarks extends Fragment {
                 String description = article_ob.getString("description");
                 String thumbnail_url = article_ob.getString("urlToImage");
                 String url = article_ob.getString("url");
-                list.add(new Article(time, source, title, description, thumbnail_url, url));
+                Article article = new Article(time, source, title, description, thumbnail_url, url);
+                article.setBookmarked(true);
+                list.add(article);
+
             } catch (JSONException e) {
 //                e.printStackTrace();
             }

@@ -58,4 +58,10 @@ public class Constants {
     public static File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
             "capturedScreenShot.jpg");
 
+    public static String TRENDING_TITLE = null;
+    public static String TRENDING_SUB_TITLE = null;
+
+    public static String RELATIONSHIP_TITLE = null;
+    public static String RELATIONSHIP_SUB_TITLE = null;
+
 }

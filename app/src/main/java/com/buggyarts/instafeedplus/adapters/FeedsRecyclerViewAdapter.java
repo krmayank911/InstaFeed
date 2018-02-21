@@ -2,7 +2,9 @@ package com.buggyarts.instafeedplus.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +20,14 @@ import com.buggyarts.instafeedplus.utils.Share;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by mayank on 1/6/18
@@ -196,19 +203,60 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
     View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Share shareItem = new Share(v);
-            String image_path = shareItem.shareScreenShot();
-
-            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            intent.setData(Uri.parse(image_path));
-            intent.setAction("android.intent.action.SEND");
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image_path));
-            intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
-            if (intent.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(intent);
-            }
+            takeScreenShot(v);
         }
     };
+
+    private void takeScreenShot(View v) {
+        View view = v.getRootView();
+        view.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        String fileName = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", new Date()).toString();
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".jpg";
+
+        File file = new File(filePath);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            shareScreenShot(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareScreenShot(File imageFile) {
+        Uri uri = Uri.fromFile(imageFile);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.setType("image/png");
+        intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+    }
+
+    //    View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Share shareItem = new Share(v);
+//            String image_path = shareItem.shareScreenShot();
+//
+//            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+//            intent.setData(Uri.parse(image_path));
+//            intent.setAction("android.intent.action.SEND");
+//            intent.setType("image/*");
+//            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image_path));
+//            intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
+//            if (intent.resolveActivity(context.getPackageManager()) != null) {
+//                context.startActivity(intent);
+//            }
+//        }
+//    };
 
 }

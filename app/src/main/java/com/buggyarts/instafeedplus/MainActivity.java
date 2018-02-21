@@ -1,22 +1,20 @@
 package com.buggyarts.instafeedplus;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomNavigationView;
+import android.content.pm.PackageManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,14 +35,12 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.adapters.MainPagerAdapter;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
-import com.buggyarts.instafeedplus.adapters.OptionsRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.fragments.Bookmarks;
 import com.buggyarts.instafeedplus.fragments.CategoriesFragment;
 import com.buggyarts.instafeedplus.fragments.StoriesFragment;
 import com.buggyarts.instafeedplus.fragments.TopFeeds;
-import com.buggyarts.instafeedplus.fragments.Trending;
 import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
-import com.buggyarts.instafeedplus.fragments.TwitterNews;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
@@ -76,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.main);
 
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
 
         checkUserPreferences();
 

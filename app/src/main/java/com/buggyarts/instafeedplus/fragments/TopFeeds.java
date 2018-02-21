@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.Models.CricMchInnDetails;
 import com.buggyarts.instafeedplus.Models.CricMchTeamScore;
@@ -25,6 +26,7 @@ import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.Source;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -133,6 +135,15 @@ public class TopFeeds extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!NetworkConnection.isNetworkAvailale(context)) {
+            Toast.makeText(context, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

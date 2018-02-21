@@ -10,6 +10,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.net.http.*;
+import android.widget.Toast;
+
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 
 public class BrowserActivity extends AppCompatActivity {
 
@@ -62,5 +65,14 @@ public class BrowserActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
 
         webView.loadUrl(url);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!NetworkConnection.isNetworkAvailale(this)) {
+            Toast.makeText(this, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 }
