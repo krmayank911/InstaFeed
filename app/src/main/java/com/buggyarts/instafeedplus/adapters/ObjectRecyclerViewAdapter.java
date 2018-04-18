@@ -32,6 +32,9 @@ import com.buggyarts.instafeedplus.customViewHolders.StoryModelOneViewHolder;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -175,9 +178,16 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         String published_at = "";
 
-        if (!article.time.equals("null")) {
-            published_at = publishedTime(article.time).concat(" - ");
+        if(article.getTimeFormat().equals("GoogleTimeFormat")){
+            if (!article.time.equals("null")) {
+                published_at = publishedTime(article.time).concat(" - ");
+            }
+        }else{
+            if(article.isTimeAvailable()){
+                published_at = article.time + " - ";
+            }
         }
+
 
         holder.time.setText(published_at);
         holder.source.setText(article.source);

@@ -61,6 +61,7 @@ import static com.buggyarts.instafeedplus.utils.Constants.TOP_HEADLINES;
 
 public class TopFeeds extends Fragment {
 
+    String TAG = "TopFeeds";
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
 
@@ -72,7 +73,7 @@ public class TopFeeds extends Fragment {
     ArrayList<Object> items;
 
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference cric_databaseReference;
+    DatabaseReference cric_databaseReference, newsPoolReference;
     ArrayList<CricketMatch> matches;
     String SELECTED_COUNTRY = "in", SELECTED_LANGUAGE = "en";
 
@@ -91,8 +92,8 @@ public class TopFeeds extends Fragment {
         adapter = new ObjectRecyclerViewAdapter(items, context);
         recyclerView.setAdapter(adapter);
 
-        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
-        snapHelper.attachToRecyclerView(recyclerView);
+//        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
+//        snapHelper.attachToRecyclerView(recyclerView);
 
 
         return feedsView;
@@ -135,6 +136,9 @@ public class TopFeeds extends Fragment {
 
             }
         });
+
+        receiveNStoreFBData();
+
     }
 
     @Override
@@ -526,4 +530,48 @@ public class TopFeeds extends Fragment {
 
         return result;
     }
+
+    public void receiveNStoreFBData(){
+        newsPoolReference = firebaseDatabase.getReference().child("newsPoolIndia").child("English");
+        newsPoolReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: "+ dataSnapshot.getValue().toString());
+                String obj = dataSnapshot.getValue().toString();
+                try {
+                    JSONArray jsonArray = new JSONObject(obj).getJSONArray("articles");
+                    int i = 0;
+                    while(i < jsonArray.length()){
+                        int j = 0;
+                        JSONArray articles = (JSONArray) jsonArray.get(i);
+                        while(j < articles.length()){
+
+                            JSONObject article_ob = articles.getJSONObject(j);
+                            String source = article_ob.getJSONObject("source").getString("name");
+                            String time = article_ob.getString("publishedAt");
+                            String title = article_ob.getString("title");
+                            String description = article_ob.getString("description");
+                            String thumbnail_url = article_ob.getString("urlToImage");
+                            String url = article_ob.getString("url");
+                            Boolean isTimeAvailable = article_ob.getBoolean("dateAvailable");
+                            String timeFormat = article_ob.getString("dateFormat");
+                            items.add(new Article(time, source, title, description, thumbnail_url, url,timeFormat,isTimeAvailable));
+                            j++;
+
+                        }
+                        i++;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

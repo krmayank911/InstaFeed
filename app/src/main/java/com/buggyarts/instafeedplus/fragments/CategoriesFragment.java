@@ -16,6 +16,9 @@ import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.OptionsRecyclerViewAdapter;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -35,16 +38,26 @@ public class CategoriesFragment extends Fragment {
     Context context;
     ArrayList<Object> categoryArrayList;
 
+    AdView adView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.sample_fragment, container, false);
+
+
 
         recyclerView = v.findViewById(R.id.categories_recycler_view);
         manager = new GridLayoutManager(context, 2);
         recyclerView.setLayoutManager(manager);
         adapter = new ObjectRecyclerViewAdapter(categoryArrayList, context);
         recyclerView.setAdapter(adapter);
+
+        adView = v.findViewById(R.id.banner_adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        adView.setAdListener(adListener);
+
         return v;
     }
 
@@ -60,5 +73,20 @@ public class CategoriesFragment extends Fragment {
             categoryArrayList.add(new Category(CATEGORIES[i]));
             i++;
         }
+
     }
+
+    AdListener adListener = new AdListener(){
+        @Override
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            adView.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onAdFailedToLoad(int i) {
+            super.onAdFailedToLoad(i);
+            adView.setVisibility(View.GONE);
+        }
+    };
 }

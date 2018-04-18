@@ -2,4 +2,8 @@
     <string name="app_name">InstaFeed+</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
+
+    <string name="ad_mob_banner_ad_id">ca-app-pub-3247474976237255/5794522169</string>
+    <string name="dummy_banner_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+
 </resources>

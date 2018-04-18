@@ -42,13 +42,21 @@ import com.buggyarts.instafeedplus.fragments.TopFeeds;
 import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_APP_ID;
+import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_APP_ID_DUMMY;
+import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_INTERSTITIAL_AD_ID;
+import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_INTERSTITIAL_AD_ID_DUMMY;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEGORIES;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
+import static com.buggyarts.instafeedplus.utils.Constants.INTERATITIAL_AD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNav();
 //        setUpViewPager();
 //        navigationHandler();
+
+        MobileAds.initialize(this,ADMOB_APP_ID);
+
+        INTERATITIAL_AD = new InterstitialAd(this);
+        INTERATITIAL_AD.setAdUnitId(ADMOB_INTERSTITIAL_AD_ID);
+        INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
 
     }
 

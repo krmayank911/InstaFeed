@@ -3,6 +3,7 @@ package com.buggyarts.instafeedplus;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -13,6 +14,14 @@ import android.net.http.*;
 import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
+import java.util.Random;
+
+import static com.buggyarts.instafeedplus.utils.Constants.INTERATITIAL_AD;
+import static com.buggyarts.instafeedplus.utils.Constants.INTERSTITIAL_AD_GAP;
 
 public class BrowserActivity extends AppCompatActivity {
 
@@ -64,7 +73,25 @@ public class BrowserActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        INTERATITIAL_AD.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
+            }
+        });
+
         webView.loadUrl(url);
+
+        if(INTERSTITIAL_AD_GAP == 0){
+            Log.d("InterstitialAd", "call");
+            showAd();
+            Random r = new Random();
+            INTERSTITIAL_AD_GAP = r.nextInt(((6-2)+1)+2);
+        }else{
+            INTERSTITIAL_AD_GAP--;
+        }
+
     }
 
     @Override
@@ -75,4 +102,13 @@ public class BrowserActivity extends AppCompatActivity {
             Toast.makeText(this, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
         }
     }
+
+    public void showAd(){
+        if (INTERATITIAL_AD.isLoaded()) {
+            INTERATITIAL_AD.show();
+        }else{
+            Log.d("InterstitialAd", "failedToLoad");
+        }
+    }
+
 }

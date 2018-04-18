@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,10 @@ import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +41,8 @@ public class Bookmarks extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     ObjectRecyclerViewAdapter adapter;
 
+    AdView adView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +53,15 @@ public class Bookmarks extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ObjectRecyclerViewAdapter(list, context);
         recyclerView.setAdapter(adapter);
+
+        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
+        snapHelper.attachToRecyclerView(recyclerView);
+
+        adView = view.findViewById(R.id.banner_adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        adView.setAdListener(adListener);
 
         return view;
     }
@@ -66,6 +83,7 @@ public class Bookmarks extends Fragment {
             createFeeds(stringArrayList.get(i));
             i++;
         }
+
     }
 
     @Override
@@ -90,13 +108,36 @@ public class Bookmarks extends Fragment {
                 String description = article_ob.getString("description");
                 String thumbnail_url = article_ob.getString("urlToImage");
                 String url = article_ob.getString("url");
-                Article article = new Article(time, source, title, description, thumbnail_url, url);
-                article.setBookmarked(true);
-                list.add(article);
+                String timeFormat = article_ob.getString("timeFormat");
+                if(timeFormat.equals("GoogleTimeFormat")){
+                    Article article = new Article(time, source, title, description, thumbnail_url, url);
+                    article.setBookmarked(true);
+                    list.add(article);
+                }else{
+                    Boolean isTimeAvailable = article_ob.getBoolean("isTimeAvailable");
+                    Article article = new Article(time, source, title, description, thumbnail_url, url,timeFormat,isTimeAvailable);
+                    article.setBookmarked(true);
+                    list.add(article);
+                }
+
 
             } catch (JSONException e) {
 //                e.printStackTrace();
             }
         }
     }
+
+    AdListener adListener = new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                adView.setVisibility(View.GONE);
+            }
+    };
 }

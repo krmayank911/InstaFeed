@@ -8,8 +8,8 @@ import android.os.Parcelable;
  */
 
 public class Article implements Parcelable {
-    public String time, source, title, description, thumbnail_url, url;
-    private boolean isBookmarked = false;
+    public String time, source, title, description, thumbnail_url, url, timeFormat = "GoogleTimeFormat";
+    private boolean isBookmarked = false, isTimeAvailable = false;
 
     public Article(String time, String source, String title, String description, String thumbnail_url, String url) {
         this.time = time;
@@ -18,6 +18,17 @@ public class Article implements Parcelable {
         this.description = description;
         this.thumbnail_url = thumbnail_url;
         this.url = url;
+    }
+
+    public Article(String time, String source, String title, String description, String thumbnail_url, String url,String timeFormat,Boolean isTimeAvailable) {
+        this.time = time;
+        this.source = source;
+        this.title = title;
+        this.description = description;
+        this.thumbnail_url = thumbnail_url;
+        this.url = url;
+        this.isTimeAvailable = isTimeAvailable;
+        this.timeFormat = timeFormat;
     }
 
     protected Article(Parcel in) {
@@ -93,6 +104,22 @@ public class Article implements Parcelable {
         return url;
     }
 
+    public boolean isTimeAvailable() {
+        return isTimeAvailable;
+    }
+
+    public void setTimeAvailable(boolean timeAvailable) {
+        isTimeAvailable = timeAvailable;
+    }
+
+    public String getTimeFormat() {
+        return timeFormat;
+    }
+
+    public void setTimeFormat(String timeFormat) {
+        this.timeFormat = timeFormat;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -117,7 +144,9 @@ public class Article implements Parcelable {
                 + getDescription() + "\",\"url\": \""
                 + getUrl() + "\",\"urlToImage\": \""
                 + getThumbnail_url() + "\",\"publishedAt\": \""
-                + getTime() + "\"}";
+                + getTime() + "\",\"isTimeAvailable\": \""
+                + isTimeAvailable() +  "\",\"timeFormat\": \""
+                + getTimeFormat()+"\"}";
 
         return article;
     }

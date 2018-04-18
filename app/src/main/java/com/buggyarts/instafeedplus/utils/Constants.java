@@ -3,6 +3,8 @@ package com.buggyarts.instafeedplus.utils;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import com.google.android.gms.ads.InterstitialAd;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,4 +66,13 @@ public class Constants {
     public static String RELATIONSHIP_TITLE = null;
     public static String RELATIONSHIP_SUB_TITLE = null;
 
+    public static String ADMOB_APP_ID_DUMMY = "ca-app-pub-3940256099942544~3347511713";
+    public static String ADMOB_INTERSTITIAL_AD_ID_DUMMY = "ca-app-pub-3940256099942544/1033173712";
+
+    public static String ADMOB_APP_ID = "ca-app-pub-3247474976237255~1815393488";
+    public static String ADMOB_INTERSTITIAL_AD_ID = "ca-app-pub-3247474976237255/6296140492";
+
+    public static int INTERSTITIAL_AD_GAP = 4;
+
+    public static InterstitialAd INTERATITIAL_AD;
 }
