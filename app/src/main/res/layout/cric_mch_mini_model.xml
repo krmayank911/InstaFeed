@@ -57,45 +57,49 @@
                     android:gravity="center_horizontal"
                     android:textSize="18dp" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/match_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/team_batting"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:padding="3dp"
+                    android:visibility="gone">
 
-                    <RelativeLayout
+                    <LinearLayout
+                        android:id="@+id/match_rr"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5">
-
-                        <TextView
-                            android:id="@+id/required_rr"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="R. run rate : 6.4" />
+                        android:padding="1dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/current_rr"
-                            android:layout_below="@id/required_rr"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:layout_marginRight="10dp"
                             android:text="C. run rate : 6.4" />
 
-                    </RelativeLayout>
+                        <TextView
+                            android:id="@+id/required_rr"
+                            android:layout_below="@id/current_rr"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="R. run rate : 6.4" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/partnership"
-                        android:layout_toRightOf="@id/current_rr"
-                        android:layout_weight="5"
+                        android:layout_below="@id/match_rr"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="1dp"
                         android:text="Patenership 24" />
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -116,15 +120,17 @@
                 android:maxLines="1"
                 android:ellipsize="end" />
 
-            <ImageView
-                android:id="@+id/toggle_extra"
-                android:layout_marginRight="5dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_expand_more_black_24dp" />
-
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/toggle_extra"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@id/match_desc"
+            android:src="@drawable/ic_expand_more_black_24dp" />
 
     </RelativeLayout>
 

@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
 //        setUpViewPager();
 //        navigationHandler();
 
-        MobileAds.initialize(this,ADMOB_APP_ID);
+        MobileAds.initialize(this,ADMOB_APP_ID_DUMMY);
 
         INTERATITIAL_AD = new InterstitialAd(this);
-        INTERATITIAL_AD.setAdUnitId(ADMOB_INTERSTITIAL_AD_ID);
+        INTERATITIAL_AD.setAdUnitId(ADMOB_INTERSTITIAL_AD_ID_DUMMY);
         INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
 
     }

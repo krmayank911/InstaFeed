@@ -111,7 +111,7 @@ public class CricMchAdapter extends RecyclerView.Adapter<CricMchAdapter.VH> {
     public class VH extends RecyclerView.ViewHolder {
 
         TextView heading, status, score_team_batting, score_team_bowling, crr, rrr, c_partnership, description;
-        LinearLayout extra;
+        RelativeLayout extra;
         ImageView toggle_extra;
 
         public VH(View itemView) {

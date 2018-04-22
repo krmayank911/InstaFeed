@@ -13,7 +13,7 @@
         android:visibility="gone"
         android:nestedScrollingEnabled="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/ad_mob_banner_ad_id">
+        ads:adUnitId="@string/dummy_banner_ad_id">
     </com.google.android.gms.ads.AdView>
 
     <android.support.v7.widget.RecyclerView
