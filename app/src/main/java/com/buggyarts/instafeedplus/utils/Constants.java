@@ -75,4 +75,9 @@ public class Constants {
     public static int INTERSTITIAL_AD_GAP = 4;
 
     public static InterstitialAd INTERATITIAL_AD;
+
+    public static final int ITEM_TYPE_STORY_LIST = 5;
+    public static final int ITEM_TYPE_ADVERTISEMENT = 8;
+    public static final int ITEM_TYPE_VIDEO = 9;
+
 }

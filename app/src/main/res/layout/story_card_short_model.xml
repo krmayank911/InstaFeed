@@ -10,7 +10,7 @@
         android:id="@+id/story_card"
         android:layout_width="150dp"
         android:layout_height="220dp"
-        card_view:cardCornerRadius="10dp">
+        card_view:cardCornerRadius="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"

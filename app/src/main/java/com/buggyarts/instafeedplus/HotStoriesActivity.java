@@ -52,6 +52,9 @@ public class HotStoriesActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.hot_stories_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorHeight(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tabLayout.setElevation(2);
+        }
     }
 
 }

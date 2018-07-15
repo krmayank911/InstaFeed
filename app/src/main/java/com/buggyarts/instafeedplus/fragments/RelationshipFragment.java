@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.buggyarts.instafeedplus.Models.StoryModelSI;
+import com.buggyarts.instafeedplus.Models.story.StoryListTypeOne;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.adapters.WrapperAdapter;
 import com.buggyarts.instafeedplus.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,9 +40,12 @@ public class RelationshipFragment extends Fragment {
     Context context;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
-    ObjectRecyclerViewAdapter adapter;
+//    ObjectRecyclerViewAdapter adapter;
+    WrapperAdapter wrapperAdapter;
 
     ArrayList<Object> list;
+    ArrayList<Object> arrayOfList = new ArrayList<>();
+    ArrayList<String> categories = new ArrayList<>();
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
@@ -54,10 +59,12 @@ public class RelationshipFragment extends Fragment {
 
 
         recyclerView = fragmentView.findViewById(R.id.stories_recycler_view);
-        manager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
-        adapter = new ObjectRecyclerViewAdapter(list, context);
-        recyclerView.setAdapter(adapter);
+        wrapperAdapter = new WrapperAdapter(context,arrayOfList);
+        recyclerView.swapAdapter(wrapperAdapter,true);
+//        adapter = new ObjectRecyclerViewAdapter(list, context);
+//        recyclerView.setAdapter(adapter);
 
         OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
@@ -80,8 +87,11 @@ public class RelationshipFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String jsonResponse = dataSnapshot.toString().replace("DataSnapshot", "");
 //                Log.d( "JSON",jsonResponse);
-                extractStories(jsonResponse);
-                adapter.notifyDataSetChanged();
+//                extractStories(jsonResponse);
+//                adapter.notifyDataSetChanged();
+                getCategories(jsonResponse);
+                wrapperAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -126,6 +136,72 @@ public class RelationshipFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void getCategories(String jsonResponse){
+        try {
+            JSONObject value = new JSONObject(jsonResponse).getJSONObject("value");
+            JSONArray items = value.getJSONArray("relationship").getJSONArray(0);
+            int i = 0;
+
+            while (i < items.length()) {
+                JSONObject story = items.getJSONObject(i);
+                String category = story.getString("category");
+
+                if(i > 0) {
+                    if(!isAddedEarlier(category)){
+                        categories.add(category);
+                    }
+                }else {
+                    categories.add(category);
+                }
+                i++;
+            }
+
+            for(String category : categories){
+                extractStoriesForCategory(category,items);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void extractStoriesForCategory(String category,JSONArray items){
+        try{
+            list = new ArrayList<>();
+            int i = 0;
+            while (i < items.length()) {
+                JSONObject story = items.getJSONObject(i);
+
+                if(category.equals(story.getString("category"))){
+                    list.add(new StoryModelSI(story.getString("title"),
+                            story.getString("imgUrl"),
+                            story.getString("fullStoryUrl"),
+                            story.getString("category")));
+                }
+                i++;
+            }
+
+            StoryListTypeOne storyListTypeOne = new StoryListTypeOne();
+            storyListTypeOne.setStorylist(list);
+            storyListTypeOne.setStoryListTitle(category);
+            arrayOfList.add(storyListTypeOne);
+
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isAddedEarlier(String category){
+
+        for(String cat : categories){
+            if(cat.equals(category)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

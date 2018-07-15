@@ -120,28 +120,27 @@ public class TopFeeds extends Fragment {
 
         findSources();
 
-
-        //cricket
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        cric_databaseReference = firebaseDatabase.getReference().child("News").child("CricketNews");
-        matches = new ArrayList<>();
-        cric_databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                matches.clear();
-                String sourceString = dataSnapshot.toString().replace("DataSnapshot", "");
-//                Log.d("JSON",sourceString);
-                extractSportsFeeds(sourceString);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
         if(SELECTED_COUNTRY.equals("in")) {
+            //cricket
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            cric_databaseReference = firebaseDatabase.getReference().child("News").child("CricketNews");
+            matches = new ArrayList<>();
+            cric_databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    matches.clear();
+                    String sourceString = dataSnapshot.toString().replace("DataSnapshot", "");
+//                Log.d("JSON",sourceString);
+                    extractSportsFeeds(sourceString);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
             receiveNStoreFBData();
         }
 

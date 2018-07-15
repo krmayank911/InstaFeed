@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.buggyarts.instafeedplus.BuildConfig;
 import com.buggyarts.instafeedplus.Models.StoriesModelOne;
 import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.R;

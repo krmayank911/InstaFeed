@@ -28,10 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/hot_stories_tab_layout"
-            android:nestedScrollingEnabled="true">
-
-        </android.support.v4.view.ViewPager>
-
+            android:nestedScrollingEnabled="true"
+            android:paddingBottom="48dp"/>
 
     </RelativeLayout>
 
