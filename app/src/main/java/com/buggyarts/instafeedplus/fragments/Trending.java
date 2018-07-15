@@ -30,6 +30,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 /**
  * Created by mayank on 1/27/18
  */
@@ -59,6 +61,8 @@ public class Trending extends Fragment {
         recyclerView.setLayoutManager(manager);
         adapter = new ObjectRecyclerViewAdapter(list, context);
         recyclerView.setAdapter(adapter);
+
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
 
         heading_title = fragmentView.findViewById(R.id.trending_title);
         heading_sub_title = fragmentView.findViewById(R.id.trending_sub_title);

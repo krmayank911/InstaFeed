@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 /**
  * Created by mayank on 2/10/18
  */
@@ -57,6 +59,8 @@ public class MenFragment extends Fragment {
 
         adapter = new ObjectRecyclerViewAdapter(stories, context);
         recyclerView.setAdapter(adapter);
+
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
         return stories_view;
 

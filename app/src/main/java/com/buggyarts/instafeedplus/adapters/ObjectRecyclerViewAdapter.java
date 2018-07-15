@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 import static com.buggyarts.instafeedplus.utils.Constants.BUSINESS;
 import static com.buggyarts.instafeedplus.utils.Constants.ENTERTAINMENT;
@@ -190,8 +193,8 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
 
         holder.time.setText(published_at);
-        holder.source.setText(article.source);
-        holder.title.setText(article.title);
+        holder.source.setText(Html.fromHtml(article.source));
+        holder.title.setText(Html.fromHtml(article.title));
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,7 +222,7 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         if (article.description.equals(" ") || article.description.equals("null")) {
             holder.description.setText(" ");
         } else {
-            holder.description.setText(article.description);
+            holder.description.setText(Html.fromHtml(article.description));
         }
         Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
 
@@ -258,6 +261,8 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         holder.score_card_recyclerView.setLayoutManager(layoutManager);
         CricMchAdapter adapter = new CricMchAdapter(score_cards, context);
         holder.score_card_recyclerView.setAdapter(adapter);
+
+        OverScrollDecoratorHelper.setUpOverScroll(holder.score_card_recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
     }
 
     private void configCategoryVH(CategoryViewHolder holder, final int position) {
@@ -313,8 +318,8 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         Glide.with(context).load("http://" + story.getThumbnail_url()).asBitmap().into(holder.thumbnail);
 
-        holder.title.setText(story.getTitle());
-        holder.category.setText(story.getCategory());
+        holder.title.setText(Html.fromHtml(story.getTitle()));
+        holder.category.setText(Html.fromHtml(story.getCategory()));
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,8 +337,8 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         final StoryModelSI storyModelSI = (StoryModelSI) object_array.get(position);
 
         Glide.with(context).load("http://" + storyModelSI.getThumbnail_url()).asBitmap().into(holder.thumbnail);
-        holder.title.setText(storyModelSI.getTitle());
-        holder.category.setText(storyModelSI.getCategory());
+        holder.title.setText(Html.fromHtml(storyModelSI.getTitle()));
+        holder.category.setText(Html.fromHtml(storyModelSI.getCategory()));
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,11 +358,11 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         Glide.with(context).load("http://" + storiesModelOne.getOne().getThumbnail_url()).asBitmap().into(holder.thumbnail_1);
         Glide.with(context).load("http://" + storiesModelOne.getTwo().getThumbnail_url()).asBitmap().into(holder.thumbnail_2);
 
-        holder.title_1.setText(storiesModelOne.getOne().getTitle());
-        holder.title_2.setText(storiesModelOne.getTwo().getTitle());
+        holder.title_1.setText(Html.fromHtml(storiesModelOne.getOne().getTitle()));
+        holder.title_2.setText(Html.fromHtml(storiesModelOne.getTwo().getTitle()));
 
-        holder.category_1.setText(storiesModelOne.getOne().getCategory());
-        holder.category_2.setText(storiesModelOne.getTwo().getCategory());
+        holder.category_1.setText(Html.fromHtml(storiesModelOne.getOne().getCategory()));
+        holder.category_2.setText(Html.fromHtml(storiesModelOne.getTwo().getCategory()));
 
         holder.cardView_1.setOnClickListener(new View.OnClickListener() {
             @Override

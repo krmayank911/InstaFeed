@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import twitter4j.ExtendedMediaEntity;
 import twitter4j.JSONArray;
 import twitter4j.JSONException;
@@ -71,6 +72,7 @@ public class TwitterNews extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new FeedsRecyclerViewAdapter(articles, context);
         recyclerView.setAdapter(adapter);
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         return twitterView;
     }
 

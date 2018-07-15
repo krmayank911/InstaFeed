@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,9 +59,9 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
             published = publishedTime(article.time).concat(" - ");
         }
         String text = published;
-        holder.time.setText(text);
-        holder.source.setText(article.source);
-        holder.title.setText(article.title);
+        holder.time.setText(Html.fromHtml(text));
+        holder.source.setText(Html.fromHtml(article.source));
+        holder.title.setText(Html.fromHtml(article.title));
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +89,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
         if (article.description.equals(" ") || article.description.equals("null")) {
             holder.description.setText(" ");
         } else {
-            holder.description.setText(article.description);
+            holder.description.setText(Html.fromHtml(article.description));
         }
         Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
         holder.share.setOnClickListener(takeSnapShotAndShare);

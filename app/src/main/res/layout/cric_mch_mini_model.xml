@@ -24,7 +24,7 @@
                 android:id="@+id/left_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jan 20, 2018 - 3rd Match IND vs SA" />
+                android:text="" />
 
         </RelativeLayout>
 
@@ -45,7 +45,7 @@
                     android:id="@+id/team_batting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IND  247/4 (46.2)"
+                    android:text=""
                     android:textSize="18dp" />
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/team_batting"
-                    android:text="SA YET TO BAT"
+                    android:text=""
                     android:gravity="center_horizontal"
                     android:textSize="18dp" />
 
@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginRight="10dp"
-                            android:text="C. run rate : 6.4" />
+                            android:text="" />
 
                         <TextView
                             android:id="@+id/required_rr"
@@ -86,7 +86,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="R. run rate : 6.4" />
+                            android:text="" />
 
                     </LinearLayout>
 
@@ -103,6 +103,21 @@
 
             </RelativeLayout>
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mom_container"
+            android:layout_below="@id/match_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/mom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="18dp" />
 
         </RelativeLayout>
 
@@ -116,7 +131,7 @@
                 android:id="@+id/match_description"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="India elected to bat first"
+                android:text=""
                 android:maxLines="1"
                 android:ellipsize="end" />
 

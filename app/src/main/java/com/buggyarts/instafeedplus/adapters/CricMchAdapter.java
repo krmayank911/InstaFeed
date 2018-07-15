@@ -70,6 +70,10 @@ public class CricMchAdapter extends RecyclerView.Adapter<CricMchAdapter.VH> {
             holder.c_partnership.setText(partnership);
 
         } else if (status.equals("Result")) {
+//            if(match.getMom().length() > 0){
+//                holder.mom.setText("Man Of Match : " + match.getMom());
+//            }
+//            holder.scoreCard.setVisibility(View.GONE);
             holder.score_team_batting.setText("Man Of Match : " + match.getMom());
             holder.score_team_bowling.setVisibility(View.GONE);
             holder.rrr.setVisibility(View.GONE);
@@ -77,13 +81,24 @@ public class CricMchAdapter extends RecyclerView.Adapter<CricMchAdapter.VH> {
             holder.c_partnership.setVisibility(View.GONE);
         } else if ((status.equals("nextlive")) || status.equals("preview")) {
 
-            holder.score_team_batting.setText(score_btn_team);
-            holder.score_team_bowling.setText(score_blng_team);
-            holder.rrr.setText(rrr);
-            holder.crr.setText(crr);
-            holder.c_partnership.setText(partnership);
+//            holder.scoreCard.setVisibility(View.GONE);
+//            holder.momContainer.setVisibility(View.GONE);
+//            holder.scoreContainer.setVisibility(View.GONE);
+
+            if(status.equals("nextlive")){
+                holder.score_team_batting.setText("Upcoming Match");
+            }else if(status.equals("preview")){
+                holder.score_team_batting.setText("Match is about to start");
+            }
+
+//            holder.score_team_batting.setText(score_btn_team);
+//            holder.score_team_bowling.setText(score_blng_team);
+//            holder.rrr.setText(rrr);
+//            holder.crr.setText(crr);
+//            holder.c_partnership.setText(partnership);
 
         }
+
         holder.heading.setText(heading);
 //        holder.status.setText(status);
         holder.description.setText(description);
@@ -110,14 +125,18 @@ public class CricMchAdapter extends RecyclerView.Adapter<CricMchAdapter.VH> {
 
     public class VH extends RecyclerView.ViewHolder {
 
-        TextView heading, status, score_team_batting, score_team_bowling, crr, rrr, c_partnership, description;
-        RelativeLayout extra;
+        TextView heading, status, score_team_batting, score_team_bowling, crr, rrr, c_partnership, description, mom;
+        RelativeLayout extra, scoreContainer, momContainer, scoreCard;
         ImageView toggle_extra;
 
         public VH(View itemView) {
             super(itemView);
 
             heading = itemView.findViewById(R.id.left_heading);
+            scoreCard = itemView.findViewById(R.id.score_card);
+            scoreContainer = itemView.findViewById(R.id.match_scores);
+            momContainer = itemView.findViewById(R.id.mom_container);
+            mom = itemView.findViewById(R.id.mom);
 //            status = itemView.findViewById(R.id.right_heading);
             extra = itemView.findViewById(R.id.match_details);
             toggle_extra = itemView.findViewById(R.id.toggle_extra);

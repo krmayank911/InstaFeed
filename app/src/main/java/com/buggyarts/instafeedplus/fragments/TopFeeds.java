@@ -46,6 +46,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 import static com.buggyarts.instafeedplus.utils.Constants.ALLSOURCES;
 import static com.buggyarts.instafeedplus.utils.Constants.API_KEY;
 import static com.buggyarts.instafeedplus.utils.Constants.BASE_URL;
@@ -90,6 +92,8 @@ public class TopFeeds extends Fragment {
         manager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(manager);
         adapter = new ObjectRecyclerViewAdapter(items, context);
+
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         recyclerView.setAdapter(adapter);
 
 //        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
@@ -137,7 +141,9 @@ public class TopFeeds extends Fragment {
             }
         });
 
-        receiveNStoreFBData();
+        if(SELECTED_COUNTRY.equals("in")) {
+            receiveNStoreFBData();
+        }
 
     }
 

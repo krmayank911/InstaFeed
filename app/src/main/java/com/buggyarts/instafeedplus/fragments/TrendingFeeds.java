@@ -32,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 /**
  * Created by mayank on 1/20/18
  */
@@ -64,6 +66,8 @@ public class TrendingFeeds extends Fragment {
 
         adapter = new ObjectRecyclerViewAdapter(object_array, context);
         recyclerView.setAdapter(adapter);
+
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
         return view;
     }
