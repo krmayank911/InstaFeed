@@ -33,6 +33,8 @@ import com.buggyarts.instafeedplus.customViewHolders.StoryModelOneViewHolder;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -504,4 +506,16 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
+    private void loadWithGlide(final ArticleViewHolder holder, String image){
+        Glide.with(context)
+                .load(image)
+                .asBitmap()
+//                .thumbnail(R.drawable.cat_sports)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        holder.thumbnail.setImageBitmap(resource);
+                    }
+                });
+    }
 }

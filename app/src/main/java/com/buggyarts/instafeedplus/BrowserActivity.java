@@ -48,12 +48,19 @@ public class BrowserActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
 
         webView = (WebView) findViewById(R.id.web_view);
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 super.onReceivedSslError(view, handler, error);
             }
+
+            @Override
+            public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+                super.doUpdateVisitedHistory(view, url, isReload);
+            }
         });
+
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
@@ -70,6 +77,7 @@ public class BrowserActivity extends AppCompatActivity {
                 return super.getVideoLoadingProgressView();
             }
         });
+
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 

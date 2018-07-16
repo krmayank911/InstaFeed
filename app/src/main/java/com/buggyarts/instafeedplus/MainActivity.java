@@ -311,4 +311,22 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    // visual modifications to be done
+    // TODO: 7/16/18 add no bookmarks view
+    // TODO: 7/16/18 add web page loading progress
+    // TODO: 7/16/18 add progress bar for content loading in magazine section
+    // TODO: 7/16/18 load progressive images in articles
+    // TODO: 7/16/18 add an intro screen
+    // TODO: 7/16/18 add visual polish women / men section
+
+    // code & feature modifications
+    // TODO: 7/16/18 make fragment instances single
+
+    // possible new features
+    // TODO: 7/16/18 make user subscribe to some interests
+    // TODO: 7/16/18 add a full screen video view
+    // TODO: 7/16/18 add a video section in news and magazine section
+    // TODO: 7/16/18 add a ad section view
+    // TODO: 7/16/18 try to geather weather / sports data
+    // TODO: 7/16/18 add a option to change color day/night
 }
