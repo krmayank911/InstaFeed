@@ -9,4 +9,7 @@
 
     <color name="darkGray">#222</color>
     <color name="blueStatusBar">#5eb6b8</color>
+    <color name="colorPrimaryLight">#FFC0CB</color>
+
+    <color name="white">#FFFFFF</color>
 </resources>

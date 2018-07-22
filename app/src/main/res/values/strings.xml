@@ -6,4 +6,6 @@
     <string name="ad_mob_banner_ad_id">ca-app-pub-3247474976237255/5794522169</string>
     <string name="dummy_banner_ad_id">ca-app-pub-3940256099942544/6300978111</string>
 
+    <string name="error_select_country">Please Select a Country</string>
+
 </resources>

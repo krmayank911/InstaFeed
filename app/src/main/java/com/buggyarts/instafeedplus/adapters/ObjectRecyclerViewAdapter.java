@@ -1,10 +1,16 @@
 package com.buggyarts.instafeedplus.adapters;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -460,15 +466,17 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         @Override
         public void onClick(View v) {
 
-            takeScreenShot(v);
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
 
-//            if (Constants.file.exists()) {
-//                Log.d("Share File", "Result = delete: " + Constants.file.delete());
-//            }
+//                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
-//            Share shareItem = new Share(v);
-//            String image_path = shareItem.shareScreenShot();
-
+            }else {
+                takeScreenShot(v);
+            }
         }
     };
 
@@ -518,4 +526,6 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                     }
                 });
     }
+
+
 }

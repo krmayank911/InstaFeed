@@ -1,10 +1,12 @@
 package com.buggyarts.instafeedplus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,14 +24,25 @@ public class GatherInfoActivity extends AppCompatActivity {
     TextView skip, submit;
     String selected_country = null, selected_language = null;
 
+    boolean onBoarding = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gather_info);
 
+        skip = findViewById(R.id.skip);
+        submit = findViewById(R.id.submit);
 //        setToolbar();
         countrySelectorSetup();
         languageSelectorSetup();
+
+        Intent intent = getIntent();
+        if(intent != null){
+            if(intent.hasExtra("onBoarding")){
+                onBoarding = intent.getBooleanExtra("onBoarding",false);
+            }
+        }
 
         actionSkip();
         actionSubmit();
@@ -80,7 +93,7 @@ public class GatherInfoActivity extends AppCompatActivity {
     }
 
     public void actionSkip() {
-        skip = findViewById(R.id.skip);
+
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,23 +107,44 @@ public class GatherInfoActivity extends AppCompatActivity {
     }
 
     public void actionSubmit() {
-        submit = findViewById(R.id.submit);
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //save data in shared preferences
-                SharedPreferences preferences = getSharedPreferences("user_preferences", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("country", selected_country);
-                editor.putString("language", selected_language);
-                editor.putBoolean("asked_before", true);
-                editor.apply();
-//                finish();
 
-                Intent intent = new Intent(GatherInfoActivity.this, MainActivity.class);
-                startActivity(intent);
+                if(!selected_country.equals("null")) {
+                    //save data in shared preferences
+                    SharedPreferences preferences = getSharedPreferences("user_preferences", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("country", selected_country);
+                    editor.putString("language", selected_language);
+                    editor.putBoolean("asked_before", true);
+                    editor.apply();
+
+                    if (onBoarding) {
+                        Intent intent = new Intent(GatherInfoActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        GatherInfoActivity.this.finish();
+                    } else {
+                        exit();
+                    }
+                }else {
+                    Toast.makeText(GatherInfoActivity.this,R.string.error_select_country,Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        exit();
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit(){
+        Intent resultIntent = new Intent();
+        setResult(Activity.RESULT_OK, resultIntent);
+        GatherInfoActivity.this.finish();
+    }
 }

@@ -64,12 +64,13 @@
             android:value="a72fd413850382879bcd244179c7b204bf5badde"
             tools:replace="android:value" />
 
-        <activity android:name=".GatherInfoActivity">
+        <activity android:name=".GatherInfoActivity" android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.IntroTransparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.buggyarts.instafeedplus.MainActivity" />
         </activity>
-        <activity android:name=".HotStoriesActivity">
+        <activity android:name=".HotStoriesActivity" android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.buggyarts.instafeedplus.MainActivity" />

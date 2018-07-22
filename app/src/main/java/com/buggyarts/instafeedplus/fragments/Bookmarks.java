@@ -57,11 +57,11 @@ public class Bookmarks extends Fragment {
         SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         snapHelper.attachToRecyclerView(recyclerView);
 
-        adView = view.findViewById(R.id.banner_adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
-        adView.setAdListener(adListener);
+//        adView = view.findViewById(R.id.banner_adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        adView.loadAd(adRequest);
+//
+//        adView.setAdListener(adListener);
 
         return view;
     }
@@ -127,17 +127,17 @@ public class Bookmarks extends Fragment {
         }
     }
 
-    AdListener adListener = new AdListener(){
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                adView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
-                adView.setVisibility(View.GONE);
-            }
-    };
+//    AdListener adListener = new AdListener(){
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//                adView.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int i) {
+//                super.onAdFailedToLoad(i);
+//                adView.setVisibility(View.GONE);
+//            }
+//    };
 }

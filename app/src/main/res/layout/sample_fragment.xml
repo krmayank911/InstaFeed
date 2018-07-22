@@ -3,24 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/banner_adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:nestedScrollingEnabled="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/dummy_banner_ad_id">
-    </com.google.android.gms.ads.AdView>
+    <!--<com.google.android.gms.ads.AdView-->
+        <!--xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/banner_adView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:visibility="gone"-->
+        <!--android:nestedScrollingEnabled="true"-->
+        <!--ads:adSize="BANNER"-->
+        <!--ads:adUnitId="@string/dummy_banner_ad_id">-->
+    <!--</com.google.android.gms.ads.AdView>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/categories_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/banner_adView"
         android:layout_marginBottom="48dp">
 
     </android.support.v7.widget.RecyclerView>

@@ -53,10 +53,10 @@ public class CategoriesFragment extends Fragment {
         adapter = new ObjectRecyclerViewAdapter(categoryArrayList, context);
         recyclerView.setAdapter(adapter);
 
-        adView = v.findViewById(R.id.banner_adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-        adView.setAdListener(adListener);
+//        adView = v.findViewById(R.id.banner_adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        adView.loadAd(adRequest);
+//        adView.setAdListener(adListener);
 
         return v;
     }
@@ -76,17 +76,17 @@ public class CategoriesFragment extends Fragment {
 
     }
 
-    AdListener adListener = new AdListener(){
-        @Override
-        public void onAdLoaded() {
-            super.onAdLoaded();
-            adView.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onAdFailedToLoad(int i) {
-            super.onAdFailedToLoad(i);
-            adView.setVisibility(View.GONE);
-        }
-    };
+//    AdListener adListener = new AdListener(){
+//        @Override
+//        public void onAdLoaded() {
+//            super.onAdLoaded();
+//            adView.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        public void onAdFailedToLoad(int i) {
+//            super.onAdFailedToLoad(i);
+//            adView.setVisibility(View.GONE);
+//        }
+//    };
 }

@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
     AHBottomNavigation bottomNavigationView;
 
+    private static int PREFERENCE_REQUEST = 12;
+    boolean onBoarding = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,18 +99,31 @@ public class MainActivity extends AppCompatActivity {
 //        setUpViewPager();
 //        navigationHandler();
 
-        MobileAds.initialize(this,ADMOB_APP_ID_DUMMY);
+//        MobileAds.initialize(this,ADMOB_APP_ID_DUMMY);
+//
+//        INTERATITIAL_AD = new InterstitialAd(this);
+//        INTERATITIAL_AD.setAdUnitId(ADMOB_INTERSTITIAL_AD_ID_DUMMY);
+//        INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
 
-        INTERATITIAL_AD = new InterstitialAd(this);
-        INTERATITIAL_AD.setAdUnitId(ADMOB_INTERSTITIAL_AD_ID_DUMMY);
-        INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            if(requestCode == PREFERENCE_REQUEST){
+                loadFragment(new TopFeeds());
+            }
+        }
     }
 
     public void checkUserPreferences() {
         SharedPreferences preferences = getSharedPreferences("user_preferences", MODE_PRIVATE);
         if (!preferences.contains("asked_before")) {
+            onBoarding = true;
             Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
+            intent.putExtra("onBoarding",onBoarding);
             startActivity(intent);
         }
     }
@@ -184,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.user_preferences:
                 Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,PREFERENCE_REQUEST);
                 return true;
             case R.id.open_bookmarks:
                 loadFragment(new Bookmarks());
@@ -318,9 +334,11 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 7/16/18 load progressive images in articles
     // TODO: 7/16/18 add an intro screen
     // TODO: 7/16/18 add visual polish women / men section
+    // TODO: 7/18/18 add touch feeds on click
 
     // code & feature modifications
     // TODO: 7/16/18 make fragment instances single
+    // TODO: 7/18/18 ask permission when share
 
     // possible new features
     // TODO: 7/16/18 make user subscribe to some interests

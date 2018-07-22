@@ -81,24 +81,24 @@ public class BrowserActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        INTERATITIAL_AD.setAdListener(new AdListener(){
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
-            }
-        });
+//        INTERATITIAL_AD.setAdListener(new AdListener(){
+//            @Override
+//            public void onAdClosed() {
+//                super.onAdClosed();
+//                INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
+//            }
+//        });
 
         webView.loadUrl(url);
 
-        if(INTERSTITIAL_AD_GAP == 0){
-            Log.d("InterstitialAd", "call");
-            showAd();
-            Random r = new Random();
-            INTERSTITIAL_AD_GAP = r.nextInt(((6-2)+1)+2);
-        }else{
-            INTERSTITIAL_AD_GAP--;
-        }
+//        if(INTERSTITIAL_AD_GAP == 0){
+//            Log.d("InterstitialAd", "call");
+//            showAd();
+//            Random r = new Random();
+//            INTERSTITIAL_AD_GAP = r.nextInt(((6-2)+1)+2);
+//        }else{
+//            INTERSTITIAL_AD_GAP--;
+//        }
 
     }
 
@@ -111,12 +111,12 @@ public class BrowserActivity extends AppCompatActivity {
         }
     }
 
-    public void showAd(){
-        if (INTERATITIAL_AD.isLoaded()) {
-            INTERATITIAL_AD.show();
-        }else{
-            Log.d("InterstitialAd", "failedToLoad");
-        }
-    }
+//    public void showAd(){
+//        if (INTERATITIAL_AD.isLoaded()) {
+//            INTERATITIAL_AD.show();
+//        }else{
+//            Log.d("InterstitialAd", "failedToLoad");
+//        }
+//    }
 
 }
