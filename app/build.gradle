@@ -20,9 +20,9 @@ android {
     defaultConfig {
         applicationId "com.buggyarts.instafeed"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode 6
-        versionName "1.0.8"
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
