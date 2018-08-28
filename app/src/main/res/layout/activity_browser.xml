@@ -6,28 +6,35 @@
     android:layout_height="match_parent"
     tools:context="com.buggyarts.instafeedplus.BrowserActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <com.buggyarts.instafeedplus.customViews.LoadingToolBar
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimaryDark">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:titleTextAppearance="@style/ExpendedText">
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        android:layout_height="wrap_content"
+        android:elevation="2dp"/>
 
     <WebView
-        android:layout_below="@+id/app_bar"
+        android:layout_below="@+id/toolBar"
         android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
 
-    </WebView>
+    <LinearLayout
+        android:id="@+id/intermediateLoaderView"
+        android:visibility="gone"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/themeOneBackground">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/indigo"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

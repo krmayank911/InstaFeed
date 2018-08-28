@@ -40,6 +40,8 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class TrendingFeeds extends Fragment {
 
+    View trendingFeeds;
+
     Context context;
     ArrayList<Object> object_array;
     FirebaseDatabase firebaseDatabase;
@@ -52,24 +54,32 @@ public class TrendingFeeds extends Fragment {
 
     TextView heading_text;
 
+    public static TrendingFeeds newInstance(){
+        TrendingFeeds fragment = new TrendingFeeds();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.trending_feeds, container, false);
+        if(trendingFeeds == null) {
 
-        heading_text = view.findViewById(R.id.trending_feeds_heading);
+            trendingFeeds = inflater.inflate(R.layout.trending_feeds, container, false);
 
-        recyclerView = view.findViewById(R.id.trending_feeds_recyclerView);
-        layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
+            heading_text = trendingFeeds.findViewById(R.id.trending_feeds_heading);
 
-        adapter = new ObjectRecyclerViewAdapter(object_array, context);
-        recyclerView.setAdapter(adapter);
+            recyclerView = trendingFeeds.findViewById(R.id.trending_feeds_recyclerView);
+            layoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(layoutManager);
 
-        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+            adapter = new ObjectRecyclerViewAdapter(object_array, context);
+            recyclerView.setAdapter(adapter);
 
-        return view;
+            OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        }
+
+        return trendingFeeds;
     }
 
     @Override

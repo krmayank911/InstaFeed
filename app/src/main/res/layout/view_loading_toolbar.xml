@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/backgroundView"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_arrow_back_32dp"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/backButton"
+        android:layout_centerVertical="true"
+        android:text="Title"
+        style="@style/browser_toolBar"/>
+
+    <ImageView
+        android:id="@+id/overflowButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_more_vert_black_32dp"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:id="@+id/progressContainer"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true">
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:progressTint="@color/teal"
+            android:max="100"
+            android:progress="20"/>
+    </LinearLayout>
+
+</RelativeLayout>

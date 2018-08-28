@@ -60,6 +60,11 @@ import static com.buggyarts.instafeedplus.utils.Constants.INTERATITIAL_AD;
 
 public class MainActivity extends AppCompatActivity {
 
+    TopFeeds fragmentTopFeeds;
+    CategoriesFragment fragmentCategories;
+    TrendingFeeds fragmentTrendingFeeds;
+    StoriesFragment fragmentStories;
+
     ViewPager viewPager;
     MainPagerAdapter adapter;
     FragmentManager fragmentManager;
@@ -93,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
 
         fragmentManager = getSupportFragmentManager();
-        loadFragment(new TopFeeds());
+        if (fragmentTopFeeds == null) {
+            fragmentTopFeeds = TopFeeds.newInstance();
+        }
+        loadFragment(fragmentTopFeeds);
 
         setupBottomNav();
 //        setUpViewPager();
@@ -209,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
 
     public void navigationHandler() {
@@ -298,19 +307,31 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         toolbarLayout.setTitle("InstaFeed+");
-                        loadFragment(new TopFeeds());
+                        if (fragmentTopFeeds == null) {
+                            fragmentTopFeeds = TopFeeds.newInstance();
+                        }
+                        loadFragment(fragmentTopFeeds);
                         return true;
                     case 1:
-                        toolbarLayout.setTitle("Categories");
-                        loadFragment(new CategoriesFragment());
+                        toolbarLayout.setTitle(getResources().getString(R.string.categories_title));
+                        if (fragmentCategories == null) {
+                            fragmentCategories = CategoriesFragment.newInstance();
+                        }
+                        loadFragment(fragmentCategories);
                         return true;
                     case 2:
-                        toolbarLayout.setTitle("InFocus");
-                        loadFragment(new TrendingFeeds());
+                        toolbarLayout.setTitle(getResources().getString(R.string.trending_title));
+                        if (fragmentTrendingFeeds == null) {
+                            fragmentTrendingFeeds = TrendingFeeds.newInstance();
+                        }
+                        loadFragment(fragmentTrendingFeeds);
                         return true;
                     case 3:
-                        toolbarLayout.setTitle("Magazine");
-                        loadFragment(new StoriesFragment());
+                        toolbarLayout.setTitle(getResources().getString(R.string.magazine_title));
+                        if (fragmentStories == null) {
+                            fragmentStories = StoriesFragment.newInstance();
+                        }
+                        loadFragment(fragmentStories);
 //                        Intent intent = new Intent(MainActivity.this,HotStoriesActivity.class);
 //                        startActivity(intent);
                         return true;
@@ -324,7 +345,8 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
+//        transaction.commit();
     }
 
     // visual modifications to be done
@@ -337,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 7/18/18 add touch feeds on click
 
     // code & feature modifications
-    // TODO: 7/16/18 make fragment instances single
+    // TODO: 7/16/18 make fragment instances single done
     // TODO: 7/18/18 ask permission when share
 
     // possible new features

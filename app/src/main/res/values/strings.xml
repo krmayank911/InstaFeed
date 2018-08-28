@@ -8,4 +8,23 @@
 
     <string name="error_select_country">Please Select a Country</string>
 
+    <!-- preferences -->
+    <string name="title_preferences">Preferences</string>
+
+    <!-- bookmarks -->
+    <string name="title_bookmarks">Bookmarks</string>
+
+    <!-- top feeds fragment -->
+    <string name="top_feeds_title">Top Feeds</string>
+
+    <!-- categories fragment -->
+    <string name="categories_title">Categories</string>
+
+    <!-- trending fragment -->
+    <string name="trending_title">InFocus</string>
+
+    <!-- magazine fragment -->
+    <string name="magazine_title">Magazine</string>
+
+
 </resources>

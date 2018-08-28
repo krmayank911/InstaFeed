@@ -31,6 +31,8 @@ import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
 
 public class CategoriesFragment extends Fragment {
 
+    View categoriesFragment;
+
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
     ObjectRecyclerViewAdapter adapter;
@@ -40,25 +42,32 @@ public class CategoriesFragment extends Fragment {
 
     AdView adView;
 
+    public static CategoriesFragment newInstance() {
+        CategoriesFragment fragment = new CategoriesFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.sample_fragment, container, false);
 
 
+        if(categoriesFragment == null) {
+            categoriesFragment = inflater.inflate(R.layout.sample_fragment, container, false);
 
-        recyclerView = v.findViewById(R.id.categories_recycler_view);
-        manager = new GridLayoutManager(context, 2);
-        recyclerView.setLayoutManager(manager);
-        adapter = new ObjectRecyclerViewAdapter(categoryArrayList, context);
-        recyclerView.setAdapter(adapter);
+            recyclerView = categoriesFragment.findViewById(R.id.categories_recycler_view);
+            manager = new GridLayoutManager(context, 2);
+            recyclerView.setLayoutManager(manager);
+            adapter = new ObjectRecyclerViewAdapter(categoryArrayList, context);
+            recyclerView.setAdapter(adapter);
 
 //        adView = v.findViewById(R.id.banner_adView);
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        adView.loadAd(adRequest);
 //        adView.setAdListener(adListener);
+        }
 
-        return v;
+        return categoriesFragment;
     }
 
     @Override

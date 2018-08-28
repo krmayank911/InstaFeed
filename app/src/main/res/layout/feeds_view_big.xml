@@ -8,10 +8,8 @@
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="8dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        card_view:cardCornerRadius="0dp"
+        android:elevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,11 +28,49 @@
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/relativeimage"
+                android:layout_marginBottom="-18dp"
+                android:paddingBottom="3dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="end">
+
+                <ImageView
+                    android:id="@+id/bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_bookmark_border_pink_24dp"
+                    android:tint="@color/colorPrimary"
+                    android:background="@drawable/background_bookmark"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:padding="5dp"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_share_pink_24dp"
+                    android:background="@drawable/background_bookmark"/>
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@id/relativeimage">
 
                 <TextView
@@ -49,21 +85,6 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/time"
                     android:hint="Daily Mail" />
-
-                <ImageView
-                    android:id="@+id/bookmark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/share"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_bookmark_border_pink_24dp" />
-
-                <ImageView
-                    android:id="@+id/share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/share_click" />
 
             </RelativeLayout>
 
@@ -83,7 +104,7 @@
                     android:layout_alignParentEnd="true"
                     android:ellipsize="end"
                     android:text="Netflix's Chilling New Sabrina Series Has Finally Found Its Teenage Witch"
-                    android:maxLines="3"
+                    android:maxLines="4"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16dp" />
 
@@ -96,28 +117,33 @@
                     android:layout_marginRight="2dp"
                     android:text="'Mad Men' actress Kiernan Shipka will take on Madam Satan in the dark Archie Comics drama" />
 
-                <TextView
-                    android:id="@+id/powered_by"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@id/read_more"
-                    android:paddingTop="10dp"
-                    android:textSize="10dp"
-                    android:text="powered by NewsApi.org" />
-
-                <TextView
-                    android:id="@+id/read_more"
                     android:layout_below="@+id/description"
-                    android:layout_width="wrap_content"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:paddingRight="5dp"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/holo_blue_dark"
-                    android:text="Read More.." />
+                    android:paddingTop="10dp">
 
+                    <TextView
+                        android:id="@+id/powered_by"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingTop="10dp"
+                        android:textSize="10dp"
+                        android:text="powered by NewsApi.org" />
+
+                    <TextView
+                        android:id="@+id/read_more"
+                        android:layout_width="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:text="Read More.." />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

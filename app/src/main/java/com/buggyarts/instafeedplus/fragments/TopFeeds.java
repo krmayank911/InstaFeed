@@ -24,6 +24,7 @@ import com.buggyarts.instafeedplus.Models.CricketMatchState;
 import com.buggyarts.instafeedplus.Models.ScoreCard;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
+import com.buggyarts.instafeedplus.customClasses.GridItemDecoration;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.Source;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
@@ -63,11 +64,14 @@ import static com.buggyarts.instafeedplus.utils.Constants.TOP_HEADLINES;
 
 public class TopFeeds extends Fragment {
 
+    View feedsView;
+
     String TAG = "TopFeeds";
     RecyclerView recyclerView;
     RecyclerView.LayoutManager manager;
 
     ObjectRecyclerViewAdapter adapter;
+    GridItemDecoration gridItemDecoration;
 
     ProgressBar progressBar;
 
@@ -80,25 +84,36 @@ public class TopFeeds extends Fragment {
     String SELECTED_COUNTRY = "in", SELECTED_LANGUAGE = "en";
 
 
+    public static TopFeeds newInstance() {
+        TopFeeds fragment = new TopFeeds();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View feedsView = inflater.inflate(R.layout.topfeeds, container, false);
+        if(feedsView == null) {
 
-        progressBar = feedsView.findViewById(R.id.progressBar);
+            feedsView = inflater.inflate(R.layout.topfeeds, container, false);
 
-        recyclerView = feedsView.findViewById(R.id.topfeeds_recyclerview);
-        manager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(manager);
-        adapter = new ObjectRecyclerViewAdapter(items, context);
+            progressBar = feedsView.findViewById(R.id.progressBar);
 
-        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
-        recyclerView.setAdapter(adapter);
+            recyclerView = feedsView.findViewById(R.id.topfeeds_recyclerview);
+            manager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(manager);
+            adapter = new ObjectRecyclerViewAdapter(items, context);
+
+            gridItemDecoration = new GridItemDecoration(20,true);
+            recyclerView.addItemDecoration(gridItemDecoration);
+
+            OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+            recyclerView.setAdapter(adapter);
 
 //        SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
 //        snapHelper.attachToRecyclerView(recyclerView);
 
+        }
 
         return feedsView;
     }

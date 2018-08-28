@@ -12,4 +12,53 @@
     <color name="colorPrimaryLight">#FFC0CB</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="black_label">#80000000</color>
+
+    <!-- plain colors -->
+    <color name="black">#111111</color>
+    <color name="grey">#333333</color>
+    <color name="yellow">#FBD800</color>
+    <color name="v1_background">#95B0AB</color>
+
+    <!-- theme -->
+    <color name="themeOnePrimary">#fefefe</color>
+    <color name="themeOneText">#2f3130</color>
+    <color name="themeOneText2">#2a2c2b</color>
+    <color name="themeOneAccent">#ff3364</color>
+    <color name="themeOneAccent2">#f64f59</color>
+    <color name="themeOneAccent3">#2fb650</color>
+    <color name="themeOneFeedback">#66ff3364</color>
+    <color name="themeOneBackground">#f2f6f9</color>
+
+
+    <!-- theme two -->
+    <color name="themeTwoBackground">#f8f8f8</color>
+    <color name="themeTwoBlack">#222222</color>
+    <color name="themeTwoAccent">#d22e2d</color>
+
+
+    <!-- transparency codes
+    100% — FF
+    95% — F2
+    90% — E6
+    85% — D9
+    80% — CC
+    75% — BF
+    70% — B3
+    65% — A6
+    60% — 99
+    55% — 8C
+    50% — 80
+    45% — 73
+    40% — 66
+    35% — 59
+    30% — 4D
+    25% — 40
+    20% — 33
+    15% — 26
+    10% — 1A
+    5%  — 0D
+    0% —  00
+    -->
+
 </resources>

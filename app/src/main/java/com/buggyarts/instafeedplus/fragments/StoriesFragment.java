@@ -43,6 +43,8 @@ import java.util.Collections;
 
 public class StoriesFragment extends Fragment {
 
+    View storiesFragment;
+
     TabLayout tabLayout;
     ViewPager viewPager;
     FragmentManager fragmentManager;
@@ -50,16 +52,22 @@ public class StoriesFragment extends Fragment {
 
     Context context;
 
+    public static StoriesFragment newInstance(){
+        StoriesFragment fragment = new StoriesFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_stories, container, false);
+        if(storiesFragment == null) {
+            storiesFragment = inflater.inflate(R.layout.fragment_stories, container, false);
 
-        setUpViewPager(view);
-        setUpTabLayout(view);
-
-        return view;
+            setUpViewPager(storiesFragment);
+            setUpTabLayout(storiesFragment);
+        }
+        return storiesFragment;
     }
 
     @Override
