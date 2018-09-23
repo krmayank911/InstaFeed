@@ -25,6 +25,7 @@
 
     <!-- magazine fragment -->
     <string name="magazine_title">Magazine</string>
+    <string name="privacy_policy_url">https://krmayank911.github.io/buggyartsWeb/</string>
 
 
 </resources>

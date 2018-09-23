@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        android:title="Search"
         android:icon="@drawable/ic_search_white_48dp"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView">
+        android:title="Search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView">
 
     </item>
     <item
@@ -20,7 +20,11 @@
         android:icon="@drawable/ic_bookmark_pink_24dp"
         android:title="Bookmarks"
         app:showAsAction="never">
-
     </item>
+
+    <item
+        android:id="@+id/privacy_policy"
+        android:title="Privacy Policy"
+        app:showAsAction="never" />
 
 </menu>

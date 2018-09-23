@@ -214,10 +214,13 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new Bookmarks());
                 toolbarLayout.setTitle("Bookmarks");
                 return true;
+            case R.id.privacy_policy:
+                startActivity(new Intent(this, BrowserActivity.class)
+                        .putExtra("visit", getString(R.string.privacy_policy_url)));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     public void navigationHandler() {
