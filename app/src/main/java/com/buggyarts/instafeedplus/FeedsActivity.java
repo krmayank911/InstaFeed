@@ -31,7 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import static com.buggyarts.instafeedplus.utils.Constants.ALLSOURCES;
-import static com.buggyarts.instafeedplus.utils.Constants.API_KEY;
+import static com.buggyarts.instafeedplus.utils.Constants.NEWS_API_KEY;
 import static com.buggyarts.instafeedplus.utils.Constants.BASE_URL;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEGORIES;
 import static com.buggyarts.instafeedplus.utils.Constants.SOURCE;
@@ -100,7 +100,7 @@ public class FeedsActivity extends AppCompatActivity {
 
     //Find All Sources
     public void findSources() {
-        String url = BASE_URL + ALLSOURCES + "language=en" + "&category=" + CATEGORY + "&apiKey=" + API_KEY;
+        String url = BASE_URL + ALLSOURCES + "language=en" + "&category=" + CATEGORY + "&apiKey=" + NEWS_API_KEY;
         Log.d("URL", url);
         SOURCES = new ArrayList<>();
         new GetSources().execute(url);
@@ -181,8 +181,8 @@ public class FeedsActivity extends AppCompatActivity {
     }
 
     public void loadFeeds(String listOfSources) {
-        String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + API_KEY;
-//        String url = BASE_URL + TOP_HEADLINES + "category="+ CATEGORY + "&country=us"+ "&sortBy=popularity" + "&apiKey=" + API_KEY;
+        String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + NEWS_API_KEY;
+//        String url = BASE_URL + TOP_HEADLINES + "category="+ CATEGORY + "&country=us"+ "&sortBy=popularity" + "&apiKey=" + NEWS_API_KEY;
 //        Log.v("URL", url);
         new GetFeeds().execute(url);
     }

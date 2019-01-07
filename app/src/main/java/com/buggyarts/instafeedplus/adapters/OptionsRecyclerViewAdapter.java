@@ -59,4 +59,5 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<OptionsRecy
             category = itemView.findViewById(R.id.title_text);
         }
     }
+
 }

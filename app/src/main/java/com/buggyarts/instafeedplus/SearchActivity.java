@@ -29,7 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.buggyarts.instafeedplus.utils.Constants.API_KEY;
+import static com.buggyarts.instafeedplus.utils.Constants.NEWS_API_KEY;
 import static com.buggyarts.instafeedplus.utils.Constants.BASE_URL;
 import static com.buggyarts.instafeedplus.utils.Constants.EVERYTHING;
 
@@ -96,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void loadFeeds(String query) {
-        String url = BASE_URL + EVERYTHING + "q=" + query + "&sortBy=popularity" + "&apiKey=" + API_KEY;
+        String url = BASE_URL + EVERYTHING + "q=" + query + "&sortBy=popularity" + "&apiKey=" + NEWS_API_KEY;
         Log.v("URL", url);
         new GetFeeds().execute(url);
     }

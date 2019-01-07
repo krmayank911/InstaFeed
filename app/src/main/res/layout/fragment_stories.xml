@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.buggyarts.instafeedplus.HotStoriesActivity">
+    tools:context="com.buggyarts.instafeedplus.HotStoriesActivity"
+    android:background="@color/colorWhite">
 
     <RelativeLayout
         android:id="@+id/hot_stories_layout"
@@ -16,10 +17,12 @@
             android:id="@+id/hot_stories_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            app:tabSelectedTextColor="@color/colorPrimaryDark"
-            app:tabTextColor="@color/darkGray"
+            app:tabSelectedTextColor="@color/themeColorSecondaryDark"
+            app:tabTextColor="@color/themeColorSecondary"
             app:tabMode="scrollable"
-            android:nestedScrollingEnabled="true">
+            android:nestedScrollingEnabled="true"
+            android:elevation="2dp"
+            android:background="@color/themeColorPrimary">
 
         </android.support.design.widget.TabLayout>
 
@@ -28,9 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/hot_stories_tab_layout"
-            android:nestedScrollingEnabled="true"
-            android:paddingBottom="48dp"/>
+            android:nestedScrollingEnabled="true"/>
 
     </RelativeLayout>
+
+    <com.buggyarts.instafeedplus.customViews.EmptyStateView
+        android:id="@+id/noResultView"
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

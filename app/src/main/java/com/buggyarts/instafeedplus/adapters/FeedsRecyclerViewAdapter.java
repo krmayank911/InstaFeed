@@ -1,13 +1,17 @@
 package com.buggyarts.instafeedplus.adapters;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +20,9 @@ import android.widget.TextView;
 
 import com.buggyarts.instafeedplus.BrowserActivity;
 import com.buggyarts.instafeedplus.R;
+import com.buggyarts.instafeedplus.customClasses.GlideApp;
 import com.buggyarts.instafeedplus.utils.Article;
-import com.buggyarts.instafeedplus.utils.Share;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,21 +49,24 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
 
     @Override
     public FeedsRecyclerViewAdapter.VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View feeds = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_view_short, parent, false);
+        View feeds = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_short_feed, parent, false);
         return new FeedsRecyclerViewAdapter.VH(feeds);
     }
 
     @Override
     public void onBindViewHolder(final FeedsRecyclerViewAdapter.VH holder, int position) {
         final Article article = feeds.get(position);
-        String published = "";
+        String meta = "";
 
         if (!article.time.equals("null")) {
-            published = publishedTime(article.time).concat(" - ");
+            meta = publishedTime(article.time);
         }
-        String text = published;
-        holder.time.setText(Html.fromHtml(text));
-        holder.source.setText(Html.fromHtml(article.source));
+
+        if(article.source != null) {
+            meta = meta + " \u2022 " + Html.fromHtml(article.source);
+        }
+
+        holder.meta.setText(meta);
         holder.title.setText(Html.fromHtml(article.title));
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +97,7 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
         } else {
             holder.description.setText(Html.fromHtml(article.description));
         }
-        Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
+        GlideApp.with(context).load(article.thumbnail_url).centerCrop().into(holder.thumbnail);
         holder.share.setOnClickListener(takeSnapShotAndShare);
 
         if (!article.isBookmarked()) {
@@ -129,15 +135,14 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
 
     class VH extends RecyclerView.ViewHolder {
         ImageView thumbnail, share, bookmark;
-        TextView time, source, title, description, read_more, powered_by;
+        TextView meta, title, description, read_more, powered_by;
 
         public VH(View itemView) {
             super(itemView);
+            meta = itemView.findViewById(R.id.meta_info);
             thumbnail = itemView.findViewById(R.id.thumbnail);
             share = itemView.findViewById(R.id.share);
             bookmark = itemView.findViewById(R.id.bookmark);
-            time = itemView.findViewById(R.id.time);
-            source = itemView.findViewById(R.id.source);
             title = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             read_more = itemView.findViewById(R.id.read_more);
@@ -152,21 +157,12 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
         String currentTime = format.format(calendar.getTime());
 
         String timestamp = null;
-
-//        int p_year = Integer.parseInt(string.substring(0,3));
-//        int p_month = Integer.parseInt(string.substring(8,9));
-//        int p_sec = Integer.parseInt(string.substring(15,16));
         int p_date = Integer.parseInt(string.substring(8, 10));
         int p_hr = Integer.parseInt(string.substring(11, 13));
         int p_min = Integer.parseInt(string.substring(14, 16));
         int c_date = Integer.parseInt(currentTime.substring(8, 10));
         int c_hr = Integer.parseInt(currentTime.substring(11, 13));
         int c_min = Integer.parseInt(currentTime.substring(14, 16));
-
-//        int c_year = Integer.parseInt(currentTime.substring(0,3));
-//        int c_month = Integer.parseInt(currentTime.substring(8,9));
-//        int c_sec = Integer.parseInt(currentTime.substring(15,16));
-
         int dateDiff = compairValues(p_date, c_date);
         if (dateDiff > 1) {
             timestamp = " " + dateDiff + " days ago..";
@@ -204,7 +200,14 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
     View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            takeScreenShot(v);
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+            }else {
+                takeScreenShot(v);
+            }
         }
     };
 
@@ -216,6 +219,9 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
 
         String fileName = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", new Date()).toString();
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".jpg";
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         File file = new File(filePath);
         try {
@@ -242,22 +248,5 @@ public class FeedsRecyclerViewAdapter extends RecyclerView.Adapter<FeedsRecycler
         }
     }
 
-    //    View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Share shareItem = new Share(v);
-//            String image_path = shareItem.shareScreenShot();
-//
-//            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-//            intent.setData(Uri.parse(image_path));
-//            intent.setAction("android.intent.action.SEND");
-//            intent.setType("image/*");
-//            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(image_path));
-//            intent.putExtra(Intent.EXTRA_TEXT, "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf");
-//            if (intent.resolveActivity(context.getPackageManager()) != null) {
-//                context.startActivity(intent);
-//            }
-//        }
-//    };
 
 }

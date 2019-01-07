@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.buggyarts.instafeedplus.activity.NewsSpecialActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/themeColorSecondaryDark"
+            android:fitsSystemWindows="true">
+
+
+            <FrameLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:layout_collapseMode="none">
+
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/placeholder"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparentBlack"/>
+
+                <RelativeLayout
+                    android:id="@+id/page_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/title_label"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/metropolis_semi_bold"
+                        android:textSize="25sp"
+                        android:text=""
+                        android:textColor="@color/colorWhite"/>
+
+                    <TextView
+                        android:id="@+id/published_at"
+                        android:layout_below="@id/title_label"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/themeTextTitle_14"
+                        android:text=""
+                        android:textColor="@color/colorWhite"/>
+
+                    <TextView
+                        android:id="@+id/sub_text"
+                        android:layout_below="@id/published_at"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/themeTextTitle_16"
+                        android:textColor="@color/colorWhite"
+                        android:text=""/>
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+            <com.buggyarts.instafeedplus.customViews.IFToolBar
+                android:id="@+id/toolBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                app:layout_collapseMode="pin"
+                android:background="@color/transparent"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="@dimen/rv_padding_bottom"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:background="@color/white"/>
+
+        <com.buggyarts.instafeedplus.customViews.FeedLoader
+            android:id="@+id/loaderView"
+            android:visibility="gone"
+            android:layout_below="@id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

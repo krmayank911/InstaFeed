@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.buggyarts.instafeedplus">
+    package="com.buggyarts.instafeedplus"
+    tools:node="replace">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,39 +11,41 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchActivity" />
+                android:value=".SearchActivity"
+                tools:replace="android:value" />
         </activity>
         <activity
             android:name=".FeedsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.buggyarts.instafeedplus.MainActivity" />
+                android:value="com.buggyarts.instafeedplus.MainActivity"
+                tools:replace="android:value" />
         </activity>
         <activity
             android:name=".BrowserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoToolBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.buggyarts.instafeedplus.MainActivity" />
+                android:value="com.buggyarts.instafeedplus.MainActivity"
+                tools:replace="android:value"/>
         </activity>
         <activity
             android:name=".SearchActivity"
@@ -55,10 +58,12 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"
-                android:value=".SearchActivity" />
+                android:value=".SearchActivity"
+                tools:replace="android:value"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.buggyarts.instafeedplus.MainActivity" />
+                android:value="com.buggyarts.instafeedplus.MainActivity"
+                tools:replace="android:value"/>
         </activity>
 
         <meta-data
@@ -66,29 +71,102 @@
             android:value="a72fd413850382879bcd244179c7b204bf5badde"
             tools:replace="android:value" />
 
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/ad_mob_dummy_app_id"/>
+
         <activity
-            android:name=".GatherInfoActivity"
+            android:name=".IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar.IntroTransparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.buggyarts.instafeedplus.MainActivity" />
+                android:value="com.buggyarts.instafeedplus.MainActivity"
+                tools:replace="android:value" />
         </activity>
         <activity
             android:name=".HotStoriesActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.buggyarts.instafeedplus.MainActivity" />
+                android:value="com.buggyarts.instafeedplus.MainActivity"
+                tools:replace="android:value"/>
         </activity>
-        <activity android:name=".HomeTabActivity"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".HomeTabActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoToolBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SearchNewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoToolBar" />
+        <activity
+            android:name=".activity.CategoryExploreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoToolBar" />
+        <activity
+            android:name=".activity.VideoPayerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".activity.NewsSpecialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoToolBar">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".activity.ArticleListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoToolBar" />
+
+        <meta-data
+            android:name="com.buggyarts.instafeedplus.customClasses.MyGlideModule"
+            android:value="MyGlideModule"
+            tools:replace="android:value"/>
+
+        <meta-data
+            tools:node="replace"
+            android:name="android.support.VERSION"
+            android:value="27.1.1" />
+
+        <service
+            android:name=".services.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/notification_icon" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/themeColorSecondaryDark" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
     </application>
 
 </manifest>

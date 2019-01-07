@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.buggyarts.instafeedplus.Models.StoryModelSI;
 import com.buggyarts.instafeedplus.Models.story.StoryListTypeOne;
 import com.buggyarts.instafeedplus.R;
-import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.WrapperAdapter;
 import com.buggyarts.instafeedplus.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
@@ -123,7 +122,7 @@ public class RelationshipFragment extends Fragment {
                 list.add(new StoryModelSI(story.getString("title"),
                         story.getString("imgUrl"),
                         story.getString("fullStoryUrl"),
-                        story.getString("category")));
+                        story.getString("identifier")));
                 i++;
             }
             JSONObject headline = value.getJSONObject("heading");
@@ -179,7 +178,7 @@ public class RelationshipFragment extends Fragment {
                     list.add(new StoryModelSI(story.getString("title"),
                             story.getString("imgUrl"),
                             story.getString("fullStoryUrl"),
-                            story.getString("category")));
+                            story.getString("identifier")));
                 }
                 i++;
             }

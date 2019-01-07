@@ -1,47 +1,26 @@
 package com.buggyarts.instafeedplus.fragments;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.buggyarts.instafeedplus.BuildConfig;
-import com.buggyarts.instafeedplus.Models.StoriesModelOne;
-import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.R;
-import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.adapters.StoriesPagerAdapter;
+import com.buggyarts.instafeedplus.customViews.EmptyStateView;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by mayank on 2/4/18
  */
 
-public class StoriesFragment extends Fragment {
+public class StoriesFragment extends Fragment implements EmptyStateView.Callback {
 
     View storiesFragment;
 
@@ -49,6 +28,7 @@ public class StoriesFragment extends Fragment {
     ViewPager viewPager;
     FragmentManager fragmentManager;
     StoriesPagerAdapter storiesPagerAdapter;
+    EmptyStateView noResultView;
 
     Context context;
 
@@ -64,9 +44,12 @@ public class StoriesFragment extends Fragment {
         if(storiesFragment == null) {
             storiesFragment = inflater.inflate(R.layout.fragment_stories, container, false);
 
-            setUpViewPager(storiesFragment);
-            setUpTabLayout(storiesFragment);
+            noResultView = storiesFragment.findViewById(R.id.noResultView);
+            noResultView.showActionButton();
+            noResultView.setVisibility(View.GONE);
+            noResultView.setCallback(this);
         }
+
         return storiesFragment;
     }
 
@@ -90,8 +73,11 @@ public class StoriesFragment extends Fragment {
         super.onResume();
 
         if (!NetworkConnection.isNetworkAvailale(context)) {
-            Toast.makeText(context, "Please check your Internet Connection", Toast.LENGTH_LONG).show();
+            shouldShowNoResultView();
         }
+
+        setUpViewPager(storiesFragment);
+        setUpTabLayout(storiesFragment);
     }
 
     private void setUpTabLayout(View v) {
@@ -100,4 +86,32 @@ public class StoriesFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorHeight(0);
     }
+
+
+    void shouldShowNoResultView(){
+        noResultView.setVisibility(View.VISIBLE);
+        noResultView.getEmptyStateImage().setImageDrawable(context.getResources().getDrawable(R.drawable.no_internet));
+        noResultView.getEmptyStateTitle().setText(context.getResources().getString(R.string.no_internet_error));
+        noResultView.getEmptyStateText().setText(context.getResources().getString(R.string.no_internet_message));
+        noResultView.getButtonAction().setText(context.getResources().getString(R.string.reload));
+    }
+
+    void hideNoResultView(){
+        noResultView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onEmptyStateActionClick() {
+        firebaseCheck();
+    }
+
+    void firebaseCheck(){
+
+        if(NetworkConnection.isNetworkAvailale(getContext())) {
+            hideNoResultView();
+        }else {
+            shouldShowNoResultView();
+        }
+    }
+
 }

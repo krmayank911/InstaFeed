@@ -8,12 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import com.buggyarts.instafeedplus.customClasses.GridItemDecoration;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.Source;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +48,7 @@ import java.util.ArrayList;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 import static com.buggyarts.instafeedplus.utils.Constants.ALLSOURCES;
-import static com.buggyarts.instafeedplus.utils.Constants.API_KEY;
+import static com.buggyarts.instafeedplus.utils.Constants.NEWS_API_KEY;
 import static com.buggyarts.instafeedplus.utils.Constants.BASE_URL;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
 import static com.buggyarts.instafeedplus.utils.Constants.GENERAL;
@@ -97,15 +95,16 @@ public class TopFeeds extends Fragment {
 
             feedsView = inflater.inflate(R.layout.topfeeds, container, false);
 
-            progressBar = feedsView.findViewById(R.id.progressBar);
+            progressBar = feedsView.findViewById(R.id.feedProgressBar);
+            progressBar.setVisibility(View.VISIBLE);
 
             recyclerView = feedsView.findViewById(R.id.topfeeds_recyclerview);
             manager = new LinearLayoutManager(context);
             recyclerView.setLayoutManager(manager);
             adapter = new ObjectRecyclerViewAdapter(items, context);
 
-            gridItemDecoration = new GridItemDecoration(20,true);
-            recyclerView.addItemDecoration(gridItemDecoration);
+//            gridItemDecoration = new GridItemDecoration(0,true);
+//            recyclerView.addItemDecoration(gridItemDecoration);
 
             OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
             recyclerView.setAdapter(adapter);
@@ -131,7 +130,7 @@ public class TopFeeds extends Fragment {
 
         items = new ArrayList<>();
         CATEG_S = new ArrayList<>();
-        new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "country=" + SELECTED_COUNTRY + "&apiKey=" + API_KEY);
+        new GetFeeds().execute(BASE_URL + TOP_HEADLINES + "country=" + SELECTED_COUNTRY + "&apiKey=" + NEWS_API_KEY);
 
         findSources();
 
@@ -158,7 +157,6 @@ public class TopFeeds extends Fragment {
 
             receiveNStoreFBData();
         }
-
     }
 
     @Override
@@ -184,9 +182,9 @@ public class TopFeeds extends Fragment {
     public void findSources() {
         String url;
         if (SELECTED_LANGUAGE != null) {
-            url = BASE_URL + ALLSOURCES + "&language=" + SELECTED_LANGUAGE + "&apiKey=" + API_KEY;
+            url = BASE_URL + ALLSOURCES + "&language=" + SELECTED_LANGUAGE + "&apiKey=" + NEWS_API_KEY;
         } else {
-            url = BASE_URL + ALLSOURCES + "&apiKey=" + API_KEY;
+            url = BASE_URL + ALLSOURCES + "&apiKey=" + NEWS_API_KEY;
         }
         SOURCES = new ArrayList<>();
         new GetSources().execute(url);
@@ -268,7 +266,7 @@ public class TopFeeds extends Fragment {
 
     public void loadFeeds(String listOfSources) {
 
-        String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + API_KEY;
+        String url = BASE_URL + TOP_HEADLINES + SOURCE + listOfSources + "&sortBy=popularity" + "&apiKey=" + NEWS_API_KEY;
 
 //        Log.v("URL", url);
         new GetFeeds().execute(url);
@@ -293,8 +291,8 @@ public class TopFeeds extends Fragment {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            progressBar.setProgress(values[0]);
             super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
         }
 
         @Override

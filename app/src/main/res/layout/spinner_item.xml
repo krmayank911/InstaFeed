@@ -2,10 +2,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:text="Item"
-    android:textSize="20dp"
-    android:textColor="@android:color/holo_blue_dark"
-    android:paddingLeft="10dp"
-    android:paddingBottom="5dp"
-    android:layout_height="match_parent">
+    android:textColor="@color/themeColorSecondaryDark"
+    android:padding="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/color_button_feedback"
+    style="@style/themeText_16">
 
 </TextView>

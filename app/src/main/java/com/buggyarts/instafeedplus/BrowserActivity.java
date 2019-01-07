@@ -1,10 +1,9 @@
 package com.buggyarts.instafeedplus;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,21 +12,20 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.net.http.*;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.customViews.LoadingToolBar;
+import com.buggyarts.instafeedplus.utils.AppUtils;
 import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
-import static com.buggyarts.instafeedplus.utils.Constants.INTERATITIAL_AD;
+import static com.buggyarts.instafeedplus.utils.Constants.INTERSTITIAL_AD;
 import static com.buggyarts.instafeedplus.utils.Constants.INTERSTITIAL_AD_GAP;
 
 public class BrowserActivity extends AppCompatActivity implements LoadingToolBar.TopBarCallback {
@@ -36,21 +34,19 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
     WebView webView;
     LinearLayout intermediateLoaderView;
 
+    private static final int maximum = 2;
+    private static final int minimum = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
-        String url = getIntent().getStringExtra("visit");
 
-        String base_url = url.replace("https", "").replace("http", "")
-                .replace("://", "").replace("www.", "");
-
-        int index = base_url.indexOf('/');
 
         loadingToolBar = findViewById(R.id.toolBar);
+        loadingToolBar.getOverflowButton().setVisibility(View.GONE);
         loadingToolBar.getProgressContainer().setVisibility(View.GONE);
-        loadingToolBar.getTitleLabel().setText(base_url.substring(0,index));
         loadingToolBar.setTopbarListener(this);
 
         intermediateLoaderView = findViewById(R.id.intermediateLoaderView);
@@ -131,31 +127,50 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
         webSettings.setSaveFormData(true);
         webSettings.setEnableSmoothTransition(true);
 
-        webView.loadUrl(url);
 
-        try {
-            URL pageUrl = new URL(url);
-            loadingToolBar.getTitleLabel().setText(pageUrl.getHost());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        String url = getIntent().getStringExtra("visit");
+
+        if(getIntent().hasExtra("page_title")){
+            String pageTitle = getIntent().getStringExtra("page_title");
+            loadingToolBar.getTitleLabel().setText(pageTitle);
+        }else {
+            String base_url = url.replace("https", "").replace("http", "")
+                    .replace("://", "").replace("www.", "");
+            int index = base_url.indexOf('/');
+            loadingToolBar.getTitleLabel().setText(base_url.substring(0,index));
+
+            try {
+                URL pageUrl = new URL(url);
+                loadingToolBar.getTitleLabel().setText(pageUrl.getHost());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
 
-//        INTERATITIAL_AD.setAdListener(new AdListener(){
-//            @Override
-//            public void onAdClosed() {
-//                super.onAdClosed();
-//                INTERATITIAL_AD.loadAd(new AdRequest.Builder().build());
-//            }
-//        });
+        webView.loadUrl(url);
 
-//        if(INTERSTITIAL_AD_GAP == 0){
-//            Log.d("InterstitialAd", "call");
-//            showAd();
-//            Random r = new Random();
-//            INTERSTITIAL_AD_GAP = r.nextInt(((6-2)+1)+2);
-//        }else{
-//            INTERSTITIAL_AD_GAP--;
-//        }
+        INTERSTITIAL_AD.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                INTERSTITIAL_AD.loadAd(new AdRequest.Builder().build());
+            }
+        });
+
+        if(INTERSTITIAL_AD_GAP == 0){
+            Log.d("InterstitialAd", "call");
+            showAd();
+            Random rand = new Random();
+            INTERSTITIAL_AD_GAP = minimum + rand.nextInt((maximum - minimum) + 1);
+        }else {
+            INTERSTITIAL_AD_GAP--;
+        }
+
+        if(AppUtils.getClickCount(this) > 0){
+            Integer count = AppUtils.getClickCount(this);
+            count = count - 1;
+            AppUtils.setClickCount(this,count.toString());
+        }
 
     }
 
@@ -176,7 +191,7 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
                     if (webView.canGoBack()) {
                         webView.goBack();
                     } else {
-                        finish();
+                        closeActivityWithAnimation();
                     }
                     return true;
             }
@@ -186,15 +201,25 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
 
     @Override
     public void backButtonCalled() {
-        this.finish();
+        closeActivityWithAnimation();
     }
 
-    //    public void showAd(){
-//        if (INTERATITIAL_AD.isLoaded()) {
-//            INTERATITIAL_AD.show();
-//        }else{
-//            Log.d("InterstitialAd", "failedToLoad");
-//        }
-//    }
+    @Override
+    public void onReloadClick() {
+        webView.reload();
+    }
+
+    public void closeActivityWithAnimation(){
+        this.finish();
+        overridePendingTransition(R.anim.activity_hold, R.anim.activity_slide_out_right);
+    }
+
+    public void showAd(){
+        if (INTERSTITIAL_AD.isLoaded()) {
+            INTERSTITIAL_AD.show();
+        }else{
+            Log.d("InterstitialAd", "failedToLoad");
+        }
+    }
 
 }

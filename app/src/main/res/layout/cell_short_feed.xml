@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/card_layout"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="0dp">
+
+    <LinearLayout
+        android:id="@+id/card_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_feed_click">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/clock"
+                android:tint="@color/themeColorSecondary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:id="@+id/meta_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="6 hours ago - "
+                android:layout_margin="5dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/detailContainer"
+            android:layout_below="@id/meta_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/thumbnail"
+                android:layout_marginRight="5dp"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:ellipsize="end"
+                    android:text="Netflix's Chilling New Sabrina Series Has Finally Found Its Teenage Witch"
+                    android:maxLines="5"
+                    android:textColor="@color/colorPrimary"
+                    style="@style/themeTextTitle_16"/>
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toStartOf="@+id/relativeimage"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:gravity="fill"
+                    android:text="'Mad Men' actress Kiernan Shipka will take on Madam Satan in the dark Archie Comics drama"
+                    android:textColor="@color/textColorSubDark"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@android:color/holo_orange_light" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_below="@id/detailContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/read_more"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_blue_dark"
+                android:text="Read More.."
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/ic_bookmark_border_pink_24dp"
+                android:background="@drawable/circular_feed_back"
+                android:tint="@color/themeIconTint"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/bookmark"
+                android:layout_centerVertical="true"
+                android:src="@drawable/share_filled"
+                android:tint="@color/themeIconTint"
+                android:background="@drawable/circular_feed_back"/>
+
+            <TextView
+                android:id="@+id/powered_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingTop="10dp"
+                android:textSize="10dp"
+                android:text="powered by NewsApi.org"
+                android:layout_toStartOf="@id/relativeimage" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/card_item"
+        android:background="@color/borderColor"/>
+
+</RelativeLayout>

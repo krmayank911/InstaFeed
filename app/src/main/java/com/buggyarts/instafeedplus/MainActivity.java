@@ -1,11 +1,10 @@
 package com.buggyarts.instafeedplus;
 
 import android.Manifest;
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -17,46 +16,30 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.adapters.MainPagerAdapter;
 import com.buggyarts.instafeedplus.adapters.ObjectRecyclerViewAdapter;
-import com.buggyarts.instafeedplus.fragments.Bookmarks;
 import com.buggyarts.instafeedplus.fragments.CategoriesFragment;
 import com.buggyarts.instafeedplus.fragments.StoriesFragment;
 import com.buggyarts.instafeedplus.fragments.TopFeeds;
 import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
-import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
-import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 
-import io.fabric.sdk.android.Fabric;
-
-import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_APP_ID;
-import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_APP_ID_DUMMY;
-import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_INTERSTITIAL_AD_ID;
-import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_INTERSTITIAL_AD_ID_DUMMY;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEGORIES;
 import static com.buggyarts.instafeedplus.utils.Constants.CATEG_S;
-import static com.buggyarts.instafeedplus.utils.Constants.INTERATITIAL_AD;
+import static com.buggyarts.instafeedplus.utils.Constants.PRIVACY_POLICY_URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.main);
 
 
@@ -130,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("user_preferences", MODE_PRIVATE);
         if (!preferences.contains("asked_before")) {
             onBoarding = true;
-            Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
+            Intent intent = new Intent(MainActivity.this, IntroActivity.class);
             intent.putExtra("onBoarding",onBoarding);
             startActivity(intent);
         }
@@ -167,29 +150,29 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu, menu);
 
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 //        searchView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
-        searchView.setBackground(getResources().getDrawable(R.drawable.search_bg));
-        searchView.setSubmitButtonEnabled(true);
+//        searchView.setBackground(getResources().getDrawable(R.drawable.search_bg));
+//        searchView.setSubmitButtonEnabled(true);
 
-        SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
-        ComponentName componentName = new ComponentName(this, SearchActivity.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+//        SearchManager searchManager = (SearchManager) getSystemService(this.SEARCH_SERVICE);
+//        ComponentName componentName = new ComponentName(this, SearchActivity.class);
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
 
 //        MenuItem searchItem = menu.findItem(R.id.action_search);
 //        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
 //                Log.d("QUERY",query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
 
         return true;
     }
@@ -203,16 +186,22 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         switch (item.getItemId()) {
-            case R.id.action_search:
-                //SearchView
-                return true;
+//            case R.id.action_search:
+//                //SearchView
+//                return true;
             case R.id.user_preferences:
-                Intent intent = new Intent(MainActivity.this, GatherInfoActivity.class);
+                Intent intent = new Intent(MainActivity.this, IntroActivity.class);
                 startActivityForResult(intent,PREFERENCE_REQUEST);
                 return true;
-            case R.id.open_bookmarks:
-                loadFragment(new Bookmarks());
-                toolbarLayout.setTitle("Bookmarks");
+//            case R.id.open_bookmarks:
+//                loadFragment(new Bookmarks());
+//                toolbarLayout.setTitle("Bookmarks");
+//                return true;
+            case R.id.privacy_policy:
+                Intent intent2 = new Intent(this, BrowserActivity.class);
+                intent2.putExtra("page_title","PRIVACY POLICY");
+                intent2.putExtra("visit", PRIVACY_POLICY_URL);
+                startActivity(intent2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

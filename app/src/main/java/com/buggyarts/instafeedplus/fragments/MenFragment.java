@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,13 +109,13 @@ public class MenFragment extends Fragment {
                 JSONObject story = items.getJSONObject(i);
                 String identifier = story.getString("identifier");
                 String img_url;
-                if (identifier.equals("maxim")) {
+                if (identifier.equals("Maxim Man")) {
                     img_url = story.getString("imgUrl").replace("https://", "");
 
                     stories.add(new Story(story.getString("title"),
                             img_url,
                             story.getString("fullStoryUrl"),
-                            story.getString("category")));
+                            story.getString("identifier")));
 
                 } else {
 
@@ -124,7 +123,7 @@ public class MenFragment extends Fragment {
                     xp.add(new Story(story.getString("title"),
                             img_url,
                             story.getString("fullStoryUrl"),
-                            story.getString("category")));
+                            story.getString("identifier")));
                 }
                 i++;
             }

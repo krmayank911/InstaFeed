@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -124,22 +122,23 @@ public class WomenFragment extends Fragment {
                 JSONObject story = items.getJSONObject(i);
                 String identifier = story.getString("identifier");
                 String img_url;
-                if (identifier.equals("MaximWomen") || identifier.equals("cosmopolitanFrontPage")) {
+//                if (identifier.equals("MaximWomen") || identifier.equals("cosmopolitanFrontPage")) {
                     img_url = story.getString("imgUrl").replace("https://", "");
 
                     stories.add(new Story(story.getString("title"),
                             img_url,
                             story.getString("fullStoryUrl"),
-                            story.getString("category")));
+                            story.getString("identifier")));
+//                }
 
-                } else {
-
-                    img_url = story.getString("imgUrl");
-                    xp.add(new Story(story.getString("title"),
-                            img_url,
-                            story.getString("fullStoryUrl"),
-                            story.getString("category")));
-                }
+//                } else {
+//
+//                    img_url = story.getString("imgUrl");
+//                    xp.add(new Story(story.getString("title"),
+//                            img_url,
+//                            story.getString("fullStoryUrl"),
+//                            story.getString("category")));
+//                }
                 i++;
             }
 
@@ -162,7 +161,7 @@ public class WomenFragment extends Fragment {
                 }
             }
 
-            Collections.shuffle(stories);
+//            Collections.shuffle(stories);
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,16 +1,17 @@
 package com.buggyarts.instafeedplus.adapters;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,14 +38,13 @@ import com.buggyarts.instafeedplus.customViewHolders.ScoreCardViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryCardSmallImageViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryCardViewHolder;
 import com.buggyarts.instafeedplus.customViewHolders.StoryModelOneViewHolder;
+import com.buggyarts.instafeedplus.utils.AppUtils;
 import com.buggyarts.instafeedplus.utils.Article;
 import com.buggyarts.instafeedplus.utils.data.DbUser;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,9 +69,9 @@ import static com.buggyarts.instafeedplus.utils.Constants.TECHNOLOGY;
  * Created by mayank on 1/23/18
  */
 
-public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
-    ArrayList<Object> object_array;
+    public ArrayList<Object> object_array;
     Context context;
     final int ARTICLE = 0, SCORE_CARD = 1, CATEGORY = 2, STORY = 3, STORY_MODEL_2_ITEM = 4,
             STORY_MODEL_3_ITEM_1 = 5, STORY_MODEL_3_ITEM_2 = 6, STORY_MODEL_SMALL_IMAGE = 7, LINKS_N_TAGS = 8;
@@ -110,7 +110,7 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         switch (viewType) {
             case ARTICLE:
-                View v1 = layoutInflater.inflate(R.layout.feeds_view_big, parent, false);
+                View v1 = layoutInflater.inflate(R.layout.cell_big_feed, parent, false);
                 objectVH = new ArticleViewHolder(v1);
                 break;
             case SCORE_CARD:
@@ -233,9 +233,10 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         } else {
             holder.description.setText(Html.fromHtml(article.description));
         }
-        Glide.with(context).load(article.thumbnail_url).asBitmap().centerCrop().into(holder.thumbnail);
+        Glide.with(context).load(article.thumbnail_url).apply(new RequestOptions().centerCrop()).into(holder.thumbnail);
 
-        holder.share.setOnClickListener(takeSnapShotAndShare);
+        holder.share.setTag(R.string.card_item_object, article);
+        holder.share.setOnClickListener(this);
 
         if (!article.isBookmarked()) {
             holder.bookmark.setImageResource(R.drawable.ic_bookmark_border_pink_24dp);
@@ -325,7 +326,11 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
         final Story story = (Story) object_array.get(position);
 
-        Glide.with(context).load("http://" + story.getThumbnail_url()).asBitmap().into(holder.thumbnail);
+        Glide.with(context).load("http://" + story.getThumbnail_url())
+                .apply(new RequestOptions()
+                .placeholder(context.getResources().getDrawable(R.drawable.placeholder_landscape))
+                .centerCrop())
+                .into(holder.thumbnail);
 
         holder.title.setText(Html.fromHtml(story.getTitle()));
         holder.category.setText(Html.fromHtml(story.getCategory()));
@@ -338,14 +343,19 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 context.startActivity(intent);
             }
         });
-        holder.share.setOnClickListener(takeSnapShotAndShare);
+        holder.share.setTag(R.string.card_item_object_1,story);
+        holder.share.setOnClickListener(this);
     }
 
     private void configStoryCardSIVH(StoryCardSmallImageViewHolder holder, int position) {
 
         final StoryModelSI storyModelSI = (StoryModelSI) object_array.get(position);
 
-        Glide.with(context).load("http://" + storyModelSI.getThumbnail_url()).asBitmap().into(holder.thumbnail);
+        Glide.with(context).load("http://" + storyModelSI.getThumbnail_url())
+                .apply(new RequestOptions()
+                        .placeholder(context.getResources().getDrawable(R.drawable.placeholder_vertical))
+                        .centerCrop())
+                .into(holder.thumbnail);
         holder.title.setText(Html.fromHtml(storyModelSI.getTitle()));
         holder.category.setText(Html.fromHtml(storyModelSI.getCategory()));
 
@@ -357,15 +367,24 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                 context.startActivity(intent);
             }
         });
-
-        holder.share.setOnClickListener(takeSnapShotAndShare);
+        holder.share.setTag(R.string.card_item_object,storyModelSI);
+        holder.share.setOnClickListener(this);
     }
 
     public void configStoryModelOneVH(StoryModelOneViewHolder holder, int position) {
         final StoriesModelOne storiesModelOne = (StoriesModelOne) object_array.get(position);
 
-        Glide.with(context).load("http://" + storiesModelOne.getOne().getThumbnail_url()).asBitmap().into(holder.thumbnail_1);
-        Glide.with(context).load("http://" + storiesModelOne.getTwo().getThumbnail_url()).asBitmap().into(holder.thumbnail_2);
+        Glide.with(context).load("http://" + storiesModelOne.getOne().getThumbnail_url())
+                .apply(new RequestOptions()
+                .placeholder(context.getResources().getDrawable(R.drawable.placeholder_vertical))
+                .centerCrop())
+                .into(holder.thumbnail_1);
+
+        Glide.with(context).load("http://" + storiesModelOne.getTwo().getThumbnail_url())
+                .apply(new RequestOptions()
+                .placeholder(context.getResources().getDrawable(R.drawable.placeholder_square))
+                .centerCrop())
+                .into(holder.thumbnail_2);
 
         holder.title_1.setText(Html.fromHtml(storiesModelOne.getOne().getTitle()));
         holder.title_2.setText(Html.fromHtml(storiesModelOne.getTwo().getTitle()));
@@ -391,8 +410,10 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
             }
         });
 
-        holder.share_1.setOnClickListener(takeSnapShotAndShare);
-        holder.share_2.setOnClickListener(takeSnapShotAndShare);
+        holder.share_1.setTag(R.string.card_item_object_1, storiesModelOne.getOne());
+        holder.share_2.setTag(R.string.card_item_object_2, storiesModelOne.getTwo());
+        holder.share_1.setOnClickListener(this);
+        holder.share_2.setOnClickListener(this);
     }
 
     public void configLinksnTagsVH(LinksnTagsViewHolder holder, int position) {
@@ -463,24 +484,6 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         return 0;
     }
 
-    View.OnClickListener takeSnapShotAndShare = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:" + context.getPackageName()));
-                context.startActivity(intent);
-
-//                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-            }else {
-                takeScreenShot(v);
-            }
-        }
-    };
-
     private void takeScreenShot(View v) {
         View view = v.getRootView();
         view.setDrawingCacheEnabled(true);
@@ -518,18 +521,87 @@ public class ObjectRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    private void loadWithGlide(final ArticleViewHolder holder, String image){
-        Glide.with(context)
-                .load(image)
-                .asBitmap()
-//                .thumbnail(R.drawable.cat_sports)
+    private void loadWithGlide(String image, final String title){
+        Glide.with(context).asBitmap().load("http://" + image)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        holder.thumbnail.setImageBitmap(resource);
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        shareArticle(resource, title);
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
                     }
                 });
     }
 
+    private void shareArticle(Bitmap bitmap, String title){
 
+        String fileName = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", new Date()).toString();
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName + ".jpg";
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        File file = new File(filePath);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+//            shareScreenShot(file);
+
+            String message = title + "\n\n" + "Latest news feeds just 1 click away. Download InstaFeed+ " + "https://goo.gl/enVwXf";
+
+            AppUtils.shareImageAction(context,file,message);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.share){
+            StoryModelSI story = (StoryModelSI) view.getTag(R.string.card_item_object);
+
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+
+            }else {
+                loadWithGlide(story.getThumbnail_url(),story.getTitle());
+            }
+        }else if(view.getId() == R.id.share_1){
+            Story modelOne = (Story) view.getTag(R.string.card_item_object_1);
+
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+
+            }else {
+                loadWithGlide(modelOne.getThumbnail_url(),modelOne.getTitle());
+            }
+        }else if(view.getId() == R.id.share_2){
+            Story modelTwo = (Story) view.getTag(R.string.card_item_object_2);
+
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+
+            }else {
+                loadWithGlide(modelTwo.getThumbnail_url(),modelTwo.getTitle());
+            }
+        }
+    }
 }

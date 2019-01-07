@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparentBlack"
+    android:id="@+id/dialog_window">
+
+    <RelativeLayout
+        android:id="@+id/dialog_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/background_dialog"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:padding="20dp"
+        android:clickable="true"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Dialog Title"
+            style="@style/themeTextTitle_18"
+            android:textColor="@color/textColorSubDark"/>
+
+        <ImageView
+            android:id="@+id/dialog_image"
+            android:layout_below="@id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/rate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:tint="@color/themeColorSecondary"/>
+
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_below="@id/dialog_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/rate_app_message"
+            android:textAlignment="center"
+            style="@style/themeText_14"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/dialog_message"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/dialog_action_neg"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="NOT NOW"
+                style="@style/themeTextTitle_14"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:background="@drawable/color_button_feedback"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/dialog_action_pos"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="OKAY"
+                style="@style/themeTextTitle_14"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:background="@drawable/color_button_feedback"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

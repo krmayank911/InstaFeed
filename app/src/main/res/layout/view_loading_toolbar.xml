@@ -11,6 +11,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:src="@drawable/ic_arrow_back_32dp"
+        android:background="@drawable/circular_feed_back"
         android:layout_margin="5dp"
         android:padding="5dp"
         android:layout_centerVertical="true"/>
@@ -25,13 +26,28 @@
         style="@style/browser_toolBar"/>
 
     <ImageView
+        android:id="@+id/reloadButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_toLeftOf="@id/overflowButton"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/if_refresh"
+        android:tint="@color/black"
+        android:background="@drawable/circular_feed_back"
+        android:padding="4dp"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
         android:id="@+id/overflowButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_more_vert_black_32dp"
+        android:background="@drawable/circular_feed_back"
         android:layout_margin="5dp"
-        android:padding="5dp"
+        android:padding="4dp"
+        android:visibility="gone"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
@@ -46,7 +62,7 @@
             android:id="@+id/progress"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:progressTint="@color/teal"
+            android:progressTint="@color/themeColorAccent"
             android:max="100"
             android:progress="20"/>
     </LinearLayout>

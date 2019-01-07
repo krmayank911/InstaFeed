@@ -24,6 +24,7 @@ public class LoadingToolBar extends FrameLayout implements View.OnClickListener,
     private TextView titleLabel;
     private ImageView backButton;
     private ImageView overflowButton;
+    private ImageView reloadButton;
     private RelativeLayout backGroundView;
 
     private LinearLayout progressContainer;
@@ -33,6 +34,7 @@ public class LoadingToolBar extends FrameLayout implements View.OnClickListener,
 
     public interface TopBarCallback {
         void backButtonCalled();
+        void onReloadClick();
     }
 
     public void setTopbarListener(TopBarCallback mCallback) {
@@ -49,6 +51,9 @@ public class LoadingToolBar extends FrameLayout implements View.OnClickListener,
         backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(this);
 
+        reloadButton = findViewById(R.id.reloadButton);
+        reloadButton.setOnClickListener(this);
+
         progressContainer = findViewById(R.id.progressContainer);
         progressBar = findViewById(R.id.progress);
 
@@ -62,6 +67,8 @@ public class LoadingToolBar extends FrameLayout implements View.OnClickListener,
             topCallback.backButtonCalled();
         }else if(view.getId() == R.id.overflowButton){
             showPopup(view);
+        }else if(view.getId() == R.id.reloadButton){
+            topCallback.onReloadClick();
         }
     }
 
@@ -87,6 +94,14 @@ public class LoadingToolBar extends FrameLayout implements View.OnClickListener,
 
     public ProgressBar getProgressBar() {
         return progressBar;
+    }
+
+    public ImageView getOverflowButton() {
+        return overflowButton;
+    }
+
+    public ImageView getReloadButton() {
+        return reloadButton;
     }
 
     public void showPopup(View v) {

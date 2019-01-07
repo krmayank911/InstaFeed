@@ -24,7 +24,7 @@
     </style>
 
     <style name="toolBar">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/lato_regular</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginLeft">20dp</item>
@@ -37,6 +37,93 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
+    </style>
+
+    <style name="themeEditText_18">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+        <item name="colorAccent">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeText_22">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeText_20">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeText_18">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeText_16">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeText_14">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/themeOneText</item>
+    </style>
+
+    <style name="themeText_12">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeTextTitle_22">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeTextTitle_20">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeTextTitle_18">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeTextTitle_16">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="themeTextTitle_14">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/themeOneText</item>
+    </style>
+
+    <style name="themeTextTitle_12">
+        <item name="android:fontFamily">@font/metropolis_semi_bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/themeTwoBlack</item>
+    </style>
+
+    <style name="spinnerStyle" parent="@android:style/Widget.Spinner.DropDown">
+        <item name="android:textAppearance">@style/themeText_16</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:background">@color/themeColorPrimary</item>
+        <item name="android:textColor">@color/themeColorSecondary</item>
     </style>
 
 </resources>

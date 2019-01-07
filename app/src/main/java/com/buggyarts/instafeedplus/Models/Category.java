@@ -8,6 +8,8 @@ public class Category {
 
     private String category;
 
+    private String icon;
+
     public Category(String category) {
         this.category = category;
     }
@@ -18,5 +20,13 @@ public class Category {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

@@ -150,4 +150,5 @@ public class Article implements Parcelable {
 
         return article;
     }
+
 }

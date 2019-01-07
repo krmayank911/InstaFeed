@@ -22,12 +22,17 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
     private TextView titleLabel;
     private ImageView backButton;
     private ImageView overflowButton;
+    private ImageView searchButton;
     private RelativeLayout backGroundView;
 
     private TopBarCallback topCallback;
 
     public interface TopBarCallback {
         void backButtonCalled();
+        void onSearchClick();
+        void onPreferencesClick();
+        void onBookmarksClick();
+        void onPrivacyPolicyClick();
     }
 
     public void setTopbarListener(TopBarCallback mCallback) {
@@ -40,6 +45,9 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
         LayoutInflater.from(context).inflate(R.layout.view_topbar, this, true);
         titleLabel = findViewById(R.id.title);
         backGroundView = findViewById(R.id.backgroundView);
+
+        searchButton = findViewById(R.id.search);
+        searchButton.setOnClickListener(this);
 
         backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(this);
@@ -54,6 +62,8 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
             topCallback.backButtonCalled();
         }else if(view.getId() == R.id.overflowButton){
             showPopup(view);
+        }else if(view.getId() == R.id.search){
+            topCallback.onSearchClick();
         }
     }
 
@@ -73,6 +83,14 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
         return titleLabel;
     }
 
+    public ImageView getOverflowButton() {
+        return overflowButton;
+    }
+
+    public ImageView getSearchButton() {
+        return searchButton;
+    }
+
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(getContext(), v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -84,15 +102,19 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.add_to_favourites:
+        switch (item.getItemId()) {
+            case R.id.user_preferences:
+                topCallback.onPreferencesClick();
+                return true;
+//            case R.id.open_bookmarks:
+//                topCallback.onBookmarksClick();
 //                return true;
-//            case R.id.save_to_device:
-//                return true;
-//            default:
-//                return false;
-//        }
-        return false;
+            case R.id.privacy_policy:
+                topCallback.onPrivacyPolicyClick();
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

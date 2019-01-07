@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.buggyarts.instafeedplus.Models.Story;
 import com.buggyarts.instafeedplus.Models.StoryModelSI;
 import com.buggyarts.instafeedplus.Models.story.StoryListTypeOne;
 import com.buggyarts.instafeedplus.R;
@@ -30,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -99,7 +97,7 @@ public class Trending extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(TAG, "onCancelled: ");
             }
         });
 
@@ -163,7 +161,7 @@ public class Trending extends Fragment {
                     list.add(new StoryModelSI(story.getString("title"),
                             story.getString("imgUrl"),
                             story.getString("fullStoryUrl"),
-                            story.getString("category")));
+                            story.getString("identifier")));
                 }
                 i++;
             }

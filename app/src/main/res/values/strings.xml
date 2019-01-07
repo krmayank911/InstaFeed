@@ -3,8 +3,19 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
 
-    <string name="ad_mob_banner_ad_id">ca-app-pub-3247474976237255/5794522169</string>
+    <!-- dummy-->
+    <string name="ad_mob_dummy_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="dummy_banner_ad_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!-- live -->
+    <string name="ad_mob_app_id">ca-app-pub-3247474976237255~1815393488</string>
+    <string name="ad_mob_banner_ad_id">ca-app-pub-3247474976237255/5794522169</string>
+
+    <!-- intro screen -->
+    <string name="select_country_title">Select your Country</string>
+    <string name="select_country_msg">We personalize news feeds\non the basis of country.</string>
+    <string name="select_language_title">Select your Language</string>
+    <string name="select_language_msg">We personalize news feeds\non the basis of language.</string>
 
     <string name="error_select_country">Please Select a Country</string>
 
@@ -12,7 +23,7 @@
     <string name="title_preferences">Preferences</string>
 
     <!-- bookmarks -->
-    <string name="title_bookmarks">Bookmarks</string>
+    <string name="title_bookmarks">Reading List</string>
 
     <!-- top feeds fragment -->
     <string name="top_feeds_title">Top Feeds</string>
@@ -26,5 +37,48 @@
     <!-- magazine fragment -->
     <string name="magazine_title">Magazine</string>
 
+    <string name="card_item_holder">Card Item Holder</string>
+    <string name="card_item_object">Card Item Object</string>
+    <string name="card_item_position">Card Item Position</string>
+    <string name="page_object">Page Object</string>
+    <string name="more_articles_object">More Articles Object</string>
+
+    <string name="card_item_object_1">Card Item Object 1</string>
+    <string name="card_item_object_2">Card Item Object 2</string>
+
+    <string name="news_special_json">newsSpecialJson</string>
+
+    <!-- errors -->
+    <string name="reload">Reload</string>
+    <string name="no_internet_error">Oops!!</string>
+    <string name="no_internet_message">Please check your Internet Connection and try again.</string>
+
+    <!-- fcm -->
+    <string name="msg_token_fmt">FCM Token: </string>
+    <string name="default_notification_channel_id">FCM_CHANNEL_DEFAULT</string>
+
+    <!-- notifications -->
+    <string name="is_notification">isNotification</string>
+    <string name="notification_object">Notification Object</string>
+    <string name="notification_type_browser">Notification Type Browser</string>
+    <string name="notification_type_cards">Notification Type Cards</string>
+    <string name="notification_type_trending">Notification Type Trending Tab</string>
+    <string name="notification_type_magazine">Notification Type Magazine Tab</string>
+    <string name="notification_type_category">Notification Type Category</string>
+
+    <string name="notification_channel_urgent">urgent</string>
+    <string name="notification_channel_medium">medium</string>
+    <string name="notification_channel_low">low</string>
+
+    <string name="msg_subscribed">InstaFeedPlusTopics</string>
+    <string name="msg_subscribe_failed">InstaFeedPlusTopics Subscription Failed</string>
+
+    <string name="notifications_primary_channel_name">News Feed Notifications</string>
+    <string name="notifications_primary_channel_description">Get latest News feeds at regular intervals.</string>
+
+    <string name="rate_app_title">APP REVIEW</string>
+    <string name="rate_app_message">Hey!! User If you liked our app,\nplease show your support on play store.</string>
+    <string name="rate_app_action_pos">RATE</string>
+    <string name="rate_app_action_neg">NOT NOW</string>
 
 </resources>

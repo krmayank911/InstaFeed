@@ -4,15 +4,16 @@
     android:id="@+id/backgroundView"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/white"
-    android:elevation="2dp">
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back_32dp"
-        android:layout_margin="5dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:background="@drawable/circular_feed_back"
+        android:tint="@color/themeIconTintInverse"
         android:padding="5dp"
         android:layout_centerVertical="true"/>
 
@@ -23,16 +24,30 @@
         android:layout_toRightOf="@id/backButton"
         android:layout_centerVertical="true"
         android:text="Title"
+        android:textColor="@color/themeIconTintInverse"
         style="@style/toolBar"/>
 
     <ImageView
-        android:id="@+id/overflowButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_more_vert_black_32dp"
-        android:layout_margin="5dp"
+        android:id="@+id/search"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:padding="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@id/overflowButton"
+        android:src="@drawable/ic_search_black_24dp"
+        android:tint="@color/themeIconTintInverse"
+        android:background="@drawable/circular_feed_back"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/overflowButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/overflow"
+        android:tint="@color/themeIconTintInverse"
+        android:background="@drawable/circular_feed_back"
         android:layout_centerVertical="true"/>
 
 </RelativeLayout>

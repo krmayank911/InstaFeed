@@ -3,21 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:background="@drawable/bg_feed_click">
 
     <TextView
         android:id="@+id/link_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="first link"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/colorWhite"
+        style="@style/themeTextTitle_16"
+        android:textColor="@color/themeColorSecondary"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:layout_margin="5dp"
-        android:background="@drawable/link_bg" />
+        android:background="@drawable/link_bg"/>
 
 </RelativeLayout>
