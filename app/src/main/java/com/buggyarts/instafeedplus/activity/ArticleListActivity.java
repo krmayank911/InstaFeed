@@ -525,6 +525,11 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
     }
 
     @Override
+    public void onRateUsClick() {
+
+    }
+
+    @Override
     public void onPrivacyPolicyClick() {
 
     }

@@ -26,11 +26,12 @@ public class CustomDialog extends FrameLayout implements View.OnClickListener {
     ImageView dialogImage;
 
     private Callback callback;
+    private int FLAG;
 
     public interface Callback{
         void onWindowOutsideClick();
-        void onDialogActionNeg();
-        void onDialogActionPos();
+        void onDialogActionNeg(int flag);
+        void onDialogActionPos(int flag);
     }
 
     public CustomDialog(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -85,14 +86,22 @@ public class CustomDialog extends FrameLayout implements View.OnClickListener {
         this.callback = callback;
     }
 
+    public void setFLAG(int FLAG) {
+        this.FLAG = FLAG;
+    }
+
+    public int getFLAG() {
+        return FLAG;
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.dialog_window){
             callback.onWindowOutsideClick();
         }else if(view.getId() == R.id.dialog_action_neg){
-            callback.onDialogActionNeg();
+            callback.onDialogActionNeg(FLAG);
         }else if(view.getId() == R.id.dialog_action_pos){
-            callback.onDialogActionPos();
+            callback.onDialogActionPos(FLAG);
         }
     }
 

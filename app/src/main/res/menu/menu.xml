@@ -17,13 +17,13 @@
         app:showAsAction="collapseActionView">
 
     </item>
-    <!--<item-->
-        <!--android:id="@+id/open_bookmarks"-->
-        <!--android:icon="@drawable/if_bookmark"-->
-        <!--android:title="Bookmarks"-->
-        <!--app:showAsAction="collapseActionView">-->
+    <item
+        android:id="@+id/rate_app"
+        android:icon="@drawable/if_bookmark"
+        android:title="Rate Us"
+        app:showAsAction="collapseActionView">
 
-    <!--</item>-->
+    </item>
     <item
         android:id="@+id/privacy_policy"
         android:title="Privacy Policy"

@@ -1,5 +1,6 @@
 package com.buggyarts.instafeedplus.rest;
 
+import com.buggyarts.instafeedplus.Models.AppVersion;
 import com.buggyarts.instafeedplus.Models.news.ResponseNewsApi;
 import com.buggyarts.instafeedplus.Models.news.ResponseSources;
 
@@ -58,5 +59,8 @@ public interface ApiInterface {
     Call<ResponseSources> getSourcesForCategory(@Query("apiKey") String apiKey,
                                                @Query("category") String category,
                                                @Query("language") String language);
+
+    @GET("buggy/notification/app-version")
+    Call<AppVersion> getAppVersion();
 
 }

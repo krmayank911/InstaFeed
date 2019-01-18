@@ -34,12 +34,12 @@ public class IntroPagerAdapter extends FragmentPagerAdapter implements SelectCou
         switch (position){
             case 0:
                 selectCountryFragment = new SelectCountryFragment();
-                selectCountryFragment.setCallback(this);
+                selectCountryFragment.setCallback(IntroPagerAdapter.this);
                 return selectCountryFragment;
 
             case 1:
                 selectLanguageFragment = new SelectLanguageFragment();
-                selectLanguageFragment.setCallback(this);
+                selectLanguageFragment.setCallback(IntroPagerAdapter.this);
                 return selectLanguageFragment;
         }
 

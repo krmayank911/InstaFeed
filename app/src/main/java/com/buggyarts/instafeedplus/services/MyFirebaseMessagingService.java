@@ -16,6 +16,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import com.buggyarts.instafeedplus.BrowserActivity;
 import com.buggyarts.instafeedplus.HomeTabActivity;
@@ -28,6 +29,9 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -50,12 +54,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG, "From: " + remoteMessage.toString());
+//        Log.d(TAG, "From: " + remoteMessage.toString());
         if (remoteMessage.getData() != null) {
-            Log.d(TAG, "From: " + remoteMessage.getData().toString());
+//            Log.d(TAG, "From: " + remoteMessage.getData().toString());
             if (remoteMessage.getData().get("body") != null) {
                 if (remoteMessage.getData().get("body").length() > 0) {
-                    Log.d(TAG, "Notification Message Body: " + remoteMessage.getData().toString());
                     IFNotificationObject notifObject = new IFNotificationObject(remoteMessage.getData(), this);
                     sendNotification(notifObject);
                     Log.d(TAG, "onMessageReceived: " + notifObject.getTitle());
@@ -89,14 +92,43 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                         Notification.BigPictureStyle style = new Notification.BigPictureStyle()
                                                 .bigPicture(resource);
 
-                                        Notification.Builder nBuilder = new Notification.Builder(MyFirebaseMessagingService.this)
-                                                .setContentTitle(notificationObject.getTitle())
-                                                .setContentText(Html.fromHtml(notificationObject.getBody()))
-                                                .setSmallIcon(R.drawable.notification_icon)
-                                                .setStyle(style)
-                                                .setAutoCancel(true)
-                                                .setSound(defaultSoundUri)
-                                                .setContentIntent(pendingIntent);
+                                        Notification.Builder nBuilder = new Notification.Builder(MyFirebaseMessagingService.this);
+
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                                            final String time = new SimpleDateFormat("h:mm a").format(new Date()).toString();
+
+                                            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.if_notification_collapsed);
+                                            contentView.setTextViewText(R.id.title,notificationObject.getTitle());
+                                            contentView.setTextViewText(R.id.text,notificationObject.getBody());
+                                            contentView.setImageViewBitmap(R.id.notif_image,resource);
+                                            contentView.setTextViewText(R.id.header_text,time);
+                                            nBuilder.setCustomContentView(contentView)
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setShowWhen(true)
+                                                    .setAutoCancel(true)
+                                                    .setSound(defaultSoundUri)
+                                                    .setContentIntent(pendingIntent);
+
+                                            RemoteViews expandedView = new RemoteViews(getPackageName(), R.layout.if_notification_expanded);
+                                            expandedView.setTextViewText(R.id.title,notificationObject.getTitle());
+                                            expandedView.setTextViewText(R.id.text,notificationObject.getBody());
+                                            expandedView.setImageViewBitmap(R.id.notif_image,resource);
+                                            expandedView.setTextViewText(R.id.header_text,time);
+                                            nBuilder.setCustomBigContentView(expandedView);
+
+                                        }else {
+
+                                                nBuilder.setContentTitle(notificationObject.getTitle())
+                                                    .setContentText(Html.fromHtml(notificationObject.getBody()))
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setStyle(style)
+                                                    .setShowWhen(true)
+                                                    .setAutoCancel(true)
+                                                    .setSound(defaultSoundUri)
+                                                    .setContentIntent(pendingIntent);
+
+                                        }
 
                                         goToNotificationBuilder(nBuilder, notificationID, notificationObject);
                                     }
@@ -136,17 +168,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                                         Notification.Builder nBuilder = new Notification.Builder(MyFirebaseMessagingService.this);
 
-                                        nBuilder.setContentTitle(notificationObject.getTitle())
-                                                .setContentText(Html.fromHtml(notificationObject.getBody()))
-                                                .setSmallIcon(R.drawable.notification_icon)
-                                                .setLargeIcon(resource)
-                                                .setStyle(new Notification.BigTextStyle()
-                                                        .setBigContentTitle(notificationObject.getTitle())
-                                                        .bigText(Html.fromHtml(notificationObject.getBody())))
-                                                .setAutoCancel(true)
-                                                .setSound(defaultSoundUri)
-                                                .setContentIntent(pendingIntent);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
+                                            final String time = new SimpleDateFormat("h:mm a").format(new Date()).toString();
+
+                                            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.if_notification_collapsed);
+                                            contentView.setTextViewText(R.id.title,notificationObject.getTitle());
+                                            contentView.setTextViewText(R.id.text,notificationObject.getBody());
+                                            contentView.setImageViewBitmap(R.id.notif_image,resource);
+                                            contentView.setTextViewText(R.id.header_text,time);
+                                            nBuilder.setCustomContentView(contentView)
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setAutoCancel(true)
+                                                    .setShowWhen(true)
+                                                    .setSound(defaultSoundUri)
+                                                    .setContentIntent(pendingIntent);
+
+                                        }else {
+
+                                            nBuilder.setContentTitle(notificationObject.getTitle())
+                                                    .setContentText(Html.fromHtml(notificationObject.getBody()))
+                                                    .setSmallIcon(R.drawable.notification_icon)
+                                                    .setLargeIcon(resource)
+                                                    .setStyle(new Notification.BigTextStyle()
+                                                            .setBigContentTitle(notificationObject.getTitle())
+                                                            .bigText(Html.fromHtml(notificationObject.getBody())))
+                                                    .setAutoCancel(true)
+                                                    .setSound(defaultSoundUri)
+                                                    .setContentIntent(pendingIntent);
+                                        }
                                         goToNotificationBuilder(nBuilder, notificationID, notificationObject);
 
                                     }
@@ -190,6 +240,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                                 .setBigContentTitle(notificationObject.getTitle())
                                                 .bigText(Html.fromHtml(notificationObject.getBody())))
                                         .setAutoCancel(true)
+                                        .setShowWhen(true)
                                         .setSound(defaultSoundUri)
                                         .setContentIntent(pendingIntent);
 
@@ -220,6 +271,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setBigContentTitle(notificationObject.getTitle())
                         .bigText(Html.fromHtml(notificationObject.getBody())))
                 .setAutoCancel(true)
+                .setShowWhen(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 

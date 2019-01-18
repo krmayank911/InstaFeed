@@ -202,6 +202,8 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
+
         });
     }
 

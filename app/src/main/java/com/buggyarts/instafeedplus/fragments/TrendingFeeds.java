@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,8 +36,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
 /**
  * Created by mayank on 1/20/18
  */
@@ -58,6 +57,8 @@ public class TrendingFeeds extends Fragment implements EmptyStateView.Callback {
     RelativeLayout headingLayout;
     TextView heading_text;
     EmptyStateView noResultView;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public static TrendingFeeds newInstance(){
         TrendingFeeds fragment = new TrendingFeeds();
@@ -87,6 +88,8 @@ public class TrendingFeeds extends Fragment implements EmptyStateView.Callback {
             adapter = new ObjectRecyclerViewAdapter(object_array, context);
             recyclerView.setAdapter(adapter);
 
+            swipeRefreshLayout = trendingFeeds.findViewById(R.id.swipe_refresh_layout);
+
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
@@ -104,7 +107,17 @@ public class TrendingFeeds extends Fragment implements EmptyStateView.Callback {
                 }
             });
 
-            OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    object_array.clear();
+                    adapter.object_array = object_array;
+                    getData();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+
+//            OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
         }
 
         return trendingFeeds;

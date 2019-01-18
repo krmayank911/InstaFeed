@@ -1,5 +1,7 @@
 package com.buggyarts.instafeedplus;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
@@ -37,12 +39,14 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
     private static final int maximum = 2;
     private static final int minimum = 1;
 
+    boolean showAdOnExit = false;
+
+    String TAG = BrowserActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-
-
 
         loadingToolBar = findViewById(R.id.toolBar);
         loadingToolBar.getOverflowButton().setVisibility(View.GONE);
@@ -111,6 +115,12 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
                 return super.getVideoLoadingProgressView();
             }
 
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                Log.d(TAG, "onReceivedTitle: " + title);
+            }
+
         });
 
         WebSettings webSettings = webView.getSettings();
@@ -130,14 +140,14 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
 
         String url = getIntent().getStringExtra("visit");
 
+        if(getIntent().hasExtra(getResources().getString(R.string.show_ad_on_back))) {
+            showAdOnExit = getIntent().getBooleanExtra(getResources().getString(R.string.show_ad_on_back),false);
+        }
+
         if(getIntent().hasExtra("page_title")){
             String pageTitle = getIntent().getStringExtra("page_title");
             loadingToolBar.getTitleLabel().setText(pageTitle);
         }else {
-            String base_url = url.replace("https", "").replace("http", "")
-                    .replace("://", "").replace("www.", "");
-            int index = base_url.indexOf('/');
-            loadingToolBar.getTitleLabel().setText(base_url.substring(0,index));
 
             try {
                 URL pageUrl = new URL(url);
@@ -210,6 +220,13 @@ public class BrowserActivity extends AppCompatActivity implements LoadingToolBar
     }
 
     public void closeActivityWithAnimation(){
+
+        if(showAdOnExit){
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(getResources().getString(R.string.show_ad_on_back),showAdOnExit);
+            setResult(Activity.RESULT_OK, resultIntent);
+        }
+
         this.finish();
         overridePendingTransition(R.anim.activity_hold, R.anim.activity_slide_out_right);
     }

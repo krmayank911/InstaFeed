@@ -45,4 +45,29 @@ public class ApiClient {
         return retrofit;
     }
 
+    public static Retrofit getNewApiClient(){
+
+        String newBaseUrl = "https://instafeedplus.herokuapp.com/";
+
+        Retrofit fit;
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setLenient();
+        Gson myGson = gsonBuilder.create();
+
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        fit = new Retrofit.Builder()
+                .baseUrl(newBaseUrl)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(myGson))
+                .build();
+
+        return fit;
+    }
+
 }

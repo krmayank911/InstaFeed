@@ -21,6 +21,7 @@ import android.view.View;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.buggyarts.instafeedplus.Models.AppVersion;
 import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.Models.IFNotificationObject;
 import com.buggyarts.instafeedplus.activity.ArticleListActivity;
@@ -35,9 +36,11 @@ import com.buggyarts.instafeedplus.fragments.FargHomeFeed;
 import com.buggyarts.instafeedplus.fragments.StoriesFragment;
 import com.buggyarts.instafeedplus.fragments.TopFeeds;
 import com.buggyarts.instafeedplus.fragments.TrendingFeeds;
+import com.buggyarts.instafeedplus.rest.ApiClient;
+import com.buggyarts.instafeedplus.rest.ApiInterface;
 import com.buggyarts.instafeedplus.utils.AppUtils;
 import com.buggyarts.instafeedplus.utils.Constants;
-import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
@@ -54,7 +57,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_APP_ID_DUMMY;
 import static com.buggyarts.instafeedplus.utils.Constants.ADMOB_INTERSTITIAL_AD_ID_DUMMY;
@@ -80,9 +85,12 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
     AHBottomNavigation bottomNavigationView;
 
     private static int PREFERENCE_REQUEST = 12;
+    private static int AD_REQUEST = 31;
+    private int FLAG_RATE = 22;
+    private int FLAG_UPDATE = 23;
     boolean onBoarding = false;
     String SELECTED_COUNTRY;
-    String previouslySelectedCountry;
+    String previouslySelectedCountry = "";
     ArrayList<String> subTopics = new ArrayList<>();
 
     String TAG = HomeTabActivity.class.getSimpleName();
@@ -91,7 +99,7 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_tab2);
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -144,6 +152,15 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                         Log.d(TAG, msg);
                     }
                 });
+
+        INTERSTITIAL_AD.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                INTERSTITIAL_AD.loadAd(new AdRequest.Builder().build());
+            }
+        });
+
     }
 
     @Override
@@ -184,10 +201,16 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
             if(intent.hasExtra(getResources().getString(R.string.notification_type_browser))){
                 String dataUrl = intent.getStringExtra(getResources().getString(R.string.notification_type_browser));
 
-                Intent browserIntent = new Intent(HomeTabActivity.this,BrowserActivity.class);
-                intent.putExtra("visit", dataUrl);
-                startActivity(browserIntent);
-                overridePendingTransition(R.anim.activity_slide_in_right,R.anim.activity_hold);
+                if(dataUrl != null) {
+                    if (dataUrl.length() > 0) {
+
+                        Intent browserIntent = new Intent(HomeTabActivity.this, BrowserActivity.class);
+                        intent.putExtra("visit", dataUrl);
+                        intent.putExtra(getResources().getString(R.string.show_ad_on_back),true);
+                        startActivityForResult(browserIntent,AD_REQUEST);
+                        overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_hold);
+                    }
+                }
 
             }else if(intent.hasExtra(getResources().getString(R.string.notification_type_cards))){
 
@@ -199,7 +222,11 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
 
             }else if(intent.hasExtra(getResources().getString(R.string.notification_type_magazine))){
 
-                openStoriesTab();
+                if(intent.getStringExtra(getResources().getString(R.string.notification_type_magazine)) != null) {
+                    openStoriesTab(Integer.parseInt(intent.getStringExtra(getResources().getString(R.string.notification_type_magazine))));
+                }else {
+                    openStoriesTab();
+                }
 
             }else if(intent.hasExtra(getResources().getString(R.string.notification_type_category))){
 
@@ -218,7 +245,8 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                         if (notificationObject.getDataUrl().length() > 0) {
                             Intent browserIntent = new Intent(this, BrowserActivity.class);
                             browserIntent.putExtra("visit", notificationObject.getDataUrl());
-                            startActivity(browserIntent);
+                            browserIntent.putExtra(getResources().getString(R.string.show_ad_on_back),true);
+                            startActivityForResult(browserIntent,AD_REQUEST);
                             overridePendingTransition(R.anim.activity_slide_in_right,R.anim.activity_hold);
                         }
                     } else if (notificationObject.getType().equals("1")) {
@@ -226,7 +254,11 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                     } else if (notificationObject.getType().equals("2")) {
                         openTrendingTab();
                     } else if (notificationObject.getType().equals("3")) {
-                        openStoriesTab();
+                        if(notificationObject.getTypeIndex() != null) {
+                            openStoriesTab(Integer.parseInt(notificationObject.getTypeIndex()));
+                        }else {
+                            openStoriesTab();
+                        }
                     } else if (notificationObject.getType().equals("4")) {
                         openCategoryNotification(Integer.parseInt(notificationObject.getTypeIndex()));
                     }
@@ -280,6 +312,18 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
             loadFragment(fragmentStories);
         }else {
             fragmentStories = new StoriesFragment();
+            loadFragment(fragmentStories);
+        }
+        bottomNavigationView.setCurrentItem(3);
+    }
+
+    private void openStoriesTab(int index){
+        if(fragmentStories != null){
+            fragmentStories.setTabIndex(index);
+            loadFragment(fragmentStories);
+        }else {
+            fragmentStories = new StoriesFragment();
+            fragmentStories.setTabIndex(index);
             loadFragment(fragmentStories);
         }
         bottomNavigationView.setCurrentItem(3);
@@ -386,6 +430,8 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
             if(requestCode == PREFERENCE_REQUEST){
                 fragHomeFeed = new FargHomeFeed();
                 loadFragment(fragHomeFeed);
+            }else if(requestCode == AD_REQUEST){
+                showAd();
             }
         }
     }
@@ -429,6 +475,11 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
     }
 
     @Override
+    public void onRateUsClick() {
+        rateApp();
+    }
+
+    @Override
     public void onPrivacyPolicyClick() {
         Intent intent = new Intent(this, BrowserActivity.class);
         intent.putExtra("page_title","PRIVACY POLICY");
@@ -444,12 +495,12 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
         }
 
         // Get new Instance ID token
-//        String token = task.getResult().getToken();
-//        appendLog(token);
+        String token = task.getResult().getToken();
+        //appendLog(token);
 
         // Log and toast
-//        String msg = getResources().getString(R.string.msg_token_fmt) + token;
-//        Log.d(TAG, msg);
+        String msg = getResources().getString(R.string.msg_token_fmt) + token;
+        Log.d(TAG, msg);
 //        Toast.makeText(HomeTabActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -518,13 +569,17 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
         customDialog.setVisibility(View.GONE);
         customDialog.setCallback(this);
 
+
         if(AppUtils.getClickCount(this) == 0){
             showRateDialog();
             AppUtils.setClickCount(this,"15");
+        }else {
+            checkAppVersion();
         }
     }
 
     public void showRateDialog(){
+        customDialog.setFLAG(FLAG_RATE);
         customDialog.getDialogTitle().setText(getResources().getString(R.string.rate_app_title));
         customDialog.getDialogMessage().setText(getResources().getString(R.string.rate_app_message));
         customDialog.getDialogActionNeg().setText(getResources().getString(R.string.rate_app_action_neg));
@@ -532,19 +587,42 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
         customDialog.setVisibility(View.VISIBLE);
     }
 
+    public void showUpdateDialog(){
+        customDialog.setFLAG(FLAG_UPDATE);
+        customDialog.getDialogTitle().setText(getResources().getString(R.string.update_app_title));
+        customDialog.getDialogImage().setImageDrawable(getResources().getDrawable(R.drawable.update));
+        customDialog.getDialogMessage().setText(getResources().getString(R.string.update_app_message));
+        customDialog.getDialogActionNeg().setText(getResources().getString(R.string.update_app_action_neg));
+        customDialog.getDialogActionPos().setText(getResources().getString(R.string.update_app_action_pos));
+        customDialog.getDialogActionNeg().setAlpha(0);
+        customDialog.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onWindowOutsideClick() {
-        customDialog.setVisibility(View.GONE);
+        if(customDialog.getFLAG()==FLAG_RATE) {
+            customDialog.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void onDialogActionNeg() {
-        customDialog.setVisibility(View.GONE);
+    public void onDialogActionNeg(int flag) {
+        if(customDialog.getFLAG() == FLAG_RATE) {
+            customDialog.setVisibility(View.GONE);
+        }
     }
 
     @Override
-    public void onDialogActionPos() {
-        customDialog.setVisibility(View.GONE);
+    public void onDialogActionPos(int flag) {
+        if(flag == FLAG_RATE) {
+            customDialog.setVisibility(View.GONE);
+            rateApp();
+        }else if(flag == FLAG_UPDATE){
+            rateApp();
+        }
+    }
+
+    void rateApp(){
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
@@ -558,6 +636,38 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
         }
+    }
+
+    public void showAd(){
+        if (INTERSTITIAL_AD.isLoaded()) {
+            INTERSTITIAL_AD.show();
+        }else{
+            Log.d("InterstitialAd", "failedToLoad");
+        }
+    }
+
+    public void checkAppVersion(){
+
+        ApiInterface apiService = ApiClient.getNewApiClient().create(ApiInterface.class);
+        Call<AppVersion> call = apiService.getAppVersion();
+
+        call.enqueue(new Callback<AppVersion>() {
+            @Override
+            public void onResponse(Call<AppVersion> call, Response<AppVersion> response) {
+                if(response.code() == 200){
+                    if(Integer.parseInt(response.body().getVersion()) > BuildConfig.VERSION_CODE){
+                        showUpdateDialog();
+                    }
+                }else{
+                    Log.d(TAG, "onResponse: "+ response.code() + " : "+ response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AppVersion> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t);
+            }
+        });
     }
 
 }

@@ -32,6 +32,7 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
         void onSearchClick();
         void onPreferencesClick();
         void onBookmarksClick();
+        void onRateUsClick();
         void onPrivacyPolicyClick();
     }
 
@@ -106,9 +107,9 @@ public class SimpleToolBar extends FrameLayout implements View.OnClickListener, 
             case R.id.user_preferences:
                 topCallback.onPreferencesClick();
                 return true;
-//            case R.id.open_bookmarks:
-//                topCallback.onBookmarksClick();
-//                return true;
+            case R.id.rate_app:
+                topCallback.onRateUsClick();
+                return true;
             case R.id.privacy_policy:
                 topCallback.onPrivacyPolicyClick();
                 return true;

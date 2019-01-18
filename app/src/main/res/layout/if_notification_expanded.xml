@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView android:id="@+id/notif_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_alignParentLeft="true"/>
+
+    <ImageView android:id="@+id/image_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/gradient"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:layout_toLeftOf="@id/header_text">
+
+        <TextView android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="@color/colorWhite"
+            android:textAppearance="@style/themeText_16"
+            style="Custom Notification Title"
+            android:layout_margin="10dp"
+            android:maxLines="3"
+            android:ellipsize="end"/>
+
+        <TextView android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text"
+            android:textColor="@color/colorWhite"
+            android:textAppearance="@style/themeText_14"
+            android:layout_below="@id/title"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            style="Custom Notification Text"
+            android:visibility="gone"
+            android:maxLines="2"
+            android:ellipsize="end"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00 AM"
+        style="@style/themeText_12"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>

@@ -17,6 +17,8 @@
     <string name="select_language_title">Select your Language</string>
     <string name="select_language_msg">We personalize news feeds\non the basis of language.</string>
 
+    <string name="error_selection">Ops! something went wrong please skip this step and try again.</string>
+
     <string name="error_select_country">Please Select a Country</string>
 
     <!-- preferences -->
@@ -80,5 +82,13 @@
     <string name="rate_app_message">Hey!! User If you liked our app,\nplease show your support on play store.</string>
     <string name="rate_app_action_pos">RATE</string>
     <string name="rate_app_action_neg">NOT NOW</string>
+
+    <string name="update_app_title">NEW UPDATE</string>
+    <string name="update_app_message">Hey!! User \nupdate to improve your experience and get new exciting features.</string>
+    <string name="update_app_action_pos">UPDATE</string>
+    <string name="update_app_action_neg">NOT NOW</string>
+
+    <string name="app_name_notification">InstaFeed+</string>
+    <string name="show_ad_on_back">show_ad_on_back</string>
 
 </resources>

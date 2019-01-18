@@ -31,6 +31,7 @@ public class StoriesFragment extends Fragment implements EmptyStateView.Callback
     EmptyStateView noResultView;
 
     Context context;
+    int currentTabIndex = 0;
 
     public static StoriesFragment newInstance(){
         StoriesFragment fragment = new StoriesFragment();
@@ -66,6 +67,14 @@ public class StoriesFragment extends Fragment implements EmptyStateView.Callback
         viewPager = v.findViewById(R.id.hot_stories_view_pager);
         storiesPagerAdapter = new StoriesPagerAdapter(fragmentManager);
         viewPager.setAdapter(storiesPagerAdapter);
+
+        viewPager.setCurrentItem(currentTabIndex,true);
+    }
+
+    public void setTabIndex(int index){
+        if(index < 4) {
+            currentTabIndex = index;
+        }
     }
 
     @Override

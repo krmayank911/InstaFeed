@@ -26,14 +26,21 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/trending_feeds_recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/heading"
-        android:paddingBottom="@dimen/rv_padding_bottom"
-        android:clipToPadding="false"
-        android:clipChildren="false"/>
+        android:layout_below="@id/heading">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trending_feeds_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/rv_padding_bottom"
+            android:clipToPadding="false"
+            android:clipChildren="false"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.buggyarts.instafeedplus.customViews.EmptyStateView
         android:id="@+id/noResultView"

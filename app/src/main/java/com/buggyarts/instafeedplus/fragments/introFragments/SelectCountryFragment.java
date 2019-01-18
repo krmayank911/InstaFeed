@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.utils.Constants;
@@ -79,7 +80,11 @@ public class SelectCountryFragment extends Fragment {
 
                 if(positionOffset >= 0){
                     selected_country = Constants.country_options_abr[positionOffset];
-                    callback.onCountrySelected(selected_country);
+                    if(callback != null) {
+                        callback.onCountrySelected(selected_country);
+                    }else {
+                        Toast.makeText(mContext,getResources().getString(R.string.error_selection),Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }

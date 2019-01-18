@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.utils.Constants;
@@ -77,7 +78,11 @@ public class SelectLanguageFragment extends Fragment {
                 int positionOffset = position - 1;
                 if(positionOffset>=0) {
                     selected_language = Constants.languages_options_abr[positionOffset];
-                    callback.onLanguageSelected(selected_language);
+                    if(callback != null) {
+                        callback.onLanguageSelected(selected_language);
+                    }else {
+                        Toast.makeText(mContext,getResources().getString(R.string.error_selection),Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 

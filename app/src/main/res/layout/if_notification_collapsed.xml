@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp" >
+
+    <ImageView android:id="@+id/notif_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
+        android:layout_centerVertical="true"
+        android:src="@drawable/placeholder_square"/>
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="4dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/notification_icon"
+            android:tint="@color/themeColorSecondaryDark"
+            android:layout_marginRight="5dp"
+            android:padding="1dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name_notification"
+            style="@style/themeText_12"
+            android:textColor="@color/themeColorSecondaryDark"
+            />
+
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            style="@style/themeText_12"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/textColorSubDark"/>
+
+    </LinearLayout>
+
+    <TextView android:id="@+id/title"
+        android:layout_below="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_toLeftOf="@+id/notif_image"
+        android:textAppearance="@style/themeText_14"
+        style="Custom Notification Title"
+        android:layout_marginLeft="2dp"/>
+
+    <TextView android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/notif_image"
+        android:text="Text"
+        android:textColor="@color/textColorSubDark"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textAppearance="@style/themeText_12"
+        android:layout_below="@id/title"
+        style="Custom Notification Text"
+        android:layout_marginLeft="2dp"/>
+
+</RelativeLayout>

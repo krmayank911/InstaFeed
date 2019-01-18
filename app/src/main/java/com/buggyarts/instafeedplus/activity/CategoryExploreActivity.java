@@ -310,6 +310,11 @@ public class CategoryExploreActivity extends AppCompatActivity implements Simple
     }
 
     @Override
+    public void onRateUsClick() {
+
+    }
+
+    @Override
     public void onPrivacyPolicyClick() {
 
     }
