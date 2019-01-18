@@ -364,12 +364,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, HomeTabActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        if(notificationObject.getDataUrl() != null){
-            if(notificationObject.getDataUrl().length() > 0){
-
-                intent = new Intent(this,BrowserActivity.class);
-                intent.putExtra("visit", notificationObject.getDataUrl());
-
+        if(notificationObject.getType().equals("0")){
+            if(notificationObject.getDataUrl() != null) {
+                if (notificationObject.getDataUrl().length() > 0) {
+                    intent = new Intent(this, BrowserActivity.class);
+                    intent.putExtra("visit", notificationObject.getDataUrl());
+                }
             }
         }else if(notificationObject.getType().equals("1")){
             intent.putExtra(getResources().getString(R.string.notification_type_cards), notificationObject.getTypeIndex());

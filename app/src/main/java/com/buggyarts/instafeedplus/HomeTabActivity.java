@@ -40,6 +40,7 @@ import com.buggyarts.instafeedplus.rest.ApiClient;
 import com.buggyarts.instafeedplus.rest.ApiInterface;
 import com.buggyarts.instafeedplus.utils.AppUtils;
 import com.buggyarts.instafeedplus.utils.Constants;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -57,6 +58,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,7 +101,7 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_tab2);
-//        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -241,13 +243,15 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                 notificationObject = gson.fromJson(notificationObjectJson,IFNotificationObject.class);
 
                 if(notificationObject != null) {
-                    if (notificationObject.getDataUrl() != null) {
-                        if (notificationObject.getDataUrl().length() > 0) {
-                            Intent browserIntent = new Intent(this, BrowserActivity.class);
-                            browserIntent.putExtra("visit", notificationObject.getDataUrl());
-                            browserIntent.putExtra(getResources().getString(R.string.show_ad_on_back),true);
-                            startActivityForResult(browserIntent,AD_REQUEST);
-                            overridePendingTransition(R.anim.activity_slide_in_right,R.anim.activity_hold);
+                    if(notificationObject.getType().equals("0")){
+                        if (notificationObject.getDataUrl() != null) {
+                            if (notificationObject.getDataUrl().length() > 0) {
+                                Intent browserIntent = new Intent(this, BrowserActivity.class);
+                                browserIntent.putExtra("visit", notificationObject.getDataUrl());
+                                browserIntent.putExtra(getResources().getString(R.string.show_ad_on_back), true);
+                                startActivityForResult(browserIntent, AD_REQUEST);
+                                overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_hold);
+                            }
                         }
                     } else if (notificationObject.getType().equals("1")) {
                         openHomeFragmentForCards();
