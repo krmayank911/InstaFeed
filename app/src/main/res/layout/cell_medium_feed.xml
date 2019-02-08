@@ -144,6 +144,28 @@
 
         </RelativeLayout>
 
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/button_post_article"-->
+                <!--android:layout_below="@id/button_create_new_page"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:text="Post Article"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textColor="@color/themeColorAccentDark"-->
+                <!--style="@style/themeTextTitle_18"-->
+                <!--android:background="@drawable/color_button_feedback"-->
+                <!--android:layout_gravity="center_horizontal" />-->
+
+        <!--</FrameLayout>-->
+
     </LinearLayout>
 
     <View

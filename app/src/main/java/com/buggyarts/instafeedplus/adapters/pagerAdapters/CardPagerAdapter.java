@@ -121,7 +121,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter, View.
                 }
 
                 GlideApp.with(mContext)
-                        .load(item.getCardsList().get(articleIndex).getThumbnail_url())
+                        .load(item.getCardsList().get(articleIndex).getUrlToImage())
                         .placeholder(mContext.getResources().getDrawable(R.drawable.placeholder_landscape))
                         .centerInside().into(imageView);
             }else {
@@ -146,7 +146,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter, View.
                     }
 
                     GlideApp.with(mContext)
-                            .load(block.getCallResult().get(articleIndex).getThumbnail_url())
+                            .load(block.getCallResult().get(articleIndex).getUrlToImage())
                             .placeholder(mContext.getResources().getDrawable(R.drawable.placeholder_landscape))
                             .centerInside().into(imageView);
                 }else {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +33,7 @@ import com.buggyarts.instafeedplus.Models.news.ResponseNewsApi;
 import com.buggyarts.instafeedplus.Models.news.ResponseSources;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.activity.ArticleListActivity;
+import com.buggyarts.instafeedplus.activity.NewsSpecialActivity;
 import com.buggyarts.instafeedplus.adapters.recyclerAdapters.HomeFeedRecyclerAdapter;
 import com.buggyarts.instafeedplus.customClasses.GridItemDecoration;
 import com.buggyarts.instafeedplus.customViews.EmptyStateView;
@@ -41,6 +43,7 @@ import com.buggyarts.instafeedplus.rest.ApiInterface;
 import com.buggyarts.instafeedplus.utils.AppUtils;
 import com.buggyarts.instafeedplus.utils.Source;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,6 +88,7 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
 
     Context context;
     ArrayList<HomeFeedRecyclerObject> items = new ArrayList();
+    ArrayList<NewsSpecial> pages = new ArrayList<>();
 
     FirebaseDatabase firebaseDatabase;
     PagesResponse pagesResponse;
@@ -168,43 +172,91 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
 //        }
     }
 
+//    public void retrievePageData(){
+//
+//        firebaseDatabase = FirebaseDatabase.getInstance();
+//        pageReference = firebaseDatabase.getReference().child("NewsApi").child("pages");
+//
+//        pageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                String obj = dataSnapshot.getValue().toString();
+//
+//                try {
+//                    Gson gson = new Gson();
+//                    pagesResponse = gson.fromJson(obj,PagesResponse.class);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if(pagesResponse != null){
+//
+//                    if(items.size() >= 2) {
+//                        items.remove(1);
+//                        items.add(1, new HomeFeedRecyclerObject(FEED_TYPE_PAGER, pagesResponse));
+//                    }else {
+//                        items.add(1, new HomeFeedRecyclerObject(FEED_TYPE_PAGER, pagesResponse));
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//
+//
+//        });
+//    }
+
     public void retrievePageData(){
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        pageReference = firebaseDatabase.getReference().child("NewsApi").child("pages");
+        pageReference = firebaseDatabase.getReference().child("NewsApi_v1").child("pages_v1").child("response");
 
-        pageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        pagesResponse = new PagesResponse();
+        pages.clear();
+
+        pageReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                String obj = dataSnapshot.getValue().toString();
-
-                try {
-                    Gson gson = new Gson();
-                    pagesResponse = gson.fromJson(obj,PagesResponse.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                pages.add(dataSnapshot.getValue(NewsSpecial.class));
+                pagesResponse.setPages(pages);
 
                 if(pagesResponse != null){
-
                     if(items.size() >= 2) {
                         items.remove(1);
                         items.add(1, new HomeFeedRecyclerObject(FEED_TYPE_PAGER, pagesResponse));
+                        adapter.notifyItemChanged(1);
                     }else {
                         items.add(1, new HomeFeedRecyclerObject(FEED_TYPE_PAGER, pagesResponse));
                     }
                 }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
             }
 
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
+
     }
 
     public void getNewsArticles(){
@@ -395,7 +447,7 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
                     String description = article_ob.getString("description");
                     String thumbnail_url = article_ob.getString("urlToImage");
                     String url = article_ob.getString("url");
-//                    items.add(new Article(time, source, title, description, thumbnail_url, url));
+//                    items.add(new Article(time, source, title, description, urlToImage, url));
                     i++;
                 }
             } catch (JSONException e) {
@@ -615,11 +667,11 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
 //                            String time = article_ob.getString("publishedAt");
 //                            String title = article_ob.getString("title");
 //                            String description = article_ob.getString("description");
-//                            String thumbnail_url = article_ob.getString("urlToImage");
+//                            String urlToImage = article_ob.getString("urlToImage");
 //                            String url = article_ob.getString("url");
 //                            Boolean isTimeAvailable = article_ob.getBoolean("dateAvailable");
 //                            String timeFormat = article_ob.getString("dateFormat");
-//                            items.add(new NewsArticle(time, source, title, description, thumbnail_url, url,timeFormat,isTimeAvailable));
+//                            items.add(new NewsArticle(time, source, title, description, urlToImage, url,timeFormat,isTimeAvailable));
 //                            j++;
                         }
                         i++;
@@ -753,11 +805,23 @@ public class FargHomeFeed extends Fragment implements HomeFeedRecyclerAdapter.Ca
         getNewsArticles();
     }
 
-    public void showCards(Context context){
+    public void showCards(Context context, int pageIndex){
 
-        Intent intent = new Intent(context, ArticleListActivity.class);
-        intent.putExtra(context.getResources().getString(R.string.news_special_json), true);
-        context.startActivity(intent);
+        if(pageIndex > 100) {
+
+            pageIndex = pageIndex - 100;
+
+            Intent intent = new Intent(context, NewsSpecialActivity.class);
+            intent.putExtra(context.getResources().getString(R.string.news_special_notification), true);
+            intent.putExtra(context.getResources().getString(R.string.news_special_page_index), pageIndex);
+            context.startActivity(intent);
+
+        }else {
+            Intent intent = new Intent(context, ArticleListActivity.class);
+            intent.putExtra(context.getResources().getString(R.string.news_special_notification), true);
+            intent.putExtra(context.getResources().getString(R.string.news_special_page_index), pageIndex);
+            context.startActivity(intent);
+        }
 
     }
 

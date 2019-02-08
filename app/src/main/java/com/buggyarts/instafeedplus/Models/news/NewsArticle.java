@@ -21,7 +21,7 @@ public class NewsArticle {
     public String url;
 
     @SerializedName("urlToImage")
-    public String thumbnail_url;
+    public String urlToImage;
 
     @SerializedName("publishedAt")
     public String publishedAt;
@@ -41,21 +41,21 @@ public class NewsArticle {
 
     public NewsArticle(){}
 
-    public NewsArticle(String time, String source, String title, String description, String thumbnail_url, String url) {
+    public NewsArticle(String time, String source, String title, String description, String urlToImage, String url) {
         this.time = time;
 //        this.source = source;
         this.title = title;
         this.description = description;
-        this.thumbnail_url = thumbnail_url;
+        this.urlToImage = urlToImage;
         this.url = url;
     }
 
-    public NewsArticle(String time, String source, String title, String description, String thumbnail_url, String url,String timeFormat,Boolean isTimeAvailable) {
+    public NewsArticle(String time, String source, String title, String description, String urlToImage, String url, String timeFormat, Boolean isTimeAvailable) {
         this.time = time;
 //        this.source = source;
         this.title = title;
         this.description = description;
-        this.thumbnail_url = thumbnail_url;
+        this.urlToImage = urlToImage;
         this.url = url;
         this.isTimeAvailable = isTimeAvailable;
         this.timeFormat = timeFormat;
@@ -129,12 +129,12 @@ public class NewsArticle {
         this.description = description;
     }
 
-    public String getThumbnail_url() {
-        return thumbnail_url;
+    public String getUrlToImage() {
+        return urlToImage;
     }
 
-    public void setThumbnail_url(String thumbnail_url) {
-        this.thumbnail_url = thumbnail_url;
+    public void setUrlToImage(String urlToImage) {
+        this.urlToImage = urlToImage;
     }
 
     public boolean isBookmarked() {
@@ -174,7 +174,7 @@ public class NewsArticle {
 //                ", title:'" + title + '\'' +
 //                ", description:'" + description + '\'' +
 //                ", url:'" + url + '\'' +
-//                ", urlToImage:'" + thumbnail_url + '\'' +
+//                ", urlToImage:'" + urlToImage + '\'' +
 //                ", publishedAt:'" + publishedAt + '\'' +
 //                ", content:'" + content + '\'' +
 //                ", time:'" + time + '\'' +

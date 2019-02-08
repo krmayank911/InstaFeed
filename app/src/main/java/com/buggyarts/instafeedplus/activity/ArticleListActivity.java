@@ -40,11 +40,11 @@ import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -65,6 +65,7 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
 
     String TAG = ArticleListActivity.class.getSimpleName();
     ArrayList<NewsArticle> articles = new ArrayList<>();
+    ArrayList<NewsSpecial> pages = new ArrayList<>();
     int next = 1;
     int totalResults = 0;
     boolean callInProgress = false;
@@ -75,6 +76,7 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
     int articlesByHeadlines = 0;
     boolean articlesByHeadlinesCompleted = false;
     int pageSize = 20;
+    int newsSpecialPageIndex = 0;
 
     EmptyStateView noResultView;
     SimpleToolBar toolBar;
@@ -150,20 +152,26 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
 
             }else if(intent.hasExtra(getResources().getString(R.string.news_special_json))){
 
+
+                String json = intent.getStringExtra(getResources().getString(R.string.news_special_json));
+                Gson gson = new Gson();
+                NewsSpecial newsSpecial = gson.fromJson(json,NewsSpecial.class);
+
+                if(newsSpecial != null) {
+
+                    articles = newsSpecial.getCardsList();
+                    this.next = 0;
+                    pagerAdapter.articles = articles;
+                    pagerAdapter.notifyDataSetChanged();
+
+                }
+
+            }else if(intent.hasExtra(getResources().getString(R.string.news_special_notification))){
+                if(intent.hasExtra(getResources().getString(R.string.news_special_page_index))) {
+                    newsSpecialPageIndex = intent.getIntExtra(getResources().getString(R.string.news_special_page_index), 0);
+                }
+
                 firebaseCheck();
-//                String json = intent.getStringExtra(getResources().getString(R.string.news_special_json));
-//                Gson gson = new Gson();
-//
-//                NewsSpecial newsSpecial = gson.fromJson(json,NewsSpecial.class);
-//
-//                if(newsSpecial != null) {
-//
-//                    articles = newsSpecial.getCardsList();
-//                    this.next = 0;
-//                    pagerAdapter.articles = articles;
-//                    pagerAdapter.notifyDataSetChanged();
-//
-//                }
             }
         }
 
@@ -434,7 +442,7 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
 
     @Override
     public void onArticleShareClick(NewsArticle article) {
-        loadWithGlide(article.getThumbnail_url(),article.getTitle());
+        loadWithGlide(article.getUrlToImage(),article.getTitle());
     }
 
     @Override
@@ -616,39 +624,87 @@ public class ArticleListActivity extends AppCompatActivity implements VerticalPa
         }
     }
 
+//    public void retrievePageData(){
+//
+//        firebaseDatabase = FirebaseDatabase.getInstance();
+//        pageReference = firebaseDatabase.getReference().child("NewsApi").child("pages");
+//
+//        pageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                String obj = dataSnapshot.getValue().toString();
+//
+//                try {
+//                    Gson gson = new Gson();
+//                    pagesResponse = gson.fromJson(obj,PagesResponse.class);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                if(pagesResponse != null){
+//                    NewsSpecial newsSpecial = pagesResponse.getPages().get(0);
+//                    if(newsSpecial != null) {
+//                        articles = newsSpecial.getCardsList();
+//                        next = 0;
+//                        pagerAdapter.articles = articles;
+//                        pagerAdapter.notifyDataSetChanged();
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) { }
+//        });
+//    }
+
     public void retrievePageData(){
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        pageReference = firebaseDatabase.getReference().child("NewsApi").child("pages");
+        pageReference = firebaseDatabase.getReference().child("NewsApi_v1").child("pages_v1").child("response");
 
-        pageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        pagesResponse = new PagesResponse();
+
+
+        pageReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                pages.add(dataSnapshot.getValue(NewsSpecial.class));
 
-                String obj = dataSnapshot.getValue().toString();
+                if(pages.size() > newsSpecialPageIndex){
 
-                try {
-                    Gson gson = new Gson();
-                    pagesResponse = gson.fromJson(obj,PagesResponse.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if(pagesResponse != null){
-                    NewsSpecial newsSpecial = pagesResponse.getPages().get(0);
-                    if(newsSpecial != null) {
-                        articles = newsSpecial.getCardsList();
+                    if(pages.get(newsSpecialPageIndex).getCards() && pages.get(newsSpecialPageIndex).getCardsList().size() > 0){
+                        articles = pages.get(newsSpecialPageIndex).getCardsList();
                         next = 0;
                         pagerAdapter.articles = articles;
                         pagerAdapter.notifyDataSetChanged();
                     }
+
                 }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
+
     }
 
 }

@@ -226,19 +226,19 @@ public class Bookmarks extends Fragment implements HomeFeedRecyclerAdapter.Callb
 //
 //                String description = article_ob.getString("description");
 //
-//                String thumbnail_url = article_ob.getString("urlToImage");
+//                String urlToImage = article_ob.getString("urlToImage");
 //
 //                String url = article_ob.getString("url");
 //
 //                String timeFormat = article_ob.getString("timeFormat");
 //
 //                if(timeFormat.equals("GoogleTimeFormat")){
-//                    Article article = new Article(time, source, title, description, thumbnail_url, url);
+//                    Article article = new Article(time, source, title, description, urlToImage, url);
 //                    article.setBookmarked(true);
 //                    list.add(article);
 //                }else{
 //                    Boolean isTimeAvailable = article_ob.getBoolean("isTimeAvailable");
-//                    Article article = new Article(time, source, title, description, thumbnail_url, url,timeFormat,isTimeAvailable);
+//                    Article article = new Article(time, source, title, description, urlToImage, url,timeFormat,isTimeAvailable);
 //                    article.setBookmarked(true);
 //                    list.add(article);
 //                }

@@ -348,7 +348,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
 
-
         Gson gson = new Gson();
         intent.putExtra(getResources().getString(R.string.is_notification), true);
         intent.putExtra(getResources().getString(R.string.notification_object), gson.toJson(notificationObject));

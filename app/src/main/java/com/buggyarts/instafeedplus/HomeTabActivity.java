@@ -215,8 +215,8 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                 }
 
             }else if(intent.hasExtra(getResources().getString(R.string.notification_type_cards))){
-
-                openHomeFragmentForCards();
+                int pageIndex = Integer.parseInt(intent.getStringExtra(getResources().getString(R.string.notification_type_cards)));
+                openHomeFragmentForCards(pageIndex);
 
             }else if(intent.hasExtra(getResources().getString(R.string.notification_type_trending))){
 
@@ -254,7 +254,7 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
                             }
                         }
                     } else if (notificationObject.getType().equals("1")) {
-                        openHomeFragmentForCards();
+                        openHomeFragmentForCards(Integer.parseInt(notificationObject.getTypeIndex()));
                     } else if (notificationObject.getType().equals("2")) {
                         openTrendingTab();
                     } else if (notificationObject.getType().equals("3")) {
@@ -288,15 +288,15 @@ public class HomeTabActivity extends AppCompatActivity implements SimpleToolBar.
         }
     }
 
-    private void openHomeFragmentForCards(){
+    private void openHomeFragmentForCards(int pageIndex){
 
         if(fragHomeFeed != null){
             loadFragment(fragHomeFeed);
-            fragHomeFeed.showCards(this);
+            fragHomeFeed.showCards(this, pageIndex);
         }else {
             fragHomeFeed = new FargHomeFeed();
             loadFragment(fragHomeFeed);
-            fragHomeFeed.showCards(this);
+            fragHomeFeed.showCards(this, pageIndex);
         }
         bottomNavigationView.setCurrentItem(0);
     }

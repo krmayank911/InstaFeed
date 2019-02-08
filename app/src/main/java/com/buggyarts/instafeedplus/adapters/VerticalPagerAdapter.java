@@ -164,7 +164,7 @@ public class VerticalPagerAdapter extends PagerAdapter implements View.OnClickLi
 //        }
 
         Glide.with(mContext)
-                .load(article.thumbnail_url).apply(new RequestOptions()
+                .load(article.urlToImage).apply(new RequestOptions()
                 .placeholder(mContext.getResources().getDrawable(R.drawable.placeholder_landscape))
                 .centerCrop())
                 .into(thumbnail);

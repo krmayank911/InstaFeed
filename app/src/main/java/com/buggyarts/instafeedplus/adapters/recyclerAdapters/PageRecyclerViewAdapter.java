@@ -226,7 +226,7 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 //            holder.description.setVisibility(View.GONE);
 //        }
 
-        Glide.with(mContext).load(article.thumbnail_url).apply(new RequestOptions().centerCrop()).into(holder.thumbnail);
+        Glide.with(mContext).load(article.urlToImage).apply(new RequestOptions().centerCrop()).into(holder.thumbnail);
 
         holder.itemCard.setTag(R.string.card_item_object, article);
         holder.itemCard.setTag(R.string.card_item_holder, holder);
@@ -404,7 +404,7 @@ public class PageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                         Uri.parse("package:" + mContext.getPackageName()));
                 mContext.startActivity(intent);
             }else {
-                loadWithGlide(article.getThumbnail_url(),article.getTitle());
+                loadWithGlide(article.getUrlToImage(),article.getTitle());
             }
         }
     }

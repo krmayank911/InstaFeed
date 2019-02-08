@@ -53,31 +53,31 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         switch (category.getCategory()) {
             case BUSINESS:
                 holder.category_title.setText(BUSINESS);
-                holder.category_icon.setImageResource(R.drawable.cat_business);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_business));
                 break;
             case ENTERTAINMENT:
                 holder.category_title.setText(ENTERTAINMENT);
-                holder.category_icon.setImageResource(R.drawable.cat_entertainment);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_entertainment));
                 break;
             case GENERAL:
                 holder.category_title.setText(GENERAL);
-                holder.category_icon.setImageResource(R.drawable.cat_general);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_general));
                 break;
             case HEALTH:
                 holder.category_title.setText(HEALTH);
-                holder.category_icon.setImageResource(R.drawable.cat_health);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_health));
                 break;
             case SCIENCE:
                 holder.category_title.setText(SCIENCE);
-                holder.category_icon.setImageResource(R.drawable.cat_science);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_science));
                 break;
             case SPORTS:
                 holder.category_title.setText(SPORTS);
-                holder.category_icon.setImageResource(R.drawable.cat_sports);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_sports));
                 break;
             case TECHNOLOGY:
                 holder.category_title.setText(TECHNOLOGY);
-                holder.category_icon.setImageResource(R.drawable.cat_technology);
+                holder.category_icon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.cat_technology));
                 break;
         }
 

@@ -206,6 +206,7 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             }
         }
 
+
         holder.metaInfo.setText(meta);
         holder.title.setText(Html.fromHtml(article.title));
 
@@ -219,12 +220,14 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
 //        if(holder.getItemViewType() == TYPE_MEDIUM) {
 //            holder.description.setVisibility(View.GONE);
+//        holder.postArticle.setOnClickListener(this);
+//        holder.postArticle.setTag(R.string.card_item_object, article);
 //        }
 
         if(mediumSize) {
 
             Glide.with(mContext)
-                    .load(article.thumbnail_url)
+                    .load(article.urlToImage)
                     .apply(new RequestOptions()
                     .placeholder(mContext.getResources().getDrawable(R.drawable.placeholder_landscape))
                     .centerCrop())
@@ -232,7 +235,7 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         }else {
 
             Glide.with(mContext)
-                    .load(article.thumbnail_url)
+                    .load(article.urlToImage)
                     .apply( new RequestOptions()
                     .placeholder(mContext.getResources().getDrawable(R.drawable.placeholder_square))
                     .centerCrop())
@@ -305,6 +308,8 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         public TextView read_more;
         public TextView powered_by;
 
+//        public TextView postArticle;
+
         public IFNewsFeedVH(View itemView) {
             super(itemView);
 
@@ -317,6 +322,8 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
             description = itemView.findViewById(R.id.description);
             read_more = itemView.findViewById(R.id.read_more);
             powered_by = itemView.findViewById(R.id.powered_by);
+
+//            postArticle = itemView.findViewById(R.id.button_post_article);
         }
     }
 
@@ -395,9 +402,18 @@ public class HomeFeedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             }else {
                 NewsArticle article = (NewsArticle) v.getTag(R.string.card_item_object);
-                loadWithGlide(article.getThumbnail_url(),article.getTitle());
+                loadWithGlide(article.getUrlToImage(),article.getTitle());
             }
         }
+//        else if(v.getId() == R.id.button_post_article){
+//            NewsArticle article = (NewsArticle) v.getTag(R.string.card_item_object);
+//            Gson gson = new Gson();
+//            String articleJson = gson.toJson(article);
+//
+//            Intent intent = new Intent(mContext, CreateArticleActivity.class);
+//            intent.putExtra(mContext.getResources().getString(R.string.article_object),articleJson);
+//            mContext.startActivity(intent);
+//        }
     }
 
 

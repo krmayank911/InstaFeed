@@ -44,11 +44,14 @@
     <string name="card_item_position">Card Item Position</string>
     <string name="page_object">Page Object</string>
     <string name="more_articles_object">More Articles Object</string>
+    <string name="article_object">Article Object</string>
 
     <string name="card_item_object_1">Card Item Object 1</string>
     <string name="card_item_object_2">Card Item Object 2</string>
 
     <string name="news_special_json">newsSpecialJson</string>
+    <string name="news_special_notification">newsSpecialNotification</string>
+    <string name="news_special_page_index">pageIndex</string>
 
     <!-- errors -->
     <string name="reload">Reload</string>

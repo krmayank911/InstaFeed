@@ -2,6 +2,8 @@ package com.buggyarts.instafeedplus.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,12 @@ import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.adapters.recyclerAdapters.PageRecyclerViewAdapter;
 import com.buggyarts.instafeedplus.customClasses.GlideApp;
 import com.buggyarts.instafeedplus.customViews.IFToolBar;
+import com.buggyarts.instafeedplus.utils.data.NetworkConnection;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -51,6 +59,7 @@ public class NewsSpecialActivity extends AppCompatActivity implements IFToolBar.
     NewsSpecial newsSpecial;
 
     String TAG = NewsSpecialActivity.class.getSimpleName();
+    int newsSpecialPageIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +96,12 @@ public class NewsSpecialActivity extends AppCompatActivity implements IFToolBar.
                 if(newsSpecial != null) {
                     extractItemNAdd();
                 }
+            }else if(intent.hasExtra(getResources().getString(R.string.news_special_notification))){
+                if(intent.hasExtra(getResources().getString(R.string.news_special_page_index))) {
+                    newsSpecialPageIndex = intent.getIntExtra(getResources().getString(R.string.news_special_page_index), 0);
+                }
+
+                firebaseCheck();
             }
         }
     }
@@ -125,7 +140,7 @@ public class NewsSpecialActivity extends AppCompatActivity implements IFToolBar.
                         articleIndex = random.nextInt(block.getCallResult().size());
                     }
 
-                    GlideApp.with(this).load(block.getCallResult().get(articleIndex).getThumbnail_url())
+                    GlideApp.with(this).load(block.getCallResult().get(articleIndex).getUrlToImage())
                             .placeholder(getResources().getDrawable(R.drawable.placeholder_landscape))
                             .optionalCenterCrop().into(thumbnail);
                 }else {
@@ -230,6 +245,57 @@ public class NewsSpecialActivity extends AppCompatActivity implements IFToolBar.
         Log.d(TAG, "percentage: "+ percentage);
 
         simpleToolBar.updateToolBarAlpha(percentage,this);
+    }
+
+    void firebaseCheck(){
+
+        if(NetworkConnection.isNetworkAvailale(this)) {
+            retrievePageData();
+        }else {
+            closeActivityWithAnimation();
+        }
+    }
+
+    public void retrievePageData(){
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference pageReference = firebaseDatabase.getReference().child("NewsApi_v1").child("pages_v1").child("response");
+        final ArrayList<NewsSpecial> pages = new ArrayList<>();
+
+        pageReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                pages.add(dataSnapshot.getValue(NewsSpecial.class));
+
+                if(pages.size() > newsSpecialPageIndex){
+                    if(!pages.get(newsSpecialPageIndex).getCards() && pages.get(newsSpecialPageIndex).getBlocks().size() > 0){
+                        newsSpecial = pages.get(newsSpecialPageIndex);
+                        extractItemNAdd();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 }

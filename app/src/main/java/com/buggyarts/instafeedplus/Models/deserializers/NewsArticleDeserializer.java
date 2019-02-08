@@ -44,7 +44,7 @@ public class NewsArticleDeserializer implements JsonDeserializer<NewsArticle> {
 
         if (jsonObject.get("urlToImage") != null) {
             final String urlToImage = jsonObject.get("urlToImage").getAsString();
-            newsArticle.setThumbnail_url(urlToImage);
+            newsArticle.setUrlToImage(urlToImage);
         }
 
         if (jsonObject.get("publishedAt") != null) {

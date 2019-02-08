@@ -1,7 +1,6 @@
 package com.buggyarts.instafeedplus.adapters.recyclerAdapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.buggyarts.instafeedplus.BrowserActivity;
 import com.buggyarts.instafeedplus.Models.Category;
 import com.buggyarts.instafeedplus.Models.news.NewsArticle;
 import com.buggyarts.instafeedplus.R;
 import com.buggyarts.instafeedplus.customClasses.GlideApp;
 import com.buggyarts.instafeedplus.customViews.CircularImageView;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -215,7 +212,7 @@ public class BaseItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             holder.description.setText(Html.fromHtml(article.description));
         }
-        GlideApp.with(mContext).load(article.thumbnail_url).centerCrop().into(holder.thumbnail);
+        GlideApp.with(mContext).load(article.urlToImage).centerCrop().into(holder.thumbnail);
 
         if (!article.isBookmarked()) {
             holder.bookmark.setImageResource(R.drawable.ic_bookmark_border_pink_24dp);

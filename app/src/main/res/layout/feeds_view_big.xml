@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/dummy_banner_ad_id"/>
+            ads:adUnitId="@string/ad_mob_banner_ad_id"/>
 
     </RelativeLayout>
 
